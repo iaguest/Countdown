@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{4080F5B6-E94B-40D6-A890-C54B09F5DB6C}</ProjectGuid>
-    <RootNamespace>Countdown</RootNamespace>
+    <ProjectGuid>{E643EF83-28AD-47EB-B4EB-746E3FCFB151}</ProjectGuid>
+    <RootNamespace>CountdownTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,18 +70,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -92,6 +80,22 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\G-Dawg\source\repos\Countdown\Countdown\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ConundrumGame.obj;LettersGame.obj;NumbersGame.obj;NumbersGameUtils.obj;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\G-Dawg\source\repos\Countdown\Countdown\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ConundrumGame.obj;LettersGame.obj;NumbersGame.obj;NumbersGameUtils.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +106,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,7 +121,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,35 +129,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractGame.h" />
-    <ClInclude Include="ComplexExpressionsGenerator.h" />
-    <ClInclude Include="ConundrumGame.h" />
-    <ClInclude Include="ExpressionsGenerator.h" />
-    <ClInclude Include="GameRunner.h" />
-    <ClInclude Include="IGame.h" />
-    <ClInclude Include="IGenerator.h" />
-    <ClInclude Include="Io.h" />
-    <ClInclude Include="LettersGame.h" />
-    <ClInclude Include="NumbersGame.h" />
-    <ClInclude Include="NumbersGameUtils.h" />
-    <ClInclude Include="ParenthesizedExpressionsGenerator.h" />
-    <ClInclude Include="PermutationsGenerator.h" />
-    <ClInclude Include="SimpleExpressionsGenerator.h" />
-    <ClInclude Include="SubPermutationsGenerator.h" />
-    <ClInclude Include="Timer.h" />
+    <ProjectReference Include="..\Countdown\Countdown.vcxproj">
+      <Project>{4080f5b6-e94b-40d6-a890-c54b09f5db6c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="consonants.txt" />
-    <Text Include="UK_english_truncated.txt" />
-    <Text Include="vowels.txt" />
+    <ClInclude Include="catch.hpp" />
+    <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConundrumGame.cpp" />
-    <ClCompile Include="Io.cpp" />
-    <ClCompile Include="LettersGame.cpp" />
+    <ClCompile Include="ConundrumGameTests.cpp" />
+    <ClCompile Include="ExpressionsGeneratorTests.cpp" />
+    <ClCompile Include="LettersGameTests.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NumbersGame.cpp" />
-    <ClCompile Include="NumbersGameUtils.cpp" />
+    <ClCompile Include="NumbersGameTests.cpp" />
+    <ClCompile Include="NumbersGameUtilsTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
