@@ -19,7 +19,7 @@ constexpr double EPSILON = 1.0E-9;
 TEST_CASE("Validate NumbersGame behavior.")
 {
     // initialization
-    std::mt19937 gen(3);
+    std::mt19937 gen(0);
     std::ostringstream oss;
     std::istringstream iss;
     
@@ -39,7 +39,7 @@ TEST_CASE("Validate NumbersGame behavior.")
         NumbersGame game(gen);
         iss.str("1");
         game.initialize(oss, iss); 
-        REQUIRE_THAT("75 3 7 5 9 10", Catch::Equals(game.getGameBoard()));
+        REQUIRE_THAT("25 4 4 8 3 7", Catch::Equals(game.getGameBoard()));
     }
     
     SECTION("getTarget throws if uninitialized game")
@@ -52,27 +52,27 @@ TEST_CASE("Validate NumbersGame behavior.")
     {
         NumbersGame game(gen);
         game.initialize(oss, iss);
-        REQUIRE(545 == game.getTarget());
+        REQUIRE(144 == game.getTarget());
     }
     
     SECTION("getScore returns score of 10 for valid answer")
     {
         NumbersGame game(gen);
-        iss.str("2");
+        iss.str("1");
         game.initialize(oss, iss); 
-        CHECK_THAT("75 50 8 9 10 1", Catch::Equals(game.getGameBoard()));
-        CHECK(545 == game.getTarget());
-        REQUIRE_THAT(game.getScore("(100+50)-10-(6/2)"), Catch::WithinRel(10.0, EPSILON));
+        CHECK_THAT("25 4 4 5 10 6", Catch::Equals(game.getGameBoard()));
+        CHECK(144 == game.getTarget());
+        REQUIRE_THAT(game.getScore("(6*25)-(10-4)"), Catch::WithinRel(10.0, EPSILON));
     }
     
-    SECTION("getScore returns score of 3 when 7 away from target.")
+    SECTION("getScore returns score of 4 when 6 away from target.")
     {
         NumbersGame game(gen);
         iss.str("3");
         game.initialize(oss, iss); 
-        CHECK_THAT("100 75 50 10 10 8", Catch::Equals(game.getGameBoard()));
-        CHECK(545 == game.getTarget());
-        REQUIRE_THAT(game.getScore("(75+50)+5"), Catch::WithinRel(3.0, EPSILON));
+        CHECK_THAT("100 50 25 4 8 8", Catch::Equals(game.getGameBoard()));
+        CHECK(144 == game.getTarget());
+        REQUIRE_THAT(game.getScore("100+50"), Catch::WithinRel(4.0, EPSILON));
     }
     
     SECTION("getScore returns score of 0 when 10 or more away from target.")
@@ -80,32 +80,33 @@ TEST_CASE("Validate NumbersGame behavior.")
         NumbersGame game(gen);
         iss.str("4");
         game.initialize(oss, iss); 
-        CHECK_THAT("100 75 50 10 10 8", Catch::Equals(game.getGameBoard()));
-        CHECK(545 == game.getTarget());
-        CHECK_THAT(game.getScore("(100+50)-(75/25)"), Catch::WithinRel(0.0, EPSILON));
-        REQUIRE_THAT(game.getScore("100+50"), Catch::WithinRel(0.0, EPSILON));
+        CHECK_THAT("100 75 50 25 4 1", Catch::Equals(game.getGameBoard()));
+        CHECK(144 == game.getTarget());
+        CHECK_THAT(game.getScore("(100+50)+4"), Catch::WithinRel(0.0, EPSILON));
+        REQUIRE_THAT(game.getScore("100+25"), Catch::WithinRel(0.0, EPSILON));
     }
     
     SECTION("getScore returns 0 for invalid answers.")
     {
         NumbersGame game(gen);
+		iss.str("4");
         game.initialize(oss, iss);
-        CHECK(545 == game.getTarget());
+        CHECK(144 == game.getTarget());
         // empty expression
         CHECK_THAT(game.getScore(""), Catch::WithinRel(0.0, EPSILON));
         // number not in gameboard
-        CHECK_THAT(game.getScore("137"), Catch::WithinRel(0.0, EPSILON));
+        CHECK_THAT(game.getScore("144"), Catch::WithinRel(0.0, EPSILON));
         // invalid expression
-        CHECK_THAT(game.getScore("+/-9"), Catch::WithinRel(0.0, EPSILON));
+        CHECK_THAT(game.getScore("+/-100"), Catch::WithinRel(0.0, EPSILON));
     }
     
     SECTION("startMessage includes target value.")
     {
         NumbersGame game(gen);
         game.initialize(oss, iss);
-        CHECK(545 == game.getTarget());
+        CHECK(144 == game.getTarget());
 
-        REQUIRE(game.startMessage().find("137") != std::string::npos);
+        REQUIRE(game.startMessage().find("144") != std::string::npos);
     }
     
     SECTION("picking 3 large numbers yields a gameboard with 3 numbers greater than 10")
