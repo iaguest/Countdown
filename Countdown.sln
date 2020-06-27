@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Countdown", "Countdown\Coun
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountdownTests", "CountdownTests\CountdownTests.vcxproj", "{E643EF83-28AD-47EB-B4EB-746E3FCFB151}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountdownDll", "CountdownDll\CountdownDll.vcxproj", "{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{E643EF83-28AD-47EB-B4EB-746E3FCFB151}.Release|x64.Build.0 = Release|x64
 		{E643EF83-28AD-47EB-B4EB-746E3FCFB151}.Release|x86.ActiveCfg = Release|Win32
 		{E643EF83-28AD-47EB-B4EB-746E3FCFB151}.Release|x86.Build.0 = Release|Win32
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Debug|x64.ActiveCfg = Debug|x64
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Debug|x64.Build.0 = Debug|x64
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Debug|x86.ActiveCfg = Debug|Win32
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Debug|x86.Build.0 = Debug|Win32
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Release|x64.ActiveCfg = Release|x64
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Release|x64.Build.0 = Release|x64
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Release|x86.ActiveCfg = Release|Win32
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
