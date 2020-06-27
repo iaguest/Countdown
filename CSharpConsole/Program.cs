@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -19,27 +20,36 @@ namespace CSharpConsole
                                                  StringBuilder output,
                                                  IntPtr outputSize);
 
-        [DllImport("CountdownDll.dll")]
-        static public extern StringBuilder CallGetGameBoard(IntPtr pLettersGame);
+        //[DllImport("CountdownDll.dll")]
+        //static public extern StringBuilder CallGetGameBoard(IntPtr pLettersGame);
 
         static void Main(string[] args)
         {
+            List<string> vals = new List<string>();
+
             //use the functions
             IntPtr pLettersGame = CreateLettersGame();
 
-            //CallFunction(pClassName);
-            //var s = "BobbyBobBob";
-            //CallPrintChars(pClassName, s, s.Length);
-
-            //var s = new StringBuilder("1234567");
-            //for (int i = 0; i < 7; ++i)
+            StringBuilder sb = new StringBuilder(256);
+            int sbSize = sb.MaxCapacity;
+            // Allocating memory for int
+            IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
+            //while (true)
             //{
-            //    CallInitialize(pLettersGame, new String('v', i + 1), i + 1, s);
+            Marshal.WriteInt32(sbSizePointer, sbSize);
+            bool isInitialized = !CallInitialize(pLettersGame, new String('c', 1), 1, sb, sbSizePointer);
+            //    if (isInitialized)
+            //        break;
+
+            //    var output = sb.ToString();
+            //    int outputSize = Marshal.ReadInt32(sbSizePointer);
+            //    vals.Add(output.Substring(0, outputSize));
             //}
-            //Console.WriteLine(s.ToString());
 
+            // Free memory
+            Marshal.FreeHGlobal(sbSizePointer);
+            sbSizePointer = IntPtr.Zero;
             DisposeLettersGame(pLettersGame);
-
             pLettersGame = IntPtr.Zero;
 
             Console.ReadLine();
