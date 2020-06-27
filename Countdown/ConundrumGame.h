@@ -18,7 +18,7 @@ class ConundrumGame : public AbstractGame<char>
 public:
     explicit ConundrumGame(std::mt19937& gen, const std::vector<std::string>& words);
     
-    void initialize(std::ostream& os, std::istream& is) override;
+    bool initialize(std::ostream& os, std::istream& is) override;
     
     std::string endMessage() const override;
     

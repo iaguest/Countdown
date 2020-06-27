@@ -41,6 +41,20 @@ TEST_CASE("Validate LettersGame behavior.")
         REQUIRE(game.getGameBoard().empty());
     }
     
+    SECTION("Initialize returns false for fully partially initialized board")
+    {
+        LettersGame game(gen, vowels, consonants, words);
+        iss.str("c v v v c v v v");  // one letter missing
+        REQUIRE(false == game.initialize(oss, iss));
+    }
+
+    SECTION("Initialize returns true for fully initialized board")
+    {
+        LettersGame game(gen, vowels, consonants, words);
+        iss.str("v c v v v c v v v");
+        REQUIRE(true == game.initialize(oss, iss));
+    }
+
     SECTION("Game board is filled on initialize.")
     {
         LettersGame game(gen, vowels, consonants, words);
@@ -51,6 +65,16 @@ TEST_CASE("Validate LettersGame behavior.")
         REQUIRE_THAT("p u h o c o s e h", Catch::Equals(game.getGameBoard()));
     }
     
+    SECTION("Game board can be initialized in steps.")
+    {
+        LettersGame game(gen, vowels, consonants, words);
+        iss.str("c v c v c v c v");
+        game.initialize(oss, iss);
+        std::istringstream iss2("c");
+        game.initialize(oss, iss2);
+        REQUIRE_THAT("p u h o c o s e h", Catch::Equals(game.getGameBoard()));
+    }
+
     SECTION("Game board has expected number of vowels and consonants after initialization.")
     {
         LettersGame game(gen, vowels, consonants, words);

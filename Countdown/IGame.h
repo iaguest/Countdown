@@ -22,7 +22,7 @@ public:
     IGame& operator=(const IGame&) = delete;
     
     // Set up for gameboard
-    virtual void initialize(std::ostream& os, std::istream& is) = 0;
+    virtual bool initialize(std::ostream& os, std::istream& is) = 0;
     // Start message related to game setup
     virtual std::string startMessage() const = 0;
     // Get the gameboard itself

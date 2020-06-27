@@ -47,7 +47,7 @@ NumbersGame::NumbersGame(std::mt19937& gen)
 {
 }
 
-void NumbersGame::initialize(std::ostream& os, std::istream& is)
+bool NumbersGame::initialize(std::ostream& os, std::istream& is)
 {
     target = std::uniform_int_distribution<>(minTarget, maxTarget)(gen); 
     
@@ -66,6 +66,8 @@ void NumbersGame::initialize(std::ostream& os, std::istream& is)
     isRunning = false;
     
     bestScore = 0;
+
+	return true;
 }
 
 void NumbersGame::onStartRun()

@@ -41,27 +41,30 @@ LettersGame::LettersGame(std::mt19937& gen,
 {
 }
 
-void LettersGame::initialize(std::ostream& os, std::istream& is)
+bool LettersGame::initialize(std::ostream& os, std::istream& is)
 {
-    while (gameBoard.size() != lettersBoardSize)
+    while (gameBoard.size() != lettersBoardSize && !is.eof())
     {
         os << "Vowel(v)/Consonant(c)? ";
-        const char c = getSingleCharacterInput(is);
-        if (c == 'v' || c == 'V') {
+        const char charIn = getSingleCharacterInput(is);
+		char charOut;
+        if (charIn == 'v' || charIn == 'V') {
             int randomVowelIndex =
                 std::uniform_int_distribution<>(0, static_cast<int>(vowels.size() - 1))(gen);
-            gameBoard.push_back(vowels.at(randomVowelIndex));
+			charOut = vowels.at(randomVowelIndex);;
         }
-        else if (c=='c' || c== 'C') {
+        else if (charIn=='c' || charIn== 'C') {
             int randomConsonantIndex =
                 std::uniform_int_distribution<>(0, static_cast<int>(consonants.size() - 1))(gen);
-            gameBoard.push_back(consonants.at(randomConsonantIndex));
+			charOut = consonants.at(randomConsonantIndex);
         }
-        os << getGameBoard() << std::endl;
+		gameBoard.push_back(charOut);
+        os << charOut << std::endl;
     }
-    os << std::endl;
     
     solutionWords.clear();
+
+	return gameBoard.size() == lettersBoardSize;
 }
 
 void LettersGame::onStartRun()

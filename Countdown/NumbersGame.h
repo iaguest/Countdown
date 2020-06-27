@@ -22,7 +22,7 @@ class NumbersGame : public AbstractGame<int>
 public:
     explicit NumbersGame(std::mt19937& gen);
 
-    void initialize(std::ostream& os, std::istream& is) override;
+    bool initialize(std::ostream& os, std::istream& is) override;
     
     void onStartRun() override;
     

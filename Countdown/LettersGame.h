@@ -23,7 +23,7 @@ public:
                          const std::vector<char>& consonants,
                          const std::vector<std::string>& words);
     
-    void initialize(std::ostream& os, std::istream& is) override;
+    bool initialize(std::ostream& os, std::istream& is) override;
 
     void onStartRun() override;
     
