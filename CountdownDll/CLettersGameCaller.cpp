@@ -48,5 +48,5 @@ const char* CallGetGameBoard(CLettersGame* pLettersGame)
     {
         pLettersGame->getGameBoard();
     }
-    throw std::runtime_error("Invalid call to CallGetGameBoard.")
+    throw std::runtime_error("Invalid call to CallGetGameBoard.");
 }
