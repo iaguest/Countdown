@@ -5,10 +5,8 @@
 class CLettersGame
 {
 public:
-    CLettersGame(std::mt19937& gen,
-                 const std::vector<char>& vowels,
-                 const std::vector<char>& consonants,
-                 const std::vector<std::string>& words);
+    CLettersGame();
+
     ~CLettersGame();
 
 	bool initialize(const char* input,
@@ -19,5 +17,10 @@ public:
     const char* getGameBoard();
 
 private:
+    std::mt19937 gen;
+    const std::string resourcePath;
+    std::vector<char> vowels;
+    std::vector<char> consonants;
+    std::vector<std::string> words;
     LettersGame lettersGame;
 };

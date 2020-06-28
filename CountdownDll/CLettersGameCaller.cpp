@@ -1,22 +1,11 @@
-#include <random>
-#include <string>
-#include <vector>
-
 #include "pch.h" 
 
 #include "CLettersGameCaller.h"
-#include "../Countdown/Io.h"
+
 
 CLettersGame* CreateLettersGame()
 {
-    std::mt19937 gen(std::random_device{}());
-
-    const std::string resourcePath = "./";
-
-    std::vector<char> vowels = Io::getLetters(resourcePath, "vowels.txt");
-    std::vector<char> consonants = Io::getLetters(resourcePath, "consonants.txt");
-    std::vector<std::string> words = Io::getWords(resourcePath, "UK_english_truncated.txt");
-    return new CLettersGame(gen, vowels, consonants, words);
+    return new CLettersGame();
 }
 
 void DisposeLettersGame(CLettersGame* pLettersGame)

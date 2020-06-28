@@ -1,15 +1,22 @@
+#include <iostream>
+#include <random>
 #include <sstream>
 #include <string>
 
 #include "pch.h" 
 
 #include "CLettersGame.h"
+#include "../Countdown/Io.h"
 
-CLettersGame::CLettersGame(std::mt19937& gen,
-                           const std::vector<char>& vowels,
-                           const std::vector<char>& consonants,
-                           const std::vector<std::string>& words)
-    : lettersGame(gen, vowels, consonants, words)
+
+CLettersGame::CLettersGame() :
+    gen(std::random_device{}()),
+    // TODO: Remove hardcoded path
+    resourcePath("C:/Users/G-Dawg/source/repos/Countdown/Countdown"),
+    vowels(Io::getLetters(resourcePath, "vowels.txt")),
+    consonants(Io::getLetters(resourcePath, "consonants.txt")),
+    words(Io::getWords(resourcePath, "UK_english_truncated.txt")),
+    lettersGame(gen, vowels, consonants, words)
 {
 }
 

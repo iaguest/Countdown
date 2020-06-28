@@ -20,11 +20,16 @@ namespace CSharpConsole
                                                  StringBuilder output,
                                                  IntPtr outputSize);
 
-        //[DllImport("CountdownDll.dll")]
-        //static public extern StringBuilder CallGetGameBoard(IntPtr pLettersGame);
+        [DllImport("CountdownDll.dll")]
+        static public extern StringBuilder CallGetGameBoard(IntPtr pLettersGame);
 
         static void Main(string[] args)
         {
+            // TODO:
+            // might be good to have a post build step for the dll build
+            // not only have to copy dll but resource files into the C# build folder
+
+
             List<string> vals = new List<string>();
 
             //use the functions
@@ -34,17 +39,20 @@ namespace CSharpConsole
             int sbSize = sb.MaxCapacity;
             // Allocating memory for int
             IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
-            //while (true)
-            //{
-            Marshal.WriteInt32(sbSizePointer, sbSize);
-            bool isInitialized = !CallInitialize(pLettersGame, new String('c', 1), 1, sb, sbSizePointer);
-            //    if (isInitialized)
-            //        break;
 
-            //    var output = sb.ToString();
-            //    int outputSize = Marshal.ReadInt32(sbSizePointer);
-            //    vals.Add(output.Substring(0, outputSize));
-            //}
+            while (true)
+            {
+                Marshal.WriteInt32(sbSizePointer, sbSize);
+                bool isInitialized = CallInitialize(pLettersGame, new string('c', 1), 1, sb, sbSizePointer);
+                if (isInitialized)
+                    break;
+
+                var output = sb.ToString();
+                int outputsize = Marshal.ReadInt32(sbSizePointer);
+                string toAdd = output.Substring(0, outputsize);
+                Console.WriteLine(toAdd);
+                vals.Add(toAdd);
+            }
 
             // Free memory
             Marshal.FreeHGlobal(sbSizePointer);
