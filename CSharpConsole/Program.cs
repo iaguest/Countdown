@@ -24,6 +24,18 @@ namespace CSharpConsole
         [return: MarshalAs(UnmanagedType.LPStr)]
         static public extern string CallGetGameBoard(IntPtr pLettersGame);
 
+        [DllImport("CountdownDll.dll")]
+        static public extern void CallRun(IntPtr lettersGame);
+
+        [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        static public extern string CallEndMessage(IntPtr lettersGame);
+
+        [DllImport("CountdownDll.dll")]
+        static public extern int CallGetScore(IntPtr lettersGame,
+                                              string answer,
+                                              Int32 answerSize);
+
         static void Main(string[] args)
         {
             List<char> vals = new List<char>();

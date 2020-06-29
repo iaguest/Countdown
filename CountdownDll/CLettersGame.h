@@ -14,7 +14,14 @@ public:
                     char* output,
                     int* outputSize);
 
-    char* getGameBoard();
+    char* getGameBoard() const;
+
+    void run();
+
+    char* endMessage() const;
+
+    int getScore(const char* answer,
+                 int answerSize) const;
 
 private:
     std::mt19937 gen;

@@ -8,6 +8,20 @@
 #include "CLettersGame.h"
 #include "../Countdown/Io.h"
 
+namespace
+{
+
+// Copy string to a newly allocated char pointer (owned by caller).
+char* makeStringCopy(const std::string& str)
+{
+    const std::size_t cstrSize = str.length() + 1;
+    char* cstr = new char[cstrSize];
+    strcpy_s(cstr, cstrSize, str.c_str());
+    return cstr;
+}
+
+}  // end namespace
+
 
 CLettersGame::CLettersGame() :
     gen(std::random_device{}()),
@@ -45,11 +59,24 @@ bool CLettersGame::initialize(const char* input,
     return isInitialized;
 }
 
-char* CLettersGame::getGameBoard()
+char* CLettersGame::getGameBoard() const
 {
-    const std::string str = lettersGame.getGameBoard();
-    const std::size_t cstrSize = str.length() + 1;
-    char* cstr = new char[cstrSize];
-    strcpy_s(cstr, cstrSize, str.c_str());
-    return cstr;
+    return makeStringCopy(lettersGame.getGameBoard());
+}
+
+void CLettersGame::run()
+{
+    lettersGame.run();
+}
+
+char* CLettersGame::endMessage() const
+{
+    return makeStringCopy(lettersGame.endMessage());
+}
+
+int CLettersGame::getScore(const char* answer,
+                           int answerSize) const
+{
+    const std::string s(answer, answerSize);
+    return lettersGame.getScore(s);
 }

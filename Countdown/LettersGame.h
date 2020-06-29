@@ -27,7 +27,7 @@ public:
 
     void onStartRun() override;
     
-    void onEndRun() override;    
+    void onEndRun() override;
     
     std::string endMessage() const override;
     

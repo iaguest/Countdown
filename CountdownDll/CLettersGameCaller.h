@@ -18,6 +18,14 @@ extern "C" {
 
     extern __declspec(dllexport) char* CallGetGameBoard(CLettersGame* pLettersGame);
 
+    extern __declspec(dllexport) void CallRun(CLettersGame* pLettersGame);
+
+    extern __declspec(dllexport) char* CallEndMessage(CLettersGame* pLettersGame);
+
+    extern __declspec(dllexport) int CallGetScore(CLettersGame* pLettersGame,
+                                                  const char* answer,
+                                                  int answerSize);
+
 #ifdef __cplusplus
 }
 #endif
