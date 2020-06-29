@@ -21,16 +21,11 @@ namespace CSharpConsole
                                                  IntPtr outputSize);
 
         [DllImport("CountdownDll.dll")]
-        static public extern StringBuilder CallGetGameBoard(IntPtr pLettersGame);
+        static public extern string CallGetGameBoard(IntPtr pLettersGame);
 
         static void Main(string[] args)
         {
-            // TODO:
-            // might be good to have a post build step for the dll build
-            // not only have to copy dll but resource files into the C# build folder
-
-
-            List<string> vals = new List<string>();
+            List<char> vals = new List<char>();
 
             //use the functions
             IntPtr pLettersGame = CreateLettersGame();
@@ -43,13 +38,13 @@ namespace CSharpConsole
             while (true)
             {
                 Marshal.WriteInt32(sbSizePointer, sbSize);
-                bool isInitialized = CallInitialize(pLettersGame, new string('c', 1), 1, sb, sbSizePointer);
+                bool isInitialized = CallInitialize(
+                    pLettersGame,new string('c', 1), 1, sb, sbSizePointer);
                 if (isInitialized)
                     break;
 
-                var output = sb.ToString();
                 int outputsize = Marshal.ReadInt32(sbSizePointer);
-                string toAdd = output.Substring(0, outputsize);
+                var toAdd = sb.ToString()[outputsize-2];
                 Console.WriteLine(toAdd);
                 vals.Add(toAdd);
             }
