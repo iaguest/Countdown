@@ -21,6 +21,7 @@ namespace CSharpConsole
                                                  IntPtr outputSize);
 
         [DllImport("CountdownDll.dll")]
+        [return: MarshalAs(UnmanagedType.LPStr)]
         static public extern string CallGetGameBoard(IntPtr pLettersGame);
 
         static void Main(string[] args)
@@ -40,14 +41,18 @@ namespace CSharpConsole
                 Marshal.WriteInt32(sbSizePointer, sbSize);
                 bool isInitialized = CallInitialize(
                     pLettersGame,new string('c', 1), 1, sb, sbSizePointer);
-                if (isInitialized)
-                    break;
 
                 int outputsize = Marshal.ReadInt32(sbSizePointer);
                 var toAdd = sb.ToString()[outputsize-2];
                 Console.WriteLine(toAdd);
                 vals.Add(toAdd);
+
+                if (isInitialized)
+                    break;
             }
+
+            var board = CallGetGameBoard(pLettersGame);
+            Console.WriteLine(board);
 
             // Free memory
             Marshal.FreeHGlobal(sbSizePointer);

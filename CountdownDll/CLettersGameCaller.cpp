@@ -35,7 +35,7 @@ const char* CallGetGameBoard(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)
     {
-        pLettersGame->getGameBoard();
+        return pLettersGame->getGameBoard();
     }
     throw std::runtime_error("Invalid call to CallGetGameBoard.");
 }
