@@ -11,8 +11,7 @@
 
 CLettersGame::CLettersGame() :
     gen(std::random_device{}()),
-    // TODO: Remove hardcoded path
-    resourcePath("C:/Users/G-Dawg/source/repos/Countdown/Countdown"),
+    resourcePath("./"),
     vowels(Io::getLetters(resourcePath, "vowels.txt")),
     consonants(Io::getLetters(resourcePath, "consonants.txt")),
     words(Io::getWords(resourcePath, "UK_english_truncated.txt")),

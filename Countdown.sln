@@ -9,7 +9,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountdownTests", "Countdown
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CountdownDll", "CountdownDll\CountdownDll.vcxproj", "{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpConsole", "CSharpConsole\CSharpConsole.csproj", "{06D3E78F-83A7-45A2-8B69-4CA0D44B49B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpConsole", "CSharpConsole\CSharpConsole.csproj", "{06D3E78F-83A7-45A2-8B69-4CA0D44B49B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4080F5B6-E94B-40D6-A890-C54B09F5DB6C} = {4080F5B6-E94B-40D6-A890-C54B09F5DB6C}
+		{FA9069EE-AF7F-4E5B-824F-F28BA4843AE2} = {FA9069EE-AF7F-4E5B-824F-F28BA4843AE2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
