@@ -14,7 +14,7 @@ public:
                     char* output,
                     int* outputSize);
 
-    const char* getGameBoard();
+    char* getGameBoard();
 
 private:
     std::mt19937 gen;

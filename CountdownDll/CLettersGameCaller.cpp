@@ -31,7 +31,7 @@ bool CallInitialize(CLettersGame* pLettersGame,
 }
 
 
-const char* CallGetGameBoard(CLettersGame* pLettersGame)
+char* CallGetGameBoard(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)
     {

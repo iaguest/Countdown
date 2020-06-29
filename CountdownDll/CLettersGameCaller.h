@@ -16,7 +16,7 @@ extern "C" {
                                                      char* output,
                                                      int* outputSize);
 
-    extern __declspec(dllexport) const char* CallGetGameBoard(CLettersGame* pLettersGame);
+    extern __declspec(dllexport) char* CallGetGameBoard(CLettersGame* pLettersGame);
 
 #ifdef __cplusplus
 }

@@ -45,7 +45,11 @@ bool CLettersGame::initialize(const char* input,
     return isInitialized;
 }
 
-const char* CLettersGame::getGameBoard()
+char* CLettersGame::getGameBoard()
 {
-    return lettersGame.getGameBoard().c_str();
+    const std::string str = lettersGame.getGameBoard();
+    const std::size_t cstrSize = str.length() + 1;
+    char* cstr = new char[cstrSize];
+    strcpy_s(cstr, cstrSize, str.c_str());
+    return cstr;
 }

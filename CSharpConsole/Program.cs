@@ -20,7 +20,7 @@ namespace CSharpConsole
                                                  StringBuilder output,
                                                  IntPtr outputSize);
 
-        [DllImport("CountdownDll.dll")]
+        [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         static public extern string CallGetGameBoard(IntPtr pLettersGame);
 
