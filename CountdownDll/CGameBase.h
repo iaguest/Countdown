@@ -9,7 +9,9 @@ template <class T>
 class CGameBase
 {
 public:
-    CGameBase(): pGame(nullptr)
+
+    CGameBase(T* game) 
+        : pGame(std::move(game))
     {
     }
 
