@@ -161,12 +161,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CGameBase.h" />
     <ClInclude Include="CLettersGame.h" />
     <ClInclude Include="CGameCaller.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGameBase.cpp" />
     <ClCompile Include="CLettersGame.cpp" />
     <ClCompile Include="CGameCaller.cpp" />
     <ClCompile Include="dllmain.cpp" />
