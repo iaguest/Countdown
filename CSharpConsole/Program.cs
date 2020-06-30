@@ -9,7 +9,10 @@ namespace CSharpConsole
         {
             using (var game = new LettersGame())
             {
-                var letterTypes = new List<string> { "c", "v", "c", "v", "c", "v", "c", "v", "c" };
+                var letterTypes = new List<string>
+                {
+                    "c", "v", "c", "v", "c", "v", "c", "v", "c"
+                };
 
                 bool isInitialized = false;
                 foreach (var letterType in letterTypes)
