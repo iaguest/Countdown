@@ -48,23 +48,34 @@ namespace CSharpConsole
             // Allocating memory for int
             IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
 
-            while (true)
+            var letterTypes = new List<string> { "c", "v", "c", "v", "c", "v", "c", "v", "c" };
+
+            bool isInitialized = false;
+            foreach (var letterType in letterTypes)
             {
                 Marshal.WriteInt32(sbSizePointer, sbSize);
-                bool isInitialized = CallInitialize(
-                    pLettersGame,new string('c', 1), 1, sb, sbSizePointer);
+                isInitialized = CallInitialize(
+                    pLettersGame, letterType, 1, sb, sbSizePointer);
 
                 int outputsize = Marshal.ReadInt32(sbSizePointer);
-                var toAdd = sb.ToString()[outputsize-2];
-                Console.WriteLine(toAdd);
-                vals.Add(toAdd);
-
-                if (isInitialized)
-                    break;
+                vals.Add(sb.ToString()[outputsize - 2]);
             }
+
+            if (!isInitialized)
+                throw new InvalidOperationException();
 
             var board = CallGetGameBoard(pLettersGame);
             Console.WriteLine(board);
+
+            CallRun(pLettersGame);
+
+            Console.WriteLine("Enter answer: ");
+            var answer = Console.ReadLine();
+
+            var score = CallGetScore(pLettersGame, answer, answer.Length);
+            Console.WriteLine($"Your score is: {score}");
+
+            Console.Write(CallEndMessage(pLettersGame));
 
             // Free memory
             Marshal.FreeHGlobal(sbSizePointer);
