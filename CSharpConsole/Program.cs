@@ -18,7 +18,60 @@ namespace CSharpConsole
         int GetScore(string answer);
     }
 
-    public class LettersGame : IDisposable, IGame
+    public abstract class AbstractGameBase : IDisposable
+    {
+        private bool disposedValue = false; // To detect redundant calls
+        protected IntPtr gamePointer;
+
+        public AbstractGameBase()
+        {
+            gamePointer = CreateGame();
+        }
+
+        #region IDisposable Support
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                DisposeGame();
+                // TODO: set large fields to null.
+                gamePointer = IntPtr.Zero;
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        ~AbstractGameBase()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
+        public abstract IntPtr CreateGame();
+
+        public abstract void DisposeGame();
+    }
+
+    public class LettersGame : AbstractGameBase, IGame
     {
         #region Dll Marshalling
 
@@ -47,51 +100,21 @@ namespace CSharpConsole
 
         #endregion
 
-        private bool disposedValue = false; // To detect redundant calls
-        private IntPtr lettersGamePointer;
+        #region AbstractGame
 
-        public LettersGame()
+        public override IntPtr CreateGame()
         {
-            lettersGamePointer = CreateLettersGame();
+            return CreateLettersGame();
         }
 
-        #region IDisposable Support
-
-        protected virtual void Dispose(bool disposing)
+        public override void DisposeGame()
         {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                DisposeLettersGame(lettersGamePointer);
-                // TODO: set large fields to null.
-                lettersGamePointer = IntPtr.Zero;
-
-                disposedValue = true;
-            }
+            DisposeLettersGame(gamePointer);
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        ~LettersGame()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(false);
-        }
+        #endregion AbstractGame
 
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
+        #region IGame
 
         public bool Initialize(string input, out string output)
         {
@@ -102,7 +125,7 @@ namespace CSharpConsole
             Marshal.WriteInt32(sbSizePointer, sbSize);
 
             bool isInitialized = CallInitialize(
-                lettersGamePointer, input, 1, sb, sbSizePointer);
+                gamePointer, input, 1, sb, sbSizePointer);
 
             int outputsize = Marshal.ReadInt32(sbSizePointer);
             output = sb.ToString()[outputsize - 2].ToString();
@@ -116,24 +139,28 @@ namespace CSharpConsole
 
         public string GetGameBoard()
         {
-            return CallGetGameBoard(lettersGamePointer);
+            return CallGetGameBoard(gamePointer);
         }
 
         public void Run()
         {
-            CallRun(lettersGamePointer);
+            CallRun(gamePointer);
         }
 
         public string EndMessage()
         {
-            return CallEndMessage(lettersGamePointer);
+            return CallEndMessage(gamePointer);
         }
 
         public int GetScore(string answer)
         {
-            return CallGetScore(lettersGamePointer, answer, answer.Length);
+            return CallGetScore(gamePointer, answer, answer.Length);
         }
+
+        #endregion IGame
     }
+
+    //public class LettersGame
 
     class Program
     {
@@ -164,7 +191,7 @@ namespace CSharpConsole
 
             Console.Write(game.EndMessage());
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
