@@ -24,7 +24,7 @@
     <ClInclude Include="CLettersGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CLettersGameCaller.h">
+    <ClInclude Include="CGameCaller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClCompile Include="CLettersGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CLettersGameCaller.cpp">
+    <ClCompile Include="CGameCaller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

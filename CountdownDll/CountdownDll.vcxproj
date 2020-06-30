@@ -162,13 +162,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CLettersGame.h" />
-    <ClInclude Include="CLettersGameCaller.h" />
+    <ClInclude Include="CGameCaller.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CLettersGame.cpp" />
-    <ClCompile Include="CLettersGameCaller.cpp" />
+    <ClCompile Include="CGameCaller.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

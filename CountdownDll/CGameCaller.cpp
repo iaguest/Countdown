@@ -1,6 +1,6 @@
 #include "pch.h" 
 
-#include "CLettersGameCaller.h"
+#include "CGameCaller.h"
 
 
 CLettersGame* CreateLettersGame()
