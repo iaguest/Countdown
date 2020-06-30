@@ -5,8 +5,23 @@ using System.Text;
 
 namespace CSharpConsole
 {
-    class Program
+    public interface IGame
     {
+        bool Initialize(string input, out string output);
+
+        string GetGameBoard();
+
+        void Run();
+
+        string EndMessage();
+
+        int GetScore(string answer);
+    }
+
+    public class LettersGame : IDisposable, IGame
+    {
+        #region Dll Marshalling
+
         [DllImport("CountdownDll.dll")]
         static public extern IntPtr CreateLettersGame();
 
@@ -14,11 +29,7 @@ namespace CSharpConsole
         static public extern void DisposeLettersGame(IntPtr pLettersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern bool CallInitialize(IntPtr pLettersGame,
-                                                 string input,
-                                                 Int32 inputSize,
-                                                 StringBuilder output,
-                                                 IntPtr outputSize);
+        static public extern bool CallInitialize(IntPtr pLettersGame, string input, Int32 inputSize, StringBuilder output, IntPtr outputSize);
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
@@ -32,56 +43,126 @@ namespace CSharpConsole
         static public extern string CallEndMessage(IntPtr lettersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern int CallGetScore(IntPtr lettersGame,
-                                              string answer,
-                                              Int32 answerSize);
+        static public extern int CallGetScore(IntPtr lettersGame, string answer, Int32 answerSize);
 
-        static void Main(string[] args)
+        #endregion
+
+        private bool disposedValue = false; // To detect redundant calls
+        private IntPtr lettersGamePointer;
+
+        public LettersGame()
         {
-            List<char> vals = new List<char>();
+            lettersGamePointer = CreateLettersGame();
+        }
 
-            //use the functions
-            IntPtr pLettersGame = CreateLettersGame();
+        #region IDisposable Support
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                DisposeLettersGame(lettersGamePointer);
+                // TODO: set large fields to null.
+                lettersGamePointer = IntPtr.Zero;
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        ~LettersGame()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
+        public bool Initialize(string input, out string output)
+        {
             StringBuilder sb = new StringBuilder(256);
             int sbSize = sb.MaxCapacity;
             // Allocating memory for int
             IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
+            Marshal.WriteInt32(sbSizePointer, sbSize);
+
+            bool isInitialized = CallInitialize(
+                lettersGamePointer, input, 1, sb, sbSizePointer);
+
+            int outputsize = Marshal.ReadInt32(sbSizePointer);
+            output = sb.ToString()[outputsize - 2].ToString();
+
+            // Free memory
+            Marshal.FreeHGlobal(sbSizePointer);
+            sbSizePointer = IntPtr.Zero;
+
+            return isInitialized;
+        }
+
+        public string GetGameBoard()
+        {
+            return CallGetGameBoard(lettersGamePointer);
+        }
+
+        public void Run()
+        {
+            CallRun(lettersGamePointer);
+        }
+
+        public string EndMessage()
+        {
+            return CallEndMessage(lettersGamePointer);
+        }
+
+        public int GetScore(string answer)
+        {
+            return CallGetScore(lettersGamePointer, answer, answer.Length);
+        }
+    }
+
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+            var game = new LettersGame();
 
             var letterTypes = new List<string> { "c", "v", "c", "v", "c", "v", "c", "v", "c" };
 
             bool isInitialized = false;
             foreach (var letterType in letterTypes)
-            {
-                Marshal.WriteInt32(sbSizePointer, sbSize);
-                isInitialized = CallInitialize(
-                    pLettersGame, letterType, 1, sb, sbSizePointer);
-
-                int outputsize = Marshal.ReadInt32(sbSizePointer);
-                vals.Add(sb.ToString()[outputsize - 2]);
-            }
+                isInitialized = game.Initialize(letterType, out string s);
 
             if (!isInitialized)
                 throw new InvalidOperationException();
 
-            var board = CallGetGameBoard(pLettersGame);
+            var board = game.GetGameBoard();
             Console.WriteLine(board);
 
-            CallRun(pLettersGame);
+            game.Run();
 
             Console.WriteLine("Enter answer: ");
             var answer = Console.ReadLine();
 
-            var score = CallGetScore(pLettersGame, answer, answer.Length);
+            var score = game.GetScore(answer);
             Console.WriteLine($"Your score is: {score}");
 
-            Console.Write(CallEndMessage(pLettersGame));
-
-            // Free memory
-            Marshal.FreeHGlobal(sbSizePointer);
-            sbSizePointer = IntPtr.Zero;
-            DisposeLettersGame(pLettersGame);
-            pLettersGame = IntPtr.Zero;
+            Console.Write(game.EndMessage());
 
             Console.ReadLine();
         }
