@@ -17,11 +17,11 @@ void DisposeLettersGame(CLettersGame* pLettersGame)
     }
 }
 
-bool CallInitialize(CLettersGame* pLettersGame,
-                    const char* input,
-                    int inputSize,
-                    char* output,
-                    int* outputSize)
+bool InitializeLettersGame(CLettersGame* pLettersGame,
+                           const char* input,
+                           int inputSize,
+                           char* output,
+                           int* outputSize)
 {
     if (pLettersGame != nullptr)
     {
@@ -30,7 +30,7 @@ bool CallInitialize(CLettersGame* pLettersGame,
     throw std::runtime_error("Invalid call to CallInitialize.");
 }
 
-char* CallGetGameBoard(CLettersGame* pLettersGame)
+char* GetLettersGameBoard(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)
     {
@@ -39,7 +39,7 @@ char* CallGetGameBoard(CLettersGame* pLettersGame)
     throw std::runtime_error("Invalid call to CallGetGameBoard.");
 }
 
-void CallRun(CLettersGame* pLettersGame)
+void RunLettersGame(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)
     {
@@ -48,7 +48,7 @@ void CallRun(CLettersGame* pLettersGame)
     throw std::runtime_error("Invalid call to CallRun.");
 }
 
-char* CallEndMessage(CLettersGame* pLettersGame)
+char* GetLettersGameEndMessage(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)
     {
@@ -57,7 +57,7 @@ char* CallEndMessage(CLettersGame* pLettersGame)
     throw std::runtime_error("Invalid call to CallEndMessage.");
 }
 
-int CallGetScore(CLettersGame* pLettersGame,
+int GetLettersGameScore(CLettersGame* pLettersGame,
     const char* answer,
     int answerSize)
 {

@@ -15,21 +15,21 @@ namespace CSharpConsole
         static public extern void DisposeLettersGame(IntPtr pLettersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern bool CallInitialize(IntPtr pLettersGame, string input, Int32 inputSize, StringBuilder output, IntPtr outputSize);
+        static public extern bool InitializeLettersGame(IntPtr pLettersGame, string input, Int32 inputSize, StringBuilder output, IntPtr outputSize);
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        static public extern string CallGetGameBoard(IntPtr pLettersGame);
+        static public extern string GetLettersGameBoard(IntPtr pLettersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern void CallRun(IntPtr lettersGame);
+        static public extern void RunLettersGame(IntPtr lettersGame);
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        static public extern string CallEndMessage(IntPtr lettersGame);
+        static public extern string GetLettersGameEndMessage(IntPtr lettersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern int CallGetScore(IntPtr lettersGame, string answer, Int32 answerSize);
+        static public extern int GetLettersGameScore(IntPtr lettersGame, string answer, Int32 answerSize);
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace CSharpConsole
             IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
             Marshal.WriteInt32(sbSizePointer, sbSize);
 
-            bool isInitialized = CallInitialize(
+            bool isInitialized = InitializeLettersGame(
                 gamePointer, input, 1, sb, sbSizePointer);
 
             int outputsize = Marshal.ReadInt32(sbSizePointer);
@@ -66,22 +66,22 @@ namespace CSharpConsole
 
         public override string GetGameBoard()
         {
-            return CallGetGameBoard(gamePointer);
+            return GetLettersGameBoard(gamePointer);
         }
 
         public override void Run()
         {
-            CallRun(gamePointer);
+            RunLettersGame(gamePointer);
         }
 
         public override string EndMessage()
         {
-            return CallEndMessage(gamePointer);
+            return GetLettersGameEndMessage(gamePointer);
         }
 
         public override int GetScore(string answer)
         {
-            return CallGetScore(gamePointer, answer, answer.Length);
+            return GetLettersGameScore(gamePointer, answer, answer.Length);
         }
     }
 }
