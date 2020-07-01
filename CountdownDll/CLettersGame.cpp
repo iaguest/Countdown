@@ -1,5 +1,9 @@
+#include <memory>
+#include <random>
+
 #include "pch.h" 
 
+#include "../Countdown/Io.h"
 #include "CLettersGame.h"
 
 CLettersGame::CLettersGame()

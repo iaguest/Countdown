@@ -20,6 +20,7 @@
 #include "ConundrumGame.h"
 #include "GameRunner.h"
 #include "IGame.h"
+#include "IGenerator.h"
 #include "Io.h"
 #include "LettersGame.h"
 #include "NumbersGame.h"

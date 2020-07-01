@@ -90,7 +90,9 @@ private:
         for (const auto& s: expressionStrings) {
             const auto& tokenized = tokenizeExpression(s);
             const std::size_t tokensSize = tokenized.size();
-            maxOperatorCount = (tokensSize > 3) ? std::max(maxOperatorCount, ((tokensSize - 3) / 2)) : maxOperatorCount;
+            maxOperatorCount = (tokensSize > 3)
+                ? std::fmax(maxOperatorCount, ((tokensSize - 3) / 2))
+                : maxOperatorCount;
         }
         return maxOperatorCount - 1;
     }

@@ -15,8 +15,6 @@
 #include "AbstractGame.h"
 #include "ExpressionsGenerator.h"
 
-class ExpressionsGenerator;
-
 class NumbersGame : public AbstractGame<int>
 {
 public:
