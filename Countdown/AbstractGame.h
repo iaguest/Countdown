@@ -23,7 +23,7 @@ template <typename T>
 class AbstractGame : public IGame
 {
 public:
-    AbstractGame(std::mt19937& gen)
+    AbstractGame(std::mt19937 gen)
     : gen(gen)
     {
     }
@@ -43,7 +43,7 @@ private:
     virtual int maxAnswerTime() const { return 10; };
     
 protected:
-    std::mt19937& gen; //Standard mersenne_twister_engine
+    std::mt19937 gen; //Standard mersenne_twister_engine
     std::vector<T> gameBoard;
 };
 

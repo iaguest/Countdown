@@ -20,7 +20,7 @@ class ExpressionsGenerator;
 class NumbersGame : public AbstractGame<int>
 {
 public:
-    explicit NumbersGame(std::mt19937& gen);
+    explicit NumbersGame(std::mt19937 gen);
 
     bool initialize(std::ostream& os, std::istream& is) override;
     

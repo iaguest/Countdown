@@ -10,7 +10,7 @@ class CGameBase
 {
 public:
 
-    CGameBase(T* game) 
+    CGameBase(std::unique_ptr<T> game) 
         : pGame(std::move(game))
     {
     }

@@ -30,7 +30,7 @@ char getSingleCharacterInput(std::istream& is)
 }   // end namespace
 
 
-LettersGame::LettersGame(std::mt19937& gen,
+LettersGame::LettersGame(std::mt19937 gen,
                          const std::vector<char>& vowels,
                          const std::vector<char>& consonants,
                          const std::vector<std::string>& words)

@@ -42,7 +42,7 @@ int getSingleIntegerInputOrDefault(std::istream& is, int intDefault = 0)
 }  // end namespace
 
 
-NumbersGame::NumbersGame(std::mt19937& gen)
+NumbersGame::NumbersGame(std::mt19937 gen)
   : AbstractGame(gen)
 {
 }

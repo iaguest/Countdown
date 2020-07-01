@@ -16,7 +16,7 @@
 class ConundrumGame : public AbstractGame<char>
 {
 public:
-    explicit ConundrumGame(std::mt19937& gen, const std::vector<std::string>& words);
+    explicit ConundrumGame(std::mt19937 gen, const std::vector<std::string>& words);
     
     bool initialize(std::ostream& os, std::istream& is) override;
     
@@ -25,7 +25,7 @@ public:
     int getScore(const std::string& answer) const override;
     
 private:
-    const std::vector<std::string>& words;
+    const std::vector<std::string> words;
     std::string nineLetterWord;
 };
 
