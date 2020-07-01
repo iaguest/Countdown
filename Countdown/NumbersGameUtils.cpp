@@ -165,7 +165,7 @@ bool NumbersGameUtils::tryEvaluateExpression(const std::string& expression, doub
           try {
               stack.push(std::to_string(opFunction.at(token.front())(operand1, operand2)));
           }
-          catch (const std::exception& e) { 
+          catch (const std::exception&) { 
               return false;
           }
       }
