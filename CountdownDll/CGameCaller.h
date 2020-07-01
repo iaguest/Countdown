@@ -16,6 +16,8 @@ extern "C" {
                                                             char* output,
                                                             int* outputSize);
 
+    extern __declspec(dllexport) char* GetLettersGameStartMessage(CLettersGame* pLettersGame);
+
     extern __declspec(dllexport) char* GetLettersGameBoard(CLettersGame* pLettersGame);
 
     extern __declspec(dllexport) void RunLettersGame(CLettersGame* pLettersGame);

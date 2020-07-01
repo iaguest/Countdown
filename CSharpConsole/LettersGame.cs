@@ -19,6 +19,10 @@ namespace CSharpConsole
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
+        static public extern string GetLettersGameStartMessage(IntPtr lettersGame);
+
+        [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
         static public extern string GetLettersGameBoard(IntPtr pLettersGame);
 
         [DllImport("CountdownDll.dll")]
@@ -62,6 +66,11 @@ namespace CSharpConsole
             sbSizePointer = IntPtr.Zero;
 
             return isInitialized;
+        }
+
+        public override string StartMessage()
+        {
+            return GetLettersGameStartMessage(gamePointer);
         }
 
         public override string GetGameBoard()

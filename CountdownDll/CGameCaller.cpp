@@ -30,6 +30,15 @@ bool InitializeLettersGame(CLettersGame* pLettersGame,
     throw std::runtime_error("Invalid call to CallInitialize.");
 }
 
+char* GetLettersGameStartMessage(CLettersGame* pLettersGame)
+{
+    if (pLettersGame != nullptr)
+    {
+        return pLettersGame->startMessage();
+    }
+    throw std::runtime_error("Invalid call to CallStartMessage.");
+}
+
 char* GetLettersGameBoard(CLettersGame* pLettersGame)
 {
     if (pLettersGame != nullptr)

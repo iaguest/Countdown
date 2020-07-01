@@ -56,13 +56,13 @@ namespace CSharpConsole
 
         public abstract bool Initialize(string input, out string output);
 
-        public virtual string StartMessage() { return string.Empty; }
+        public abstract string StartMessage();
 
         public abstract string GetGameBoard();
 
         public abstract void Run();
 
-        public virtual string EndMessage() { return string.Empty; }
+        public abstract string EndMessage();
 
         public abstract int GetScore(string answer);
     }

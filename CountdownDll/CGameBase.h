@@ -37,6 +37,11 @@ public:
         return isInitialized;
     }
 
+    char* startMessage() const
+    {
+        return makeStringCopy(pGame->startMessage());
+    }
+
     char* getGameBoard() const
     {
         return makeStringCopy(pGame->getGameBoard());
