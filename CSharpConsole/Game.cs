@@ -7,7 +7,7 @@ namespace CSharpConsole
     public abstract class Game : IDisposable, IGame
     {
         private bool disposedValue = false; // To detect redundant calls
-        protected IntPtr gamePointer;
+        private IntPtr gamePointer;
 
         public Game()
         {
@@ -26,7 +26,7 @@ namespace CSharpConsole
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                DisposeGame();
+                DisposeGame(gamePointer);
                 // TODO: set large fields to null.
                 gamePointer = IntPtr.Zero;
 
@@ -52,25 +52,7 @@ namespace CSharpConsole
 
         #endregion
 
-        public abstract string StartMessage();
-
-        public abstract string GetGameBoard();
-
-        public abstract void Run();
-
-        public abstract string EndMessage();
-
-        public abstract int GetScore(string answer);
-
-        protected abstract IntPtr CreateGame();
-
-        protected abstract void DisposeGame();
-
-        protected abstract bool Initialize(IntPtr gamePointer,
-                                           string input,
-                                           Int32 inputSize,
-                                           StringBuilder output,
-                                           IntPtr outputSize);
+        #region IGame
 
         public bool Initialize(string input, out string output)
         {
@@ -91,5 +73,52 @@ namespace CSharpConsole
 
             return isInitialized;
         }
+
+        public string StartMessage()
+        {
+            return StartMessage(gamePointer);
+        }
+
+        public string GetGameBoard()
+        {
+            return GetGameBoard(gamePointer);
+        }
+
+        public void Run()
+        {
+            Run(gamePointer);
+        }
+
+        public string EndMessage()
+        {
+            return EndMessage(gamePointer);
+        }
+
+        public int GetScore(string answer)
+        {
+            return GetScore(gamePointer, answer, answer.Length);
+        }
+
+        #endregion
+
+        protected abstract IntPtr CreateGame();
+
+        protected abstract void DisposeGame(IntPtr gamePointer);
+
+        protected abstract bool Initialize(IntPtr gamePointer,
+                                           string input,
+                                           Int32 inputSize,
+                                           StringBuilder output,
+                                           IntPtr outputSize);
+
+        protected abstract string StartMessage(IntPtr gamePointer);
+
+        protected abstract string GetGameBoard(IntPtr gamePointer);
+
+        protected abstract void Run(IntPtr gamePointer);
+
+        protected abstract string EndMessage(IntPtr gamePointer);
+
+        protected abstract int GetScore(IntPtr lettersGame, string answer, Int32 answerSize);
     }
 }

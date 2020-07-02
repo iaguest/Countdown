@@ -15,6 +15,7 @@ void DisposeLettersGame(CLettersGame* pLettersGame)
     {
         delete pLettersGame;
         pLettersGame = nullptr;
+        return;
     }
     throw std::runtime_error("Invalid call.");
 }
@@ -92,6 +93,7 @@ void DisposeNumbersGame(CNumbersGame* pNumbersGame)
     {
         delete pNumbersGame;
         pNumbersGame = nullptr;
+        return;
     }
     throw std::runtime_error("Invalid call.");
 }
@@ -169,6 +171,7 @@ void DisposeConundrumGame(CConundrumGame* pConundrumGame)
     {
         delete pConundrumGame;
         pConundrumGame = nullptr;
+        return;
     }
     throw std::runtime_error("Invalid call.");
 }
