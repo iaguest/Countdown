@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace CSharpConsole
 {
-    public abstract class Game : IDisposable
+    public abstract class Game : IDisposable, IGame
     {
         private bool disposedValue = false; // To detect redundant calls
         protected IntPtr gamePointer;
@@ -50,12 +52,6 @@ namespace CSharpConsole
 
         #endregion
 
-        public abstract IntPtr CreateGame();
-
-        public abstract void DisposeGame();
-
-        public abstract bool Initialize(string input, out string output);
-
         public abstract string StartMessage();
 
         public abstract string GetGameBoard();
@@ -65,5 +61,35 @@ namespace CSharpConsole
         public abstract string EndMessage();
 
         public abstract int GetScore(string answer);
+
+        protected abstract IntPtr CreateGame();
+
+        protected abstract void DisposeGame();
+
+        protected abstract bool Initialize(IntPtr gamePointer,
+                                           string input,
+                                           Int32 inputSize,
+                                           StringBuilder output,
+                                           IntPtr outputSize);
+
+        public bool Initialize(string input, out string output)
+        {
+            StringBuilder sb = new StringBuilder(256);
+            int sbSize = sb.MaxCapacity;
+            // Allocating memory for int
+            IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
+            Marshal.WriteInt32(sbSizePointer, sbSize);
+
+            bool isInitialized = Initialize(gamePointer, input, 1, sb, sbSizePointer);
+
+            int outputsize = Marshal.ReadInt32(sbSizePointer);
+            output = sb.ToString()[outputsize - 2].ToString();
+
+            // Free memory
+            Marshal.FreeHGlobal(sbSizePointer);
+            sbSizePointer = IntPtr.Zero;
+
+            return isInitialized;
+        }
     }
 }

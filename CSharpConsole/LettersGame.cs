@@ -37,35 +37,19 @@ namespace CSharpConsole
 
         #endregion
 
-        public override IntPtr CreateGame()
+        protected override IntPtr CreateGame()
         {
             return CreateLettersGame();
         }
 
-        public override void DisposeGame()
+        protected override void DisposeGame()
         {
             DisposeLettersGame(gamePointer);
         }
 
-        public override bool Initialize(string input, out string output)
+        protected override bool Initialize(IntPtr gamePointer, string input, int inputSize, StringBuilder output, IntPtr outputSize)
         {
-            StringBuilder sb = new StringBuilder(256);
-            int sbSize = sb.MaxCapacity;
-            // Allocating memory for int
-            IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
-            Marshal.WriteInt32(sbSizePointer, sbSize);
-
-            bool isInitialized = InitializeLettersGame(
-                gamePointer, input, 1, sb, sbSizePointer);
-
-            int outputsize = Marshal.ReadInt32(sbSizePointer);
-            output = sb.ToString()[outputsize - 2].ToString();
-
-            // Free memory
-            Marshal.FreeHGlobal(sbSizePointer);
-            sbSizePointer = IntPtr.Zero;
-
-            return isInitialized;
+            return InitializeLettersGame(gamePointer, input, inputSize, output, outputSize);
         }
 
         public override string StartMessage()
