@@ -4,12 +4,12 @@ using System.Text;
 
 namespace CSharpConsole
 {
-    public abstract class Game : IDisposable, IGame
+    public abstract class AbstractGame : IDisposable, IGame
     {
         private bool disposedValue = false; // To detect redundant calls
         private IntPtr gamePointer;
 
-        public Game()
+        public AbstractGame()
         {
             gamePointer = CreateGame();
         }
@@ -35,7 +35,7 @@ namespace CSharpConsole
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        ~Game()
+        ~AbstractGame()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(false);

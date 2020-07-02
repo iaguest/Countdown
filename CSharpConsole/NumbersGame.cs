@@ -4,18 +4,19 @@ using System.Text;
 
 namespace CSharpConsole
 {
-    public class LettersGame : AbstractGame
+    public class NumbersGame : AbstractGame
     {
+
         #region Dll Marshalling
 
         [DllImport("CountdownDll.dll")]
-        static public extern IntPtr CreateLettersGame();
+        static public extern IntPtr CreateNumbersGame();
 
         [DllImport("CountdownDll.dll")]
-        static public extern void DisposeLettersGame(IntPtr pLettersGame);
+        static public extern void DisposeNumbersGame(IntPtr pNumbersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern bool InitializeLettersGame(IntPtr pLettersGame,
+        static public extern bool InitializeNumbersGame(IntPtr pNumbersGame,
                                                         string input,
                                                         Int32 inputSize,
                                                         StringBuilder output,
@@ -23,41 +24,33 @@ namespace CSharpConsole
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        static public extern string GetLettersGameStartMessage(IntPtr lettersGame);
+        static public extern string GetNumbersGameStartMessage(IntPtr NumbersGame);
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        static public extern string GetLettersGameBoard(IntPtr pLettersGame);
+        static public extern string GetNumbersGameBoard(IntPtr pNumbersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern void RunLettersGame(IntPtr lettersGame);
+        static public extern void RunNumbersGame(IntPtr NumbersGame);
 
         [DllImport("CountdownDll.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        static public extern string GetLettersGameEndMessage(IntPtr lettersGame);
+        static public extern string GetNumbersGameEndMessage(IntPtr NumbersGame);
 
         [DllImport("CountdownDll.dll")]
-        static public extern int GetLettersGameScore(IntPtr lettersGame, string answer, Int32 answerSize);
+        static public extern int GetNumbersGameScore(IntPtr NumbersGame, string answer, Int32 answerSize);
 
         #endregion
 
         protected override IntPtr CreateGame()
         {
-            return CreateLettersGame();
+            return CreateNumbersGame();
         }
 
         protected override void DisposeGame(IntPtr gamePointer)
         {
-            DisposeLettersGame(gamePointer);
+            DisposeNumbersGame(gamePointer);
         }
-
-        public override bool Initialize(string input, out string output)
-        {
-            bool isInitialized = base.Initialize(input, out output);
-            // get last character which is the generated vowel or consonant.
-            output = output[output.Length - 2].ToString();
-            return isInitialized;
-    }
 
         protected override bool Initialize(IntPtr gamePointer,
                                            string input,
@@ -65,32 +58,32 @@ namespace CSharpConsole
                                            StringBuilder output,
                                            IntPtr outputSize)
         {
-            return InitializeLettersGame(gamePointer, input, inputSize, output, outputSize);
+            return InitializeNumbersGame(gamePointer, input, inputSize, output, outputSize);
         }
 
         protected override string StartMessage(IntPtr gamePointer)
         {
-            return GetLettersGameStartMessage(gamePointer);
+            return GetNumbersGameStartMessage(gamePointer);
         }
 
         protected override string GetGameBoard(IntPtr gamePointer)
         {
-            return GetLettersGameBoard(gamePointer);
+            return GetNumbersGameBoard(gamePointer);
         }
 
         protected override void Run(IntPtr gamePointer)
         {
-            RunLettersGame(gamePointer);
+            RunNumbersGame(gamePointer);
         }
 
         protected override string EndMessage(IntPtr gamePointer)
         {
-            return GetLettersGameEndMessage(gamePointer);
+            return GetNumbersGameEndMessage(gamePointer);
         }
 
         protected override int GetScore(IntPtr gamePointer, string answer, Int32 answerSize)
         {
-            return GetLettersGameScore(gamePointer, answer, answer.Length);
+            return GetNumbersGameScore(gamePointer, answer, answer.Length);
         }
     }
 }
