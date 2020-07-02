@@ -54,7 +54,7 @@ namespace CSharpConsole
 
         #region IGame
 
-        public bool Initialize(string input, out string output)
+        public virtual bool Initialize(string input, out string output)
         {
             StringBuilder sb = new StringBuilder(256);
             int sbSize = sb.MaxCapacity;
@@ -65,7 +65,7 @@ namespace CSharpConsole
             bool isInitialized = Initialize(gamePointer, input, 1, sb, sbSizePointer);
 
             int outputsize = Marshal.ReadInt32(sbSizePointer);
-            output = sb.ToString()[outputsize - 2].ToString();
+            output = sb.ToString().Substring(0, outputsize);
 
             // Free memory
             Marshal.FreeHGlobal(sbSizePointer);

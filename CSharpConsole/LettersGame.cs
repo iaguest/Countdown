@@ -51,6 +51,14 @@ namespace CSharpConsole
             DisposeLettersGame(gamePointer);
         }
 
+        public override bool Initialize(string input, out string output)
+        {
+            bool isInitialized = base.Initialize(input, out output);
+            // get last character which is the generated vowel or consonant.
+            output = output[output.Length - 2].ToString();
+            return isInitialized;
+    }
+
         protected override bool Initialize(IntPtr gamePointer,
                                            string input,
                                            int inputSize,

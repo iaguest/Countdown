@@ -42,7 +42,7 @@ namespace CSharpConsole
                     "c", "v", "c", "v", "c", "v", "c", "v", "c"
                 };
 
-                ExecuteGame(game, letterTypes, (o) => Console.WriteLine(o));
+                ExecuteGame(game, letterTypes, (o) => { });
             }
         }
     }
