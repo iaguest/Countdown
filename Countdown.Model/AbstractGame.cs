@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CSharpConsole
+namespace Countdown.Model
 {
     public abstract class AbstractGame : IDisposable, IGame
     {
@@ -54,6 +54,14 @@ namespace CSharpConsole
 
         #region IGame
 
+        public string InitializeMessage => InitializationMessage;
+
+        public string StartRunMessage => StartMessage(gamePointer);
+
+        public string GameBoard => GetGameBoard(gamePointer);
+
+        public string EndRunMessage => EndMessage(gamePointer);
+
         public virtual bool Initialize(string input, out string output)
         {
             StringBuilder sb = new StringBuilder(256);
@@ -74,24 +82,10 @@ namespace CSharpConsole
             return isInitialized;
         }
 
-        public string StartMessage()
-        {
-            return StartMessage(gamePointer);
-        }
-
-        public string GetGameBoard()
-        {
-            return GetGameBoard(gamePointer);
-        }
-
-        public void Run()
+        public void Run(Action onDone)
         {
             Run(gamePointer);
-        }
-
-        public string EndMessage()
-        {
-            return EndMessage(gamePointer);
+            onDone();
         }
 
         public int GetScore(string answer)
@@ -110,6 +104,8 @@ namespace CSharpConsole
                                            Int32 inputSize,
                                            StringBuilder output,
                                            IntPtr outputSize);
+
+        protected abstract string InitializationMessage { get; }
 
         protected abstract string StartMessage(IntPtr gamePointer);
 

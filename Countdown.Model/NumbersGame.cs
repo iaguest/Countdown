@@ -2,11 +2,10 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CSharpConsole
+namespace Countdown.Model
 {
     public class NumbersGame : AbstractGame
     {
-
         #region Dll Marshalling
 
         [DllImport("CountdownDll.dll")]
@@ -60,6 +59,8 @@ namespace CSharpConsole
         {
             return InitializeNumbersGame(gamePointer, input, inputSize, output, outputSize);
         }
+
+        protected override string InitializationMessage => "Enter number of large numbers (0->4)";
 
         protected override string StartMessage(IntPtr gamePointer)
         {

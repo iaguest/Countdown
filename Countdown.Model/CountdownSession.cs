@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Countdown.Model
 {
+    // TODO: Needs to implement IDisposable
     public class CountdownSession : ICountdownSession
     {
         private IEnumerable<IGame> _games;
@@ -16,7 +17,8 @@ namespace Countdown.Model
             _games = new List<IGame>
             {
                 new LettersGame(),
-                new LettersGame()
+                new NumbersGame(),
+                new ConundrumGame()
             };
             _currentGameIndex = 0;
             Score = 0;
@@ -99,7 +101,7 @@ namespace Countdown.Model
 
         private async Task HandleInitializing(string input)
         {
-            bool isInitialized = CurrentGame.Initialize(input);
+            bool isInitialized = CurrentGame.Initialize(input, out string output);
             if (isInitialized)
             {
                 Console.Error.WriteLine("Finished initialization...");

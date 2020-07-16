@@ -9,7 +9,7 @@ namespace Countdown.Model
         string GameBoard { get; }
         string EndRunMessage { get; }
 
-        bool Initialize(string input);
+        bool Initialize(string input, out string output);
         void Run(Action onDone);
         int GetScore(string answer);
 
