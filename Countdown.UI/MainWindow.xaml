@@ -1,0 +1,137 @@
+﻿<Window x:Class="Countdown.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:prism="http://www.codeplex.com/prism"
+        mc:Ignorable="d"
+        Title="Countdown" Height="700" Width="700">
+    <Grid Background="LightBlue">
+        <i:Interaction.Triggers >
+            <i:EventTrigger EventName="KeyDown">
+                <prism:InvokeCommandAction Command="{Binding KeyDownEventCommand}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="{Binding GameType}" HorizontalAlignment="Center" FontSize="15"/>
+        <Canvas Grid.Row="0" Grid.Column="1" Height="200" Width="200" Name="ClockCanvas">
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform X="100" Y="100" />
+                </TransformGroup>
+            </Canvas.RenderTransform>
+            <Ellipse Width="200" Height="200" Stroke="Black" StrokeThickness="2" Canvas.Left="-100" Canvas.Top="-100" Fill="LightGray"/>
+            <Ellipse Width="15" Height="15" Stroke="Black" Canvas.Left="-7.5" Canvas.Top="-7.5" Fill="Black"/>
+            <Line X1="0" Y1="-100" X2="0" Y2="100" Stroke="Black" StrokeThickness="1" Fill="DarkGray"/>
+            <Line X1="-100" Y1="0" X2="100" Y2="0" Stroke="Black" StrokeThickness="1" Fill="DarkGray"/>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="30" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="60" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="120" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="150" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="210" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="240" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="300" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="70" X2="0" Y2="90" Stroke="Black" StrokeThickness="1" Fill="DarkGray">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="330" />
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="-95" Stroke="Black" StrokeThickness="5" Name="MyLine">
+                <Line.RenderTransform>
+                    <RotateTransform Angle="0" />
+                </Line.RenderTransform>
+                <Line.Resources>
+                    <Storyboard x:Key="TheStoryboard">
+                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle"
+                         From="0" To="180" Duration="0:0:30.0" FillBehavior="Stop"/>
+                    </Storyboard>
+                </Line.Resources>
+                <Line.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <StaticResource ResourceKey="TheStoryboard"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
+        </Canvas>
+        <MediaElement x:Name="myMediaElement" Visibility="Hidden" >
+            <MediaElement.Resources>
+                <Storyboard x:Key="PlaySoundStoryboard">
+                    <MediaTimeline Source="C:/Users/G-Dawg/source/repos/CountdownProto/CountdownProto/clock.mp3" />
+                </Storyboard>
+            </MediaElement.Resources>
+            <MediaElement.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <StaticResource ResourceKey="PlaySoundStoryboard"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </MediaElement.Style>
+        </MediaElement>
+        <Label Grid.Row="0" Grid.Column="2" Content="{Binding Score}" HorizontalAlignment="Center" FontSize="15"/>
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding GameBoard}" HorizontalAlignment="Center" FontSize="25"/>
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding UserMessage}" HorizontalAlignment="Center" FontSize="15"/>
+        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Height="30" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">
+        </TextBox>
+        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content=">>" FontWeight="Bold" FontSize="15"
+                Command ="{Binding OnNextGameCommand}" Width="125" Margin="10"/>
+    </Grid>
+</Window>
