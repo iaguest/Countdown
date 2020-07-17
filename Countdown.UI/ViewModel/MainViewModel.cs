@@ -17,6 +17,7 @@ namespace Countdown.UI.ViewModel
             OnNextGameCommand = new DelegateCommand(OnNextGameCommandExecute,
                                                     () => CanNextGameCommandExecute);
             CanNextGameCommandExecute = false;
+            UserInput = string.Empty;
         }
 
         public DelegateCommand<KeyEventArgs> KeyDownEventCommand { get; private set; }
