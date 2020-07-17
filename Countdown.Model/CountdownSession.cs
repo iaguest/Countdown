@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace Countdown.Model
 {
-    // TODO: Needs to implement IDisposable
     public class CountdownSession : ICountdownSession
     {
         private IEnumerable<IGame> _games;
@@ -23,6 +22,14 @@ namespace Countdown.Model
             _currentGameIndex = 0;
             Score = 0;
             State = GameState.INITIALIZING;
+        }
+
+        public void Dispose()
+        {
+            foreach (var game in _games)
+            {
+                game?.Dispose();
+            }
         }
 
         public event EventHandler<GameStateUpdatedEventArgs> GameStateUpdated;

@@ -2,7 +2,7 @@
 
 namespace Countdown.Model
 {
-    public interface ICountdownSession
+    public interface ICountdownSession : IDisposable
     {
         event EventHandler<GameStateUpdatedEventArgs> GameStateUpdated;
 
