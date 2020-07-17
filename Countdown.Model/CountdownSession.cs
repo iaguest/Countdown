@@ -10,6 +10,7 @@ namespace Countdown.Model
         private IEnumerable<IGame> _games;
         private int _currentGameIndex;
         private GameState _state;
+        private int _lastScore;
 
         public CountdownSession()
         {
@@ -20,6 +21,7 @@ namespace Countdown.Model
                 new ConundrumGame()
             };
             _currentGameIndex = 0;
+            _lastScore = 0;
             Score = 0;
             State = GameState.INITIALIZING;
         }
@@ -53,7 +55,7 @@ namespace Countdown.Model
                     case GameState.SOLVING:
                         return "Enter answer...";
                     case GameState.DONE:
-                        return $"You scored {Score}\n\n{CurrentGame.EndRunMessage}";
+                        return $"In this round, you scored {Score - _lastScore}\n\n{CurrentGame.EndRunMessage}";
                     default:
                         return string.Empty;
                 }
@@ -101,6 +103,7 @@ namespace Countdown.Model
 
         private void HandleSolving(string input)
         {
+            _lastScore = Score;
             Score += CurrentGame.GetScore(input);
             Console.Error.WriteLine($"Score: {Score}");
             State = GameState.DONE;

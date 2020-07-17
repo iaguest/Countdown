@@ -31,7 +31,7 @@ namespace Countdown.UI.ViewModel
 
         public string UserInput { get; set; }
 
-        public string Score => $"Score: {_gameSession.Score}";
+        public string Score => $"Total Score: {_gameSession.Score}";
 
         public bool IsRunning { get; private set; }
 
