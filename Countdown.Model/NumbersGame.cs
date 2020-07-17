@@ -51,11 +51,6 @@ namespace Countdown.Model
             DisposeNumbersGame(gamePointer);
         }
 
-        protected override bool CanInitialize(string input)
-        {
-            return int.TryParse(input, out int inputInt) && inputInt >= 0 && inputInt <= 4;
-        }
-
         protected override bool Initialize(IntPtr gamePointer,
                                            string input,
                                            int inputSize,

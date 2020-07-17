@@ -64,18 +64,13 @@ namespace Countdown.Model
 
         public bool Initialize(string input, out string output)
         {
-            output = null;
-
-            if (!CanInitialize(input))
-                return false;
-
             StringBuilder sb = new StringBuilder(256);
             int sbSize = sb.MaxCapacity;
             // Allocating memory for int
             IntPtr sbSizePointer = Marshal.AllocHGlobal(sizeof(int));
             Marshal.WriteInt32(sbSizePointer, sbSize);
 
-            bool isInitialized = Initialize(gamePointer, input, 1, sb, sbSizePointer);
+            bool isInitialized = Initialize(gamePointer, input, input.Length, sb, sbSizePointer);
 
             int outputsize = Marshal.ReadInt32(sbSizePointer);
             output = sb.ToString().Substring(0, outputsize);
@@ -103,8 +98,6 @@ namespace Countdown.Model
         protected abstract IntPtr CreateGame();
 
         protected abstract void DisposeGame(IntPtr gamePointer);
-
-        protected virtual bool CanInitialize(string input) { return true; }
 
         protected abstract bool Initialize(IntPtr gamePointer,
                                            string input,

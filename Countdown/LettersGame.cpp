@@ -47,24 +47,24 @@ bool LettersGame::initialize(std::ostream& os, std::istream& is)
     {
         os << "Vowel(v)/Consonant(c)? ";
         const char charIn = getSingleCharacterInput(is);
-		char charOut;
+        char charOut;
         if (charIn == 'v' || charIn == 'V') {
             int randomVowelIndex =
                 std::uniform_int_distribution<>(0, static_cast<int>(vowels.size() - 1))(gen);
-			charOut = vowels.at(randomVowelIndex);;
+            charOut = vowels.at(randomVowelIndex);;
         }
-        else if (charIn=='c' || charIn== 'C') {
+        else {
             int randomConsonantIndex =
                 std::uniform_int_distribution<>(0, static_cast<int>(consonants.size() - 1))(gen);
-			charOut = consonants.at(randomConsonantIndex);
+            charOut = consonants.at(randomConsonantIndex);
         }
-		gameBoard.push_back(charOut);
+        gameBoard.push_back(charOut);
         os << charOut << std::endl;
     }
     
     solutionWords.clear();
 
-	return gameBoard.size() == lettersBoardSize;
+    return gameBoard.size() == lettersBoardSize;
 }
 
 void LettersGame::onStartRun()
