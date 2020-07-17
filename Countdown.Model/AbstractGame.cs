@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Countdown.Model
 {
-    public abstract class AbstractGame : IDisposable, IGame
+    public abstract class AbstractGame : IGame
     {
         private bool disposedValue = false; // To detect redundant calls
         private IntPtr gamePointer;

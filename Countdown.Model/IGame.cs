@@ -2,7 +2,7 @@
 
 namespace Countdown.Model
 {
-    public interface IGame
+    public interface IGame : IDisposable
     {
         string InitializeMessage { get; }
         string StartRunMessage { get; }
