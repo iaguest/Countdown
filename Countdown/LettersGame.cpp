@@ -110,8 +110,12 @@ std::vector<std::string> LettersGame::getSolutionWords(const std::vector<std::st
 std::string LettersGame::endMessage() const
 {
     std::stringstream ss;
-    ss << "Possible words are:" << std::endl;
-    for (const auto& word: solutionWords)
+    ss << "Possible words are: ";
+    const int maxWords = 5;
+    auto possibleWords = (solutionWords.size() < maxWords)
+        ? solutionWords
+        : std::vector(rbegin(solutionWords), rbegin(solutionWords) + maxWords);
+    for (const auto& word: possibleWords)
         ss << word << " ";
     ss << std::endl;
     return ss.str();
