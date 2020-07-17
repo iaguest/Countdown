@@ -54,6 +54,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
@@ -152,7 +155,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)x64\Release\CountdownDll.dll" "$(TargetDir)" /Y
+    <PostBuildEvent>xcopy "$(SolutionDir)x64\$(Configuration)\CountdownDll.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)Countdown\consonants.txt" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)Countdown\vowels.txt" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)Countdown\UK_english_truncated.txt" "$(TargetDir)" /Y</PostBuildEvent>
