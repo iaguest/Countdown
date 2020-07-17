@@ -62,7 +62,7 @@ namespace Countdown.Model
 
         public string EndRunMessage => EndMessage(gamePointer);
 
-        public virtual bool Initialize(string input, out string output)
+        public bool Initialize(string input, out string output)
         {
             StringBuilder sb = new StringBuilder(256);
             int sbSize = sb.MaxCapacity;
