@@ -64,6 +64,11 @@ namespace Countdown.Model
 
         public bool Initialize(string input, out string output)
         {
+            output = null;
+
+            if (!CanInitialize(input))
+                return false;
+
             StringBuilder sb = new StringBuilder(256);
             int sbSize = sb.MaxCapacity;
             // Allocating memory for int
@@ -98,6 +103,8 @@ namespace Countdown.Model
         protected abstract IntPtr CreateGame();
 
         protected abstract void DisposeGame(IntPtr gamePointer);
+
+        protected virtual bool CanInitialize(string input) { return true; }
 
         protected abstract bool Initialize(IntPtr gamePointer,
                                            string input,

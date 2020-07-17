@@ -51,6 +51,12 @@ namespace Countdown.Model
             DisposeLettersGame(gamePointer);
         }
 
+        protected override bool CanInitialize(string input)
+        {
+            var lowerInput = input.ToLower();
+            return lowerInput == "c" || lowerInput == "v";
+        }
+
         protected override bool Initialize(IntPtr gamePointer,
                                            string input,
                                            int inputSize,
