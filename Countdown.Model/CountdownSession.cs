@@ -7,10 +7,14 @@ namespace Countdown.Model
 {
     public class CountdownSession : ICountdownSession
     {
+        private const int MAX_ANSWER_WAIT_TIME = 10;
+
         private IEnumerable<IGame> _games;
         private int _currentGameIndex;
         private GameState _state;
         private int _lastScore;
+        private DateTime _runCompleteDateTime;
+        private bool _isAnswerTimeout;
 
         public CountdownSession()
         {
@@ -21,9 +25,11 @@ namespace Countdown.Model
                 new ConundrumGame()
             };
             _currentGameIndex = 0;
-            _lastScore = 0;
-            Score = 0;
             State = GameState.INITIALIZING;
+            _lastScore = 0;
+            _runCompleteDateTime = default(DateTime);
+            _isAnswerTimeout = false;
+            Score = 0;
         }
 
         public void Dispose()
@@ -55,7 +61,10 @@ namespace Countdown.Model
                     case GameState.SOLVING:
                         return "Enter answer...";
                     case GameState.DONE:
-                        return $"In this round, you scored {Score - _lastScore}\n\n{CurrentGame.EndRunMessage}";
+                        var timeoutMsg = _isAnswerTimeout ?
+                            $" as you took longer than {MAX_ANSWER_WAIT_TIME} seconds to answer."
+                            : string.Empty;
+                        return $"In this round, you scored {Score - _lastScore}{timeoutMsg}\n\n{CurrentGame.EndRunMessage}";
                     default:
                         return string.Empty;
                 }
@@ -104,8 +113,8 @@ namespace Countdown.Model
         private void HandleSolving(string input)
         {
             _lastScore = Score;
-            Score += CurrentGame.GetScore(input);
-            Console.Error.WriteLine($"Score: {Score}");
+            _isAnswerTimeout = (DateTime.Now - _runCompleteDateTime).TotalSeconds > MAX_ANSWER_WAIT_TIME;
+            Score += _isAnswerTimeout ? 0 : CurrentGame.GetScore(input);
             State = GameState.DONE;
         }
 
@@ -122,6 +131,7 @@ namespace Countdown.Model
                       () =>
                       {
                           State = GameState.SOLVING;
+                          _runCompleteDateTime = DateTime.Now;
                       });
                 });
 
