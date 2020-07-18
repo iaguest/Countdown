@@ -7,7 +7,7 @@ namespace Countdown.Model
 {
     public class CountdownSession : ICountdownSession
     {
-        private const int MAX_ANSWER_WAIT_TIME = 10;
+        private const int MAX_ANSWER_WAIT_TIME = 5;
 
         private IEnumerable<IGame> _games;
         private int _currentGameIndex;
