@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
@@ -42,9 +43,9 @@ namespace Countdown.UI.ViewModel
 
         public bool IsRunning { get; private set; }
 
-        public void Load()
+        public async Task LoadAsync()
         {
-            _dataService.Load();
+            await Task.Run(() => { _dataService.Load(); });
             UpdateAllProperties();
         }
 
@@ -58,7 +59,7 @@ namespace Countdown.UI.ViewModel
             }
         }
 
-        private void OnGameStateUpdated(object sender, GameStateUpdatedEventArgs e)
+        private async void OnGameStateUpdated(object sender, GameStateUpdatedEventArgs e)
         {
             var state = e.NewState;
             IsRunning = state == GameState.RUNNING;
@@ -69,7 +70,10 @@ namespace Countdown.UI.ViewModel
                 if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
                 {
                     _dataService.HighScore = _gameSession.Score;
-                    _dataService.Save();
+                    await Task.Run(() =>
+                    {
+                        _dataService.Save();
+                    });
                 }
             }
             UpdateAllProperties();
