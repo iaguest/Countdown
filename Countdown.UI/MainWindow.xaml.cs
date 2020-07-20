@@ -1,5 +1,4 @@
 ﻿using Countdown.UI.ViewModel;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Countdown

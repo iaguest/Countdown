@@ -62,17 +62,14 @@ namespace Countdown.UI.ViewModel
         {
             var state = e.NewState;
             IsRunning = state == GameState.RUNNING;
-            var hasNextGame = _gameSession.HasNextGame;
             if (state == GameState.DONE)
             {
+                var hasNextGame = _gameSession.HasNextGame;
                 CanNextGameCommandExecute = hasNextGame;
                 if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
                 {
                     _dataService.HighScore = _gameSession.Score;
-                    await Task.Run(() =>
-                    {
-                        _dataService.Save();
-                    });
+                    await Task.Run(() => { _dataService.Save(); });
                 }
             }
             UpdateAllProperties();
