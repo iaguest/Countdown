@@ -85,7 +85,7 @@
                     <RotateTransform Angle="0" />
                 </Line.RenderTransform>
                 <Line.Resources>
-                    <Storyboard x:Key="TheStoryboard">
+                    <Storyboard x:Key="LineStoryboard">
                         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle"
                          From="0" To="180" Duration="0:0:30.0" FillBehavior="Stop"/>
                     </Storyboard>
@@ -97,7 +97,7 @@
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <StaticResource ResourceKey="TheStoryboard"/>
+                                            <StaticResource ResourceKey="LineStoryboard"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
@@ -109,7 +109,7 @@
         </Canvas>
         <MediaElement x:Name="myMediaElement" Visibility="Hidden" >
             <MediaElement.Resources>
-                <Storyboard x:Key="PlaySoundStoryboard">
+                <Storyboard x:Key="SoundStoryboard">
                     <MediaTimeline Source="C:/Users/G-Dawg/source/repos/CountdownProto/CountdownProto/clock.mp3" />
                 </Storyboard>
             </MediaElement.Resources>
@@ -120,7 +120,7 @@
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <StaticResource ResourceKey="PlaySoundStoryboard"/>
+                                        <StaticResource ResourceKey="SoundStoryboard"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
