@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
@@ -9,8 +10,9 @@ namespace Countdown.UI.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private ICountdownDataService _dataService;
-        private readonly ICountdownSession _gameSession;
-        private bool _canClickExecute;
+        private ICountdownSession _gameSession;
+        private bool _canNextButtonExecute;
+        private bool _canRestartButtonExecute;
 
         public MainViewModel(ICountdownDataService dataService, ICountdownSession gameSession)
         {
@@ -20,13 +22,18 @@ namespace Countdown.UI.ViewModel
             KeyDownEventCommand = new DelegateCommand<KeyEventArgs>(ExecuteUserInput);
             OnNextGameCommand = new DelegateCommand(OnNextGameCommandExecute,
                                                     () => CanNextGameCommandExecute);
+            OnRestartCommand = new DelegateCommand(OnRestartCommandExecute,
+                                                   () => CanRestartCommandExecute);
             CanNextGameCommandExecute = false;
+            CanRestartCommandExecute = false;
             UserInput = string.Empty;
         }
 
         public DelegateCommand<KeyEventArgs> KeyDownEventCommand { get; private set; }
 
         public DelegateCommand OnNextGameCommand { get; }
+
+        public DelegateCommand OnRestartCommand { get; }
 
         public string GameType => _gameSession.GameType.Replace("Game", " Round");
 
@@ -66,6 +73,7 @@ namespace Countdown.UI.ViewModel
             {
                 var hasNextGame = _gameSession.HasNextGame;
                 CanNextGameCommandExecute = hasNextGame;
+                CanRestartCommandExecute = !hasNextGame;
                 if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
                 {
                     _dataService.HighScore = _gameSession.Score;
@@ -77,11 +85,21 @@ namespace Countdown.UI.ViewModel
 
         private bool CanNextGameCommandExecute
         {
-            get { return _canClickExecute; }
+            get { return _canNextButtonExecute; }
             set
             {
-                _canClickExecute = value;
+                _canNextButtonExecute = value;
                 OnNextGameCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private bool CanRestartCommandExecute
+        {
+            get { return _canRestartButtonExecute; }
+            set
+            {
+                _canRestartButtonExecute = value;
+                OnRestartCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -89,6 +107,13 @@ namespace Countdown.UI.ViewModel
         {
             _gameSession.NextGame();
             CanNextGameCommandExecute = false;
+        }
+
+        private void OnRestartCommandExecute()
+        {
+            _gameSession.Reset();
+            CanRestartCommandExecute = false;
+            UpdateAllProperties();
         }
     }
 }

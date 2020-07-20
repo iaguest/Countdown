@@ -7,7 +7,7 @@ namespace Countdown.Model
 {
     public class CountdownSession : ICountdownSession
     {
-        private const int MAX_ANSWER_WAIT_TIME = 5;
+        private const int MAX_ANSWER_WAIT_TIME = 10;
 
         private IEnumerable<IGame> _games;
         private int _currentGameIndex;
@@ -18,26 +18,18 @@ namespace Countdown.Model
 
         public CountdownSession()
         {
-            _games = new List<IGame>
-            {
-                new LettersGame(),
-                new NumbersGame(),
-                new ConundrumGame()
-            };
-            _currentGameIndex = 0;
-            State = GameState.INITIALIZING;
-            _lastScore = 0;
-            _runCompleteDateTime = default(DateTime);
-            _isAnswerTimeout = false;
-            Score = 0;
+            InitializeSession();
         }
 
         public void Dispose()
         {
-            foreach (var game in _games)
-            {
-                game?.Dispose();
-            }
+            DisposeGames();
+        }
+
+        public void Reset()
+        {
+            DisposeGames();
+            InitializeSession();
         }
 
         public event EventHandler<GameStateUpdatedEventArgs> GameStateUpdated;
@@ -109,6 +101,30 @@ namespace Countdown.Model
         }
 
         private IGame CurrentGame => _games.ElementAt(_currentGameIndex);
+
+        private void InitializeSession()
+        {
+            _games = new List<IGame>
+            {
+                new LettersGame(),
+                new NumbersGame(),
+                new ConundrumGame()
+            };
+            _currentGameIndex = 0;
+            State = GameState.INITIALIZING;
+            _lastScore = 0;
+            _runCompleteDateTime = default(DateTime);
+            _isAnswerTimeout = false;
+            Score = 0;
+        }
+
+        private void DisposeGames()
+        {
+            foreach (var game in _games)
+            {
+                game?.Dispose();
+            }
+        }
 
         private void HandleSolving(string input)
         {

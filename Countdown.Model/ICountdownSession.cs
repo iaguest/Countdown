@@ -15,5 +15,6 @@ namespace Countdown.Model
 
         bool HasNextGame { get; }
         void NextGame();
+        void Reset();
     }
 }
