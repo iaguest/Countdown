@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
         xmlns:prism="http://www.codeplex.com/prism"
         mc:Ignorable="d"
-        Title="Countdown" Height="700" Width="700">
+        Title="Countdown" Height="700" Width="700" ResizeMode="CanMinimize">
     <Grid Background="LightBlue">
         <i:Interaction.Triggers >
             <i:EventTrigger EventName="KeyDown">
@@ -14,7 +14,8 @@
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -25,8 +26,11 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="{Binding GameType}" HorizontalAlignment="Center" FontSize="15"/>
-        <Canvas Grid.Row="0" Grid.Column="1" Height="200" Width="200" Name="ClockCanvas">
+        <Label Grid.Row="0" Grid.Column="0" Content="{Binding HighScore}" HorizontalAlignment="Center" FontSize="15"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="{Binding GameType}"
+               HorizontalAlignment="Center" VerticalAlignment ="Center" FontSize="15"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="{Binding Score}" HorizontalAlignment="Center" FontSize="15"/>
+        <Canvas Grid.Row="1" Grid.Column="1" Height="200" Width="200" Name="ClockCanvas" VerticalAlignment="Top">
             <Canvas.RenderTransform>
                 <TransformGroup>
                     <TranslateTransform X="100" Y="100" />
@@ -125,13 +129,12 @@
                 </Style>
             </MediaElement.Style>
         </MediaElement>
-        <Label Grid.Row="0" Grid.Column="2" Content="{Binding Score}" HorizontalAlignment="Center" FontSize="15"/>
-        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding GameBoard}" HorizontalAlignment="Center" FontSize="25"/>
-        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding UserMessage}" HorizontalAlignment="Center" FontSize="15"/>
-        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding GameBoard}" HorizontalAlignment="Center" FontSize="25"/>
+        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding UserMessage}" HorizontalAlignment="Center" FontSize="15"/>
+        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Height="30" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">
         </TextBox>
-        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content=">>" FontWeight="Bold" FontSize="15"
+        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Content=">>" FontWeight="Bold" FontSize="15"
                 Command ="{Binding OnNextGameCommand}" Width="125" Margin="10"/>
     </Grid>
 </Window>

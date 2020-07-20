@@ -21,8 +21,7 @@ namespace Countdown
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // TODO: delete if useless
-            await Task.Run(() => { });
+            await Task.Run(() => { _viewModel.Load(); });
         }
     }
 }

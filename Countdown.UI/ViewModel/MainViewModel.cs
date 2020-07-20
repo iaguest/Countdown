@@ -1,16 +1,20 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using Countdown.Model;
+using Countdown.UI.Data;
 using Prism.Commands;
 
 namespace Countdown.UI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+        private ICountdownDataService _dataService;
         private readonly ICountdownSession _gameSession;
         private bool _canClickExecute;
 
-        public MainViewModel(ICountdownSession gameSession)
+        public MainViewModel(ICountdownDataService dataService, ICountdownSession gameSession)
         {
+            _dataService = dataService;
             _gameSession = gameSession;
             _gameSession.GameStateUpdated += OnGameStateUpdated;
             KeyDownEventCommand = new DelegateCommand<KeyEventArgs>(ExecuteUserInput);
@@ -24,7 +28,7 @@ namespace Countdown.UI.ViewModel
 
         public DelegateCommand OnNextGameCommand { get; }
 
-        public string GameType => _gameSession.GameType;
+        public string GameType => _gameSession.GameType.Replace("Game", " Round");
 
         public string GameBoard => _gameSession.GameBoard;
 
@@ -34,7 +38,15 @@ namespace Countdown.UI.ViewModel
 
         public string Score => $"Total Score: {_gameSession.Score}";
 
+        public string HighScore => $"High Score: {_dataService.HighScore}";
+
         public bool IsRunning { get; private set; }
+
+        public void Load()
+        {
+            _dataService.Load();
+            UpdateAllProperties();
+        }
 
         private void ExecuteUserInput(KeyEventArgs args)
         {
@@ -50,8 +62,16 @@ namespace Countdown.UI.ViewModel
         {
             var state = e.NewState;
             IsRunning = state == GameState.RUNNING;
+            var hasNextGame = _gameSession.HasNextGame;
             if (state == GameState.DONE)
-                CanNextGameCommandExecute = _gameSession.HasNextGame;
+            {
+                CanNextGameCommandExecute = hasNextGame;
+                if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
+                {
+                    _dataService.HighScore = _gameSession.Score;
+                    _dataService.Save();
+                }
+            }
             UpdateAllProperties();
         }
 

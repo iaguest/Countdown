@@ -1,11 +1,7 @@
 ﻿using Autofac;
 using Countdown.Model;
+using Countdown.UI.Data;
 using Countdown.UI.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Countdown.UI.Startup
 {
@@ -16,6 +12,8 @@ namespace Countdown.UI.Startup
             var builder = new ContainerBuilder();
 
             builder.RegisterType<MainWindow>().AsSelf();
+
+            builder.RegisterType<CountdownDataService>().As<ICountdownDataService>();
 
             builder.RegisterType<CountdownSession>().As<ICountdownSession>();
 
