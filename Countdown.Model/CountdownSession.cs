@@ -48,7 +48,7 @@ namespace Countdown.Model
                         return CurrentGame.InitializeMessage;
                     case GameState.RUNNING:
                         var startMessage = CurrentGame.StartRunMessage;
-                        var messagePrefix = startMessage.Any() ? startMessage + "\n" : "";
+                        var messagePrefix = startMessage.Any() ? startMessage + "\n\n" : "";
                         return $"{messagePrefix}Running 30 second countdown...";
                     case GameState.SOLVING:
                         return "Enter answer...";

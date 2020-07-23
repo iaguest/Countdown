@@ -37,7 +37,7 @@ namespace Countdown.UI.ViewModel
 
         public string GameType => _gameSession.GameType.Replace("Game", " Round");
 
-        public string GameBoard => _gameSession.GameBoard;
+        public string GameBoard => _gameSession.GameBoard.ToUpper();
 
         public string UserMessage => _gameSession.UserMessage;
 
