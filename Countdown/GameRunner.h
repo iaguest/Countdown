@@ -44,11 +44,7 @@ public:
             std::string answer;
             std::cout << "Enter answer: ";
             std::getline(std::cin, answer);
-            
-            std::string endMessage = game->endMessage();
-            if (!endMessage.empty())
-                std::cout << game->endMessage() << std::endl;
-            
+                      
             const double elapsed = t.elapsed();
             
             const int gameScore = game->getScore(answer, elapsed);
@@ -60,6 +56,10 @@ public:
                 score += gameScore;
             }
             std::cout << "Current score: " << score << std::endl << std::endl;
+
+            std::string endMessage = game->endMessage();
+            if (!endMessage.empty())
+                std::cout << game->endMessage() << std::endl << std::endl;
         }
         return score;
     }

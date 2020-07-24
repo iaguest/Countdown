@@ -117,6 +117,5 @@ std::string LettersGame::endMessage() const
         : std::vector(rbegin(solutionWords), rbegin(solutionWords) + maxWords);
     for (const auto& word: possibleWords)
         ss << word << " ";
-    ss << std::endl;
     return ss.str();
 }
