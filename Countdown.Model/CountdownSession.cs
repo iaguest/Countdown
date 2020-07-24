@@ -108,6 +108,8 @@ namespace Countdown.Model
             {
                 new LettersGame(),
                 new NumbersGame(),
+                new LettersGame(),
+                new NumbersGame(),
                 new ConundrumGame()
             };
             _currentGameIndex = 0;
