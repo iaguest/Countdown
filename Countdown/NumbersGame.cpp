@@ -86,6 +86,7 @@ void NumbersGame::onStartRun()
                     bestSolution = currentItem;
                 }
             }
+            expGen->first();
         });
 }
 
