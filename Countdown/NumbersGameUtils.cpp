@@ -7,6 +7,7 @@
 //
 
 #include <cctype>
+#include <cmath>
 #include <deque>
 #include <functional>
 #include <map>
@@ -19,6 +20,8 @@
 #include "NumbersGameUtils.h"
 
 namespace {
+
+constexpr double EPSILON = 1.0E-9;
 
 typedef std::queue<std::string, std::deque<std::string>> Queue;
 
@@ -163,7 +166,10 @@ bool NumbersGameUtils::tryEvaluateExpression(const std::string& expression, doub
           stack.pop();
           
           try {
-              stack.push(std::to_string(opFunction.at(token.front())(operand1, operand2)));
+              double evaluated = opFunction.at(token.front())(operand1, operand2);
+              if ((evaluated < (0 - EPSILON)) || (abs(evaluated - std::round(evaluated)) > EPSILON))
+                  return false;
+              stack.push(std::to_string(evaluated));
           }
           catch (const std::exception&) { 
               return false;

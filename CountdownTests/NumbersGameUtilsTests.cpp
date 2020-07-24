@@ -106,6 +106,42 @@ TEST_CASE("tryEvaluateExpression returns correct result for complex expression."
     REQUIRE_THAT(result, Catch::WithinRel(5.0, EPSILON));
 }
 
+TEST_CASE("tryEvaluateExpression returns correct result for integer yielding division.")
+{
+    double result;
+    bool isSuccess = tryEvaluateExpression("75/25", result);
+
+    CHECK(isSuccess);
+    REQUIRE_THAT(result, Catch::WithinRel(3, EPSILON));
+}
+
+TEST_CASE("tryEvaluateExpression returns false for expressions involving negative numbers.")
+{
+    double result = 0;
+ 
+    SECTION("tryEvaluateExpression fails for simple expression with negative result.") {
+        REQUIRE(!tryEvaluateExpression("1-2", result));
+    }
+
+    SECTION("tryEvaluateExpression fails for an expression involving negative numbers.") {
+        REQUIRE(!tryEvaluateExpression("3+(1-2)", result));
+    }
+}
+
+TEST_CASE("tryEvaluateExpression returns false for expressions involving fractional results.")
+{
+    double result = 0;
+
+    SECTION("tryEvaluateExpression fails for simple expressions fractional results.") {
+        REQUIRE(!tryEvaluateExpression("9/10", result));
+        REQUIRE(!tryEvaluateExpression("1/100", result));
+    }
+
+    SECTION("tryEvaluateExpression fails for expression involving fractional results.") {
+        REQUIRE(!tryEvaluateExpression("(9*5)+(10/3)", result));
+    }
+}
+
 TEST_CASE("tryEvaluateExpression returns false for empty expression.")
 {
     double result = 0;

@@ -25,6 +25,7 @@ std::vector<std::string> tokenizeExpression(const std::string& expression);
 
 std::vector<std::string> getPostFixExpression(const std::vector<std::string>& inFixExpression);
 
+//Returns false if the current running total becomes negative or involves a fraction.
 bool tryEvaluateExpression(const std::string& expression, double& result);
 
 bool isIntegerNumber(const std::string& s);
