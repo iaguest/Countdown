@@ -105,7 +105,11 @@ std::string NumbersGame::endMessage() const
 {
     if (bestScore == 0)
         return std::string();
-    return "Best solver score: " + std::to_string(bestScore) + " with " + bestSolution;
+    double value;
+    NumbersGameUtils::tryEvaluateExpression(bestSolution, value);
+    return "Closest solver got to " + std::to_string(target) + " was " +
+        std::to_string(static_cast<int>(value)) + " with " + bestSolution +" for " +
+        std::to_string(bestScore) + " points.";
 }
 
 int NumbersGame::getScore(const std::string& answer) const

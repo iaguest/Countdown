@@ -47,11 +47,9 @@ namespace Countdown.Model
                     case GameState.INITIALIZING:
                         return CurrentGame.InitializeMessage;
                     case GameState.RUNNING:
-                        var startMessage = CurrentGame.StartRunMessage;
-                        var messagePrefix = startMessage.Any() ? startMessage + "\n\n" : "";
-                        return $"{messagePrefix}Running 30 second countdown...";
+                        return GetRunSolveMessage("Running 30 second countdown...");
                     case GameState.SOLVING:
-                        return "Enter answer...";
+                        return GetRunSolveMessage("Enter answer...");
                     case GameState.DONE:
                         var timeoutMsg = _isAnswerTimeout ?
                             $" as you took longer than {MAX_ANSWER_WAIT_TIME} seconds to answer."
@@ -161,6 +159,15 @@ namespace Countdown.Model
         private void OnGameStateUpdated(GameStateUpdatedEventArgs e)
         {
             GameStateUpdated?.Invoke(this, e);
+        }
+
+        private string GetRunSolveMessage(string tail)
+        {
+            var startMessage = CurrentGame.StartRunMessage;
+            var head = startMessage.Any()
+                ? startMessage.PadLeft(Math.Max(startMessage.Length, tail.Length)) + "\n\n"
+                : "";
+            return $"{head}{tail}";
         }
     }
 }
