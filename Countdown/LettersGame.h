@@ -9,11 +9,13 @@
 #ifndef LettersGame_h
 #define LettersGame_h
 
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
 
 #include "AbstractGame.h"
+#include "Timer.h"
 
 class LettersGame : public AbstractGame<char>
 {
@@ -41,6 +43,8 @@ private:
     std::vector<char> vowels;
     std::vector<char> consonants;
     const std::vector<std::string> words;
+    std::unique_ptr<Timer> initializationTimer;
+    bool isInitializationTimeOut;
     std::thread solverThread;
     std::vector<std::string> solutionWords;
 };

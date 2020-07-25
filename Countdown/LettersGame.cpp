@@ -17,6 +17,7 @@
 namespace
 {
 const std::size_t lettersBoardSize = 9;
+const int maxInitializationTime = 60;
 
 char getSingleCharacterInput(std::istream& is)
 {
@@ -24,7 +25,7 @@ char getSingleCharacterInput(std::istream& is)
     is >> c;
     is.clear();
     is.ignore();
-    return std::tolower(c);    
+    return std::tolower(c);
 }
 
 }   // end namespace
@@ -37,7 +38,8 @@ LettersGame::LettersGame(std::mt19937 gen,
   : AbstractGame(gen),
     vowels(vowels),
     consonants(consonants),
-    words(words)
+    words(words),
+    isInitializationTimeOut(false)
 {
 }
 
@@ -47,6 +49,11 @@ bool LettersGame::initialize(std::ostream& os, std::istream& is)
     {
         os << "Vowel(v)/Consonant(c)? ";
         const char charIn = getSingleCharacterInput(is);
+
+        if (initializationTimer == nullptr) {
+            initializationTimer = std::make_unique<Timer>();
+        }
+
         char charOut;
         if (charIn == 'v' || charIn == 'V') {
             int randomVowelIndex =
@@ -63,6 +70,8 @@ bool LettersGame::initialize(std::ostream& os, std::istream& is)
     }
     
     solutionWords.clear();
+
+    isInitializationTimeOut = initializationTimer->elapsed() > maxInitializationTime;
 
     return gameBoard.size() == lettersBoardSize;
 }
@@ -85,9 +94,12 @@ void LettersGame::onEndRun()
 }
 
 int LettersGame::getScore(const std::string& answer) const
-{    
-    if (std::find(begin(solutionWords), end(solutionWords), answer) != end(solutionWords))
+{
+    if (!isInitializationTimeOut &&
+        std::find(begin(solutionWords), end(solutionWords), answer) != end(solutionWords))
+    {
         return static_cast<int>(answer.size());
+    }
     
     return 0;
 }
@@ -110,6 +122,13 @@ std::vector<std::string> LettersGame::getSolutionWords(const std::vector<std::st
 std::string LettersGame::endMessage() const
 {
     std::stringstream ss;
+
+    if (isInitializationTimeOut) {
+        ss << "You took longer than " << std::to_string(maxInitializationTime) <<
+            " seconds to pick your letters, so score is zero!" << std::endl <<
+            std::endl;
+    }
+
     ss << "Possible words are: ";
     const int maxWords = 5;
     auto possibleWords = (solutionWords.size() < maxWords)
@@ -117,5 +136,6 @@ std::string LettersGame::endMessage() const
         : std::vector(rbegin(solutionWords), rbegin(solutionWords) + maxWords);
     for (const auto& word: possibleWords)
         ss << word << " ";
+
     return ss.str();
 }
