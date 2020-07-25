@@ -105,7 +105,9 @@ namespace Countdown.Model
             _games = new List<IGame>
             {
                 new LettersGame(),
+                new LettersGame(),
                 new NumbersGame(),
+                new LettersGame(),
                 new LettersGame(),
                 new NumbersGame(),
                 new ConundrumGame()
