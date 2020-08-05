@@ -9,15 +9,20 @@ namespace Countdown.Model
     {
         private const int MAX_ANSWER_WAIT_TIME = 10;
 
-        private IEnumerable<IGame> _games;
+        private readonly IEnumerable<Type> _gameSequence;
+        private IList<IGame> _games;
         private int _currentGameIndex;
         private GameState _state;
         private int _lastScore;
         private DateTime _runCompleteDateTime;
         private bool _isAnswerTimeout;
 
-        public CountdownSession()
+        public CountdownSession(IEnumerable<Type> gameSequence)
         {
+            if (!gameSequence.All(o => typeof(IGame).IsAssignableFrom(o)))
+                throw new ArgumentException("gameSequence invalid");
+            _gameSequence = gameSequence;
+
             InitializeSession();
         }
 
@@ -102,16 +107,10 @@ namespace Countdown.Model
 
         private void InitializeSession()
         {
-            _games = new List<IGame>
-            {
-                new LettersGame(),
-                new LettersGame(),
-                new NumbersGame(),
-                new LettersGame(),
-                new LettersGame(),
-                new NumbersGame(),
-                new ConundrumGame()
-            };
+            _games = new List<IGame>();
+            foreach (var gameType in _gameSequence)
+                _games.Add((IGame)Activator.CreateInstance(gameType));
+
             _currentGameIndex = 0;
             State = GameState.INITIALIZING;
             _lastScore = 0;

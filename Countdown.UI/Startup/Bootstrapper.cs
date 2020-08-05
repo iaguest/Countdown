@@ -2,6 +2,8 @@
 using Countdown.Model;
 using Countdown.UI.Data;
 using Countdown.UI.ViewModel;
+using System;
+using System.Collections.Generic;
 
 namespace Countdown.UI.Startup
 {
@@ -15,7 +17,18 @@ namespace Countdown.UI.Startup
 
             builder.RegisterType<CountdownDataService>().As<ICountdownDataService>();
 
-            builder.RegisterType<CountdownSession>().As<ICountdownSession>();
+            var defaultGameSequence = new List<Type>
+            {
+                typeof(LettersGame),
+                typeof(LettersGame),
+                typeof(NumbersGame),
+                typeof(LettersGame),
+                typeof(LettersGame),
+                typeof(NumbersGame),
+                typeof(ConundrumGame),
+            };
+
+            builder.Register(o => new CountdownSession(defaultGameSequence)).As<ICountdownSession>();
 
             builder.RegisterType<MainViewModel>().AsSelf();
 
