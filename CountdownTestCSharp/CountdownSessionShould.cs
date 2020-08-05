@@ -15,8 +15,11 @@ namespace CountdownTestsCSharp
         {
             public MockGame()
             {
+                DisposeCount = 0;
                 GameBoard = string.Empty;
             }
+
+            #region IGame
 
             public string InitializeMessage => string.Empty;
 
@@ -26,7 +29,7 @@ namespace CountdownTestsCSharp
 
             public string EndRunMessage => string.Empty;
 
-            public void Dispose() { }
+            public void Dispose() { DisposeCount += 1; }
 
             public bool Initialize(string input, out string output)
             {
@@ -38,6 +41,14 @@ namespace CountdownTestsCSharp
             public void Run(Action onDone) { onDone(); }
 
             public int GetScore(string answer) { return 99; }
+
+            #endregion
+
+            #region MockHelperMethods
+
+            public int DisposeCount { get; private set; }
+
+            #endregion
         }
 
         #endregion
@@ -63,6 +74,14 @@ namespace CountdownTestsCSharp
         {
             var session = new CountdownSession(_mockGameSequence);
             Assert.AreEqual(string.Empty, session.GameBoard);
+        }
+
+        [Test]
+        public void CallDisposeOnReset()
+        {
+            var session = new CountdownSession(_mockGameSequence);
+            session.Reset();
+            Assert.AreEqual(1, _mockGame.DisposeCount);
         }
     }
 }
