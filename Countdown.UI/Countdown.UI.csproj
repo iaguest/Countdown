@@ -166,12 +166,17 @@
       <Name>Countdown.Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resource Files\clock.mp3" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(SolutionDir)x64\$(Configuration)\CountdownDll.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)Countdown\consonants.txt" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)Countdown\vowels.txt" "$(TargetDir)" /Y
-xcopy "$(SolutionDir)Countdown\UK_english_truncated.txt" "$(TargetDir)" /Y</PostBuildEvent>
+xcopy "$(SolutionDir)Countdown\UK_english_truncated.txt" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)Countdown.UI\Resource Files\clock.mp3" "$(TargetDir)" /Y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

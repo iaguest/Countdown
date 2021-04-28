@@ -116,7 +116,7 @@
         <MediaElement x:Name="myMediaElement" Visibility="Hidden" >
             <MediaElement.Resources>
                 <Storyboard x:Key="SoundStoryboard">
-                    <MediaTimeline Source="C:/Users/G-Dawg/source/repos/CountdownProto/CountdownProto/clock.mp3" />
+                    <MediaTimeline Source="clock.mp3" />
                 </Storyboard>
             </MediaElement.Resources>
             <MediaElement.Style>
