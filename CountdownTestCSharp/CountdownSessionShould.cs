@@ -7,81 +7,92 @@ using System.Collections.Generic;
 namespace CountdownTestsCSharp
 {
     [TestFixture]
-    class CountdownSessionShould
+    partial class CountdownSessionShould
     {
-        #region MockGame
-
-        private class MockGame : IGame
-        {
-            public MockGame()
-            {
-                DisposeCount = 0;
-                GameBoard = string.Empty;
-            }
-
-            #region IGame
-
-            public string InitializeMessage => string.Empty;
-
-            public string StartRunMessage => string.Empty;
-
-            public string GameBoard { get; private set; }
-
-            public string EndRunMessage => string.Empty;
-
-            public void Dispose() { DisposeCount += 1; }
-
-            public bool Initialize(string input, out string output)
-            {
-                output = string.Empty;
-                GameBoard = "MOCKBOARD";
-                return true;
-            }
-
-            public void Run(Action onDone) { onDone(); }
-
-            public int GetScore(string answer) { return 99; }
-
-            #endregion
-
-            #region MockHelperMethods
-
-            public int DisposeCount { get; private set; }
-
-            #endregion
-        }
-
-        #endregion
-
-        private MockGame _mockGame;
-        private List<Type> _mockGameSequence;
+        private List<Type> _singleGameList;
+        private List<Type> _doubleGameList;
 
         [SetUp]
         public void Initialize()
         {
-            _mockGame = new MockGame();
-            _mockGameSequence = new List<Type> { _mockGame.GetType() };
+            _singleGameList = new List<Type> { typeof(MockGame) };
+            _doubleGameList = new List<Type> { typeof(MockGame), typeof(MockGame) };
         }
 
         [Test]
         public void BeConstructable()
         {
-            new CountdownSession(_mockGameSequence);
+            new CountdownSession(_singleGameList);
         }
 
         [Test]
-        public void HaveEmptyGameBoardAfterConstruction()
+        public void NotHaveNextGameAfterConstructionWithSingleGameList()
         {
-            var session = new CountdownSession(_mockGameSequence);
-            Assert.AreEqual(string.Empty, session.GameBoard);
+            var session = new CountdownSession(_singleGameList);
+            Assert.IsFalse(session.HasNextGame);
         }
 
         [Test]
-        public void CallDisposeOnReset()
+        public void HaveNextGameAfterConstructionWithGameListWithMoreThanOneItem()
         {
-            var session = new CountdownSession(_mockGameSequence);
+            var session = new CountdownSession(_doubleGameList);
+            Assert.IsTrue(session.HasNextGame);
+        }
+
+        [Test]
+        public void HaveUninitializedGameBoardAfterConstruction()
+        {
+            var session = new CountdownSession(_singleGameList);
+            Assert.AreEqual(MockGame.UninitializedGameBoardString, session.GameBoard);
+        }
+
+        [Test]
+        public void GiveInitializeUserMessageAfterConstruction()
+        {
+            var session = new CountdownSession(_singleGameList);
+            Assert.AreEqual(MockGame.InitializeMessageString, session.UserMessage);
+        }
+
+        [Test]
+        public void HaveInitializedGameBoardAfterSessionInitialized()
+        {
+            var session = new CountdownSession(_singleGameList);
+
+            session.ExecuteUserInput("foo");
+
+            Assert.AreEqual(MockGame.InitializedGameBoardString, session.GameBoard);
+        }
+
+        [Test]
+        public void RunGameAfterInitializationIsComplete()
+        {
+            var session = new CountdownSession(_singleGameList);
+            var expectedRunCount = MockGame.RunCount + 1;
+            session.ExecuteUserInput("bar");
+            Assert.AreEqual(MockGame.RunCount, expectedRunCount);
+        }
+
+        [Test]
+        public void DisposeGamesOnDispose()
+        {
+            var expectedDisposeCount = MockGame.DisposeCount + _doubleGameList.Count;
+
+            using (var session = new CountdownSession(_doubleGameList))
+            {
+            }
+
+            Assert.AreEqual(expectedDisposeCount, MockGame.DisposeCount);
+        }
+
+        [Test]
+        public void DisposeGamesOnReset()
+        {
+            var session = new CountdownSession(_doubleGameList);
+            var expectedDisposeCount = MockGame.DisposeCount + _doubleGameList.Count;
+
             session.Reset();
-            Assert.AreEqual(1, _mockGame.DisposeCount);
+
+            Assert.AreEqual(expectedDisposeCount, MockGame.DisposeCount);
         }
     }
 }
