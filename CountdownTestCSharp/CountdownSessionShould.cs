@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CountdownTestsCSharp
 {
@@ -54,21 +55,21 @@ namespace CountdownTestsCSharp
         }
 
         [Test]
-        public void HaveInitializedGameBoardAfterSessionInitialized()
+        public async Task HaveInitializedGameBoardAfterSessionInitialized()
         {
             var session = new CountdownSession(_singleGameList);
 
-            session.ExecuteUserInput("foo");
+            await session.ExecuteUserInput("foo");
 
             Assert.AreEqual(MockGame.InitializedGameBoardString, session.GameBoard);
         }
 
         [Test]
-        public void RunGameAfterInitializationIsComplete()
+        public async Task RunGameAfterInitializationIsComplete()
         {
             var session = new CountdownSession(_singleGameList);
             var expectedRunCount = MockGame.RunCount + 1;
-            session.ExecuteUserInput("bar");
+            await session.ExecuteUserInput("bar");
             Assert.AreEqual(MockGame.RunCount, expectedRunCount);
         }
 

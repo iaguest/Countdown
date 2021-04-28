@@ -68,7 +68,7 @@ namespace Countdown.Model
 
         public int Score { get; private set; }
 
-        public async void ExecuteUserInput(string input)
+        public async Task ExecuteUserInput(string input)
         {
             switch (State)
             {

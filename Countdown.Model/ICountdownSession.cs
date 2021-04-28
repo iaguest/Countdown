@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Countdown.Model
 {
@@ -11,7 +12,7 @@ namespace Countdown.Model
         string UserMessage { get; }
         int Score { get; }
 
-        void ExecuteUserInput(string input);
+        Task ExecuteUserInput(string input);
 
         bool HasNextGame { get; }
         void NextGame();
