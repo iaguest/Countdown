@@ -21,6 +21,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Countdown.UI", "Countdown.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountdownTestsCSharp", "CountdownTestCSharp\CountdownTestsCSharp.csproj", "{C7F6E013-D84D-43A8-A0CC-7BFA3CEEE407}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE2DD760-0190-4890-8B84-69F2320597E5}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{A6098650-CFA8-4763-BB8C-3825A6FC9AFF}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\conundrum.png = ..\..\..\Desktop\conundrum.png
+		..\..\..\Desktop\letters.png = ..\..\..\Desktop\letters.png
+		..\..\..\Desktop\numbers.png = ..\..\..\Desktop\numbers.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
