@@ -1,6 +1,6 @@
 # Countdown
 
-A just for fun implementation of the classic game. The UI is written using C# and WPF and makes use of a core game library written in C++17.
+A just for fun implementation of the classic game. The UI is written using C# and WPF and makes use of a core game library written in C++17. Unit tests were written using NUnit and Catch2.
 
 ## Functionality of the application:
 The app is a fully functioning single player version of Countdown. Each game has seven rounds consisting of four letters games, two numbers games and one conundrum game. A high score is maintained throughout. Possible solutions are suggested at the end of each round.
