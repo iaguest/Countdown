@@ -65,17 +65,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="consonants.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="UK_english_truncated.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="vowels.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="ConundrumGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,5 +83,16 @@
     <ClCompile Include="NumbersGameUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="consonants.txt">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="UK_english_truncated.txt">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="vowels.txt">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
