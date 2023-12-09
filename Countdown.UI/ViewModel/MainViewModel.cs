@@ -59,7 +59,7 @@ namespace Countdown.UI.ViewModel
         {
             if (args.Key == Key.Return || args.Key == Key.Enter)
             {
-                _gameSession.ExecuteUserInput(UserInput);
+                _gameSession.ExecuteUserInput(UserInput.ToLower());
                 UserInput = "";
                 UpdateAllProperties();
             }
