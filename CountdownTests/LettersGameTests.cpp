@@ -23,7 +23,7 @@ TEST_CASE("Validate LettersGame behavior.")
     
     const std::vector<char> vowels{'a','e','i','o','u'};
     const std::vector<char> consonants{'p','s','t','c','h'};
-    const std::vector<std::string> words{"cup", "hoops", "push"};
+    const std::vector<std::string> words{"cup", "cuppas", "push"};
 
     auto isVowel = [&vowels](char& c)
         { return std::find(begin(vowels), end(vowels), c) != end(vowels); };
@@ -62,7 +62,7 @@ TEST_CASE("Validate LettersGame behavior.")
         
         game.initialize(oss, iss);
         
-        REQUIRE_THAT("p u h o c o s e h", Catch::Equals(game.getGameBoard()));
+        REQUIRE_THAT("t u c u p a s u p", Catch::Equals(game.getGameBoard()));
     }
     
     SECTION("Game board can be initialized in steps.")
@@ -72,7 +72,7 @@ TEST_CASE("Validate LettersGame behavior.")
         game.initialize(oss, iss);
         std::istringstream iss2("c");
         game.initialize(oss, iss2);
-        REQUIRE_THAT("p u h o c o s e h", Catch::Equals(game.getGameBoard()));
+        REQUIRE_THAT("t u c u p a s u p", Catch::Equals(game.getGameBoard()));
     }
 
     SECTION("Game board has expected number of vowels and consonants after initialization.")
@@ -94,14 +94,14 @@ TEST_CASE("Validate LettersGame behavior.")
         LettersGame game(gen, vowels, consonants, words);
         iss.str("c v c v c v c c c");        
         game.initialize(oss, iss);
-        CHECK_THAT("p u h o c o s s h", Catch::Equals(game.getGameBoard()));
+        CHECK_THAT("t u c u p a s h p", Catch::Equals(game.getGameBoard()));
         
         // Evaluate possible words.
         game.onStartRun();
         game.onEndRun();
         
         CHECK(3 == game.getScore("cup"));
-        CHECK(5 == game.getScore("hoops"));
+        CHECK(6 == game.getScore("cuppas"));
         REQUIRE(4 == game.getScore("push"));
     }
     
@@ -110,7 +110,7 @@ TEST_CASE("Validate LettersGame behavior.")
         LettersGame game(gen, vowels, consonants, words);
         iss.str("c v c v c v c c c");        
         game.initialize(oss, iss);
-        CHECK_THAT("p u h o c o s s h", Catch::Equals(game.getGameBoard()));
+        CHECK_THAT("t u c u p a s h p", Catch::Equals(game.getGameBoard()));
   
         // Evaluate possible words.
         game.onStartRun();

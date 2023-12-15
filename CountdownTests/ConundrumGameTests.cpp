@@ -35,7 +35,7 @@ TEST_CASE("Validate ConundrumGame behavior.")
     {
         ConundrumGame game(gen, words);
         game.initialize(oss, iss);
-        REQUIRE_THAT("a h r t p e u c a", Catch::Equals(game.getGameBoard()));
+        REQUIRE_THAT("u h p c r t a a e", Catch::Equals(game.getGameBoard()));
     }
     
     SECTION("Correct answer scores 10 points.")
