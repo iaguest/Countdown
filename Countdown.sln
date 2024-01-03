@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{A60986
 		..\..\..\Desktop\numbers.png = ..\..\..\Desktop\numbers.png
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webfrontend", "webfrontend", "{C103D39B-373E-44CB-BFB3-72FEAE9BB24D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
