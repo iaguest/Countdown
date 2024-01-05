@@ -79,7 +79,6 @@
     <Compile Include="CountdownSession.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameStateUpdatedEvent.cs" />
-    <Compile Include="GameStateUpdatedEventArgs.cs" />
     <Compile Include="ICountdownSession.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="LettersGame.cs" />
