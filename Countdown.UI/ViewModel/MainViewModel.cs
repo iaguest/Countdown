@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
 using Prism.Commands;
+using Prism.Events;
 
 namespace Countdown.UI.ViewModel
 {
@@ -14,11 +15,14 @@ namespace Countdown.UI.ViewModel
         private bool _canNextButtonExecute;
         private bool _canRestartButtonExecute;
 
-        public MainViewModel(ICountdownDataService dataService, ICountdownSession gameSession)
+        public MainViewModel(IEventAggregator eventAggregator,
+                             ICountdownDataService dataService,
+                             ICountdownSession gameSession)
         {
+            eventAggregator.GetEvent<GameStateUpdatedEvent>().Subscribe(OnGameStateUpdated);
+
             _dataService = dataService;
             _gameSession = gameSession;
-            _gameSession.GameStateUpdated += OnGameStateUpdated;
             KeyDownEventCommand = new DelegateCommand<KeyEventArgs>(ExecuteUserInput);
             OnNextGameCommand = new DelegateCommand(OnNextGameCommandExecute,
                                                     () => CanNextGameCommandExecute);
@@ -65,9 +69,8 @@ namespace Countdown.UI.ViewModel
             }
         }
 
-        private async void OnGameStateUpdated(object sender, GameStateUpdatedEventArgs e)
+        private async void OnGameStateUpdated(GameState state)
         {
-            var state = e.NewState;
             IsRunning = state == GameState.RUNNING;
             if (state == GameState.DONE)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Countdown.Model
     public class CountdownSession : ICountdownSession
     {
         private const int MAX_ANSWER_WAIT_TIME = 10;
-
+        private readonly IEventAggregator _eventAggregator;
         private readonly IEnumerable<Type> _gameSequence;
         private IList<IGame> _games;
         private int _currentGameIndex;
@@ -17,10 +18,13 @@ namespace Countdown.Model
         private DateTime _runCompleteDateTime;
         private bool _isAnswerTimeout;
 
-        public CountdownSession(IEnumerable<Type> gameSequence)
+        public CountdownSession(IEventAggregator eventAggregator, IEnumerable<Type> gameSequence)
         {
+            _eventAggregator = eventAggregator;
+
             if (!gameSequence.All(o => typeof(IGame).IsAssignableFrom(o)))
                 throw new ArgumentException("gameSequence invalid");
+
             _gameSequence = gameSequence;
 
             InitializeSession();
@@ -36,8 +40,6 @@ namespace Countdown.Model
             DisposeGames();
             InitializeSession();
         }
-
-        public event EventHandler<GameStateUpdatedEventArgs> GameStateUpdated;
 
         public string GameType => CurrentGame.GetType().Name;
 
@@ -99,7 +101,7 @@ namespace Countdown.Model
             set
             {
                 _state = value;
-                OnGameStateUpdated(new GameStateUpdatedEventArgs { NewState = _state });
+                NotifyGameStateUpdated(_eventAggregator, _state);
             }
         }
 
@@ -157,9 +159,9 @@ namespace Countdown.Model
             State = GameState.INITIALIZING;
         }
 
-        private void OnGameStateUpdated(GameStateUpdatedEventArgs e)
+        public void NotifyGameStateUpdated(IEventAggregator eventAggregator, GameState state)
         {
-            GameStateUpdated?.Invoke(this, e);
+            eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish(state);
         }
 
         private string GetRunSolveMessage(string tail)
