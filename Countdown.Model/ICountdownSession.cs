@@ -1,5 +1,4 @@
-﻿using Prism.Events;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Countdown.Model
@@ -12,8 +11,6 @@ namespace Countdown.Model
         int Score { get; }
 
         Task ExecuteUserInput(string input);
-
-        void NotifyGameStateUpdated(IEventAggregator eventAggregator, GameState state);
 
         bool HasNextGame { get; }
         void NextGame();

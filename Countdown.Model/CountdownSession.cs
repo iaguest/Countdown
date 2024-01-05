@@ -101,7 +101,7 @@ namespace Countdown.Model
             set
             {
                 _state = value;
-                NotifyGameStateUpdated(_eventAggregator, _state);
+                NotifyGameStateUpdated(_state);
             }
         }
 
@@ -159,9 +159,9 @@ namespace Countdown.Model
             State = GameState.INITIALIZING;
         }
 
-        public void NotifyGameStateUpdated(IEventAggregator eventAggregator, GameState state)
+        private void NotifyGameStateUpdated(GameState state)
         {
-            eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish(state);
+            _eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish(state);
         }
 
         private string GetRunSolveMessage(string tail)
