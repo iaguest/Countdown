@@ -2,6 +2,7 @@
 using Countdown.Model;
 using Countdown.UI.Data;
 using Countdown.UI.ViewModel;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +13,9 @@ namespace Countdown.UI.Startup
         public IContainer Bootstrap()
         {
             var builder = new ContainerBuilder();
+
+            var eventAggregator = new EventAggregator();
+            builder.Register(o => eventAggregator).As<IEventAggregator>().SingleInstance();
 
             builder.RegisterType<MainWindow>().AsSelf();
 
@@ -28,7 +32,7 @@ namespace Countdown.UI.Startup
                 typeof(ConundrumGame),
             };
 
-            builder.Register(o => new CountdownSession(defaultGameSequence)).As<ICountdownSession>();
+            builder.Register(o => new CountdownSession(eventAggregator, defaultGameSequence)).As<ICountdownSession>();
 
             builder.RegisterType<MainViewModel>().AsSelf();
 

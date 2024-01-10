@@ -5,8 +5,6 @@ namespace Countdown.Model
 {
     public interface ICountdownSession : IDisposable
     {
-        event EventHandler<GameStateUpdatedEventArgs> GameStateUpdated;
-
         string GameType { get; }
         string GameBoard { get; }
         string UserMessage { get; }
