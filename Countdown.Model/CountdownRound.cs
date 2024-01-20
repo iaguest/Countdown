@@ -23,10 +23,20 @@ namespace Countdown.Model
             _game = game;
             _maxAnswerWaitTime = maxAnswerWaitTime;
             _runCompleteDateTime = DateTime.MinValue;
-            SetState(RoundState.INITIALIZING);
+            _state = RoundState.INITIALIZING;
         }
 
         public string Type => _game.Type;
+
+        public RoundState State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                _eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish();
+            }
+        }
 
         public string Message => GetMessage();
 
@@ -58,18 +68,6 @@ namespace Countdown.Model
                     // do nothing
                     break;
             }
-        }
-
-        private RoundState State
-        {
-            get => _state;
-            set => _state = value;
-        }
-
-        private void SetState(RoundState state)
-        {
-            State = state;
-            _eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish(state);
         }
 
         private string GetMessage()
@@ -107,12 +105,12 @@ namespace Countdown.Model
             if (isInitialized)
             {
                 Console.Error.WriteLine("Finished initialization...");
-                SetState(RoundState.RUNNING);
+                State = RoundState.RUNNING;
                 await Task.Run(() =>
                 {
                     _game.Run(() =>
                     {
-                        SetState(RoundState.SOLVING);
+                        State = RoundState.SOLVING;
                         _runCompleteDateTime = DateTime.Now;
                     });
                 });
@@ -120,14 +118,14 @@ namespace Countdown.Model
                 return;
             }
 
-            SetState(RoundState.INITIALIZING);
+            State = RoundState.INITIALIZING;
         }
 
         private void HandleSolving(string input)
         {
             _isAnswerTimeout = (DateTime.Now - _runCompleteDateTime).TotalSeconds > _maxAnswerWaitTime;
             Score = _isAnswerTimeout ? 0 : _game.GetScore(input);
-            SetState(RoundState.DONE);
+            State = RoundState.DONE;
         }
     }
 }
