@@ -39,15 +39,15 @@ namespace Countdown.UI.ViewModel
 
         public DelegateCommand OnRestartCommand { get; }
 
-        public string GameType => _gameSession.GameType.Replace("Game", " Round");
+        public string GameTitle => $"{_gameSession.CurrentRound().Type} Round";
 
-        public string GameBoard => _gameSession.GameBoard.ToUpper();
+        public string GameBoard => _gameSession.CurrentRound().GameBoard.ToUpper();
 
-        public string UserMessage => _gameSession.UserMessage;
+        public string UserMessage => _gameSession.CurrentRound().Message;
 
         public string UserInput { get; set; }
 
-        public string Score => $"Total Score: {_gameSession.Score}";
+        public string Score => $"Total Score: {_gameSession.TotalScore}";
 
         public string HighScore => $"High Score: {_dataService.HighScore}";
 
@@ -63,23 +63,23 @@ namespace Countdown.UI.ViewModel
         {
             if (args.Key == Key.Return || args.Key == Key.Enter)
             {
-                _gameSession.ExecuteUserInput(UserInput.ToLower());
+                _gameSession.CurrentRound().ExecuteUserInput(UserInput.ToLower());
                 UserInput = "";
                 UpdateAllProperties();
             }
         }
 
-        private async void OnGameStateUpdated(GameState state)
+        private async void OnGameStateUpdated(RoundState state)
         {
-            IsRunning = state == GameState.RUNNING;
-            if (state == GameState.DONE)
+            IsRunning = state == RoundState.RUNNING;
+            if (state == RoundState.DONE)
             {
-                var hasNextGame = _gameSession.HasNextGame;
+                var hasNextGame = _gameSession.HasNextRound();
                 CanNextGameCommandExecute = hasNextGame;
                 CanRestartCommandExecute = !hasNextGame;
-                if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
+                if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
                 {
-                    _dataService.HighScore = _gameSession.Score;
+                    _dataService.HighScore = _gameSession.TotalScore;
                     await Task.Run(() => { _dataService.Save(); });
                 }
             }
@@ -108,13 +108,14 @@ namespace Countdown.UI.ViewModel
 
         private void OnNextGameCommandExecute()
         {
-            _gameSession.NextGame();
+            _gameSession.NextRound();
             CanNextGameCommandExecute = false;
+            UpdateAllProperties();
         }
 
         private void OnRestartCommandExecute()
         {
-            _gameSession.Reset();
+            _gameSession.ResetSession();
             CanRestartCommandExecute = false;
             UpdateAllProperties();
         }

@@ -21,6 +21,8 @@ namespace CountdownTestsCSharp
                 GameBoard = UninitializedGameBoardString;
             }
 
+            public string Type => "Mock";
+
             public string InitializeMessage => InitializeMessageString;
 
             public string StartRunMessage => StartRunMessageString;

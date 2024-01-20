@@ -60,6 +60,8 @@ namespace Countdown.Model
             return InitializeLettersGame(gamePointer, input, inputSize, output, outputSize);
         }
 
+        protected override string GameTypeString => "Letters";
+
         protected override string InitializationMessage => "Vowel(v)/Consonant(c)?";
 
         protected override string StartMessage(IntPtr gamePointer)

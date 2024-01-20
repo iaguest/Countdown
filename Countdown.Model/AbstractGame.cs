@@ -54,6 +54,8 @@ namespace Countdown.Model
 
         #region IGame
 
+        public string Type => GameTypeString;
+
         public string InitializeMessage => InitializationMessage;
 
         public string StartRunMessage => StartMessage(gamePointer);
@@ -104,6 +106,8 @@ namespace Countdown.Model
                                            Int32 inputSize,
                                            StringBuilder output,
                                            IntPtr outputSize);
+
+        protected abstract string GameTypeString { get; }
 
         protected abstract string InitializationMessage { get; }
 

@@ -33,7 +33,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="{Binding HighScore}" HorizontalAlignment="Center" FontSize="15"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="{Binding GameType}"
+        <Label Grid.Row="0" Grid.Column="1" Content="{Binding GameTitle}"
                HorizontalAlignment="Center" VerticalAlignment ="Center" FontSize="18"/>
         <Label Grid.Row="0" Grid.Column="2" Content="{Binding Score}" HorizontalAlignment="Center" FontSize="15"/>
         <Canvas Grid.Row="1" Grid.Column="1" Height="200" Width="200" Name="ClockCanvas" VerticalAlignment="Top">

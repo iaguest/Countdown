@@ -4,6 +4,7 @@ namespace Countdown.Model
 {
     public interface IGame : IDisposable
     {
+        string Type { get; }
         string InitializeMessage { get; }
         string StartRunMessage { get; }
         string GameBoard { get; }
@@ -12,6 +13,5 @@ namespace Countdown.Model
         bool Initialize(string input, out string output);
         void Run(Action onDone);
         int GetScore(string answer);
-
     }
 }

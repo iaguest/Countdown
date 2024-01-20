@@ -76,10 +76,12 @@
   <ItemGroup>
     <Compile Include="AbstractGame.cs" />
     <Compile Include="ConundrumGame.cs" />
+    <Compile Include="CountdownRound.cs" />
     <Compile Include="CountdownSession.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="GameStateUpdatedEvent.cs" />
+    <Compile Include="ICountdownRound.cs" />
     <Compile Include="ICountdownSession.cs" />
+    <Compile Include="RoundState.cs" />
+    <Compile Include="GameStateUpdatedEvent.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="LettersGame.cs" />
     <Compile Include="NumbersGame.cs" />

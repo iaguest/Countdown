@@ -2,7 +2,7 @@
 
 namespace Countdown.Model
 {
-    public class GameStateUpdatedEvent : PubSubEvent<GameState>
+    public class GameStateUpdatedEvent : PubSubEvent<RoundState>
     {
     }
 }

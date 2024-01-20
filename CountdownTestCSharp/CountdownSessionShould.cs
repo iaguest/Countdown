@@ -33,28 +33,28 @@ namespace CountdownTestsCSharp
         public void NotHaveNextGameAfterConstructionWithSingleGameList()
         {
             var session = new CountdownSession(_eventAggregator, _singleGameList);
-            Assert.IsFalse(session.HasNextGame);
+            Assert.IsFalse(session.HasNextRound());
         }
 
         [Test]
         public void HaveNextGameAfterConstructionWithGameListWithMoreThanOneItem()
         {
             var session = new CountdownSession(_eventAggregator, _doubleGameList);
-            Assert.IsTrue(session.HasNextGame);
+            Assert.IsTrue(session.HasNextRound());
         }
 
         [Test]
         public void HaveUninitializedGameBoardAfterConstruction()
         {
             var session = new CountdownSession(_eventAggregator, _singleGameList);
-            Assert.AreEqual(MockGame.UninitializedGameBoardString, session.GameBoard);
+            Assert.AreEqual(MockGame.UninitializedGameBoardString, session.CurrentRound().GameBoard);
         }
 
         [Test]
         public void GiveInitializeUserMessageAfterConstruction()
         {
             var session = new CountdownSession(_eventAggregator, _singleGameList);
-            Assert.AreEqual(MockGame.InitializeMessageString, session.UserMessage);
+            Assert.AreEqual(MockGame.InitializeMessageString, session.CurrentRound().Message);
         }
 
         [Test]
@@ -62,9 +62,9 @@ namespace CountdownTestsCSharp
         {
             var session = new CountdownSession(_eventAggregator, _singleGameList);
 
-            await session.ExecuteUserInput("foo");
+            await session.CurrentRound().ExecuteUserInput("foo");
 
-            Assert.AreEqual(MockGame.InitializedGameBoardString, session.GameBoard);
+            Assert.AreEqual(MockGame.InitializedGameBoardString, session.CurrentRound().GameBoard);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace CountdownTestsCSharp
         {
             var session = new CountdownSession(_eventAggregator, _singleGameList);
             var expectedRunCount = MockGame.RunCount + 1;
-            await session.ExecuteUserInput("bar");
+            await session.CurrentRound().ExecuteUserInput("bar");
             Assert.AreEqual(MockGame.RunCount, expectedRunCount);
         }
 
@@ -94,7 +94,7 @@ namespace CountdownTestsCSharp
             var session = new CountdownSession(_eventAggregator, _doubleGameList);
             var expectedDisposeCount = MockGame.DisposeCount + _doubleGameList.Count;
 
-            session.Reset();
+            session.ResetSession();
 
             Assert.AreEqual(expectedDisposeCount, MockGame.DisposeCount);
         }
