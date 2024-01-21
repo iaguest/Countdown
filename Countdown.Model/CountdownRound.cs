@@ -31,7 +31,7 @@ namespace Countdown.Model
         public RoundState State
         {
             get => _state;
-            set
+            private set
             {
                 _state = value;
                 _eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish();
