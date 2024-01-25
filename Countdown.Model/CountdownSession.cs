@@ -2,175 +2,78 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Countdown.Model
 {
-    public class CountdownSession : ICountdownSession
+    public sealed class CountdownSession : ICountdownSession
     {
         private const int MAX_ANSWER_WAIT_TIME = 10;
         private readonly IEventAggregator _eventAggregator;
         private readonly IEnumerable<Type> _gameSequence;
-        private IList<IGame> _games;
-        private int _currentGameIndex;
-        private GameState _state;
-        private int _lastScore;
-        private DateTime _runCompleteDateTime;
-        private bool _isAnswerTimeout;
+        private IList<ICountdownRound> _countdownRounds;
+        private int _currentRoundIndex;
 
-        public CountdownSession(IEventAggregator eventAggregator, IEnumerable<Type> gameSequence)
+        public CountdownSession(IEventAggregator eventAggregator,
+                                IEnumerable<Type> gameSequence)
         {
             _eventAggregator = eventAggregator;
-
-            if (!gameSequence.All(o => typeof(IGame).IsAssignableFrom(o)))
-                throw new ArgumentException("gameSequence invalid");
-
             _gameSequence = gameSequence;
+            _countdownRounds = new List<ICountdownRound>();
 
-            InitializeSession();
+            ResetSession();
         }
+
+        public int TotalScore => _countdownRounds.Sum(o => o.Score ?? 0);
 
         public void Dispose()
         {
             DisposeGames();
         }
 
-        public void Reset()
+        public ICountdownRound CurrentRound()
+        {
+            return _countdownRounds[_currentRoundIndex];
+        }
+
+        public bool HasNextRound()
+        {
+            return _currentRoundIndex < _countdownRounds.Count - 1;
+        }
+
+        public void NextRound()
+        {
+            if (HasNextRound())
+            {
+                _currentRoundIndex++;
+                return;
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        public void ResetSession()
         {
             DisposeGames();
-            InitializeSession();
-        }
 
-        public string GameType => CurrentGame.GetType().Name;
+            _currentRoundIndex = 0;
+            _countdownRounds.Clear();
 
-        public string GameBoard => CurrentGame.GameBoard;
+            if (!_gameSequence.All(o => typeof(IGame).IsAssignableFrom(o)))
+                throw new ArgumentException("gameSequence invalid");
 
-        public string UserMessage
-        {
-            get
+            foreach (Type gameType in _gameSequence)
             {
-                switch (State)
-                {
-                    case GameState.INITIALIZING:
-                        return CurrentGame.InitializeMessage;
-                    case GameState.RUNNING:
-                        return GetRunSolveMessage("Running 30 second countdown...");
-                    case GameState.SOLVING:
-                        return GetRunSolveMessage("Enter answer...");
-                    case GameState.DONE:
-                        var timeoutMsg = _isAnswerTimeout ?
-                            $" as you took longer than {MAX_ANSWER_WAIT_TIME} seconds to answer."
-                            : string.Empty;
-                        return $"In this round, you scored {Score - _lastScore}{timeoutMsg}\n\n{CurrentGame.EndRunMessage}";
-                    default:
-                        return string.Empty;
-                }
+                IGame game = ((IGame)Activator.CreateInstance(gameType));
+                _countdownRounds.Add(new CountdownRound(_eventAggregator, game, MAX_ANSWER_WAIT_TIME));
             }
-        }
-
-        public int Score { get; private set; }
-
-        public async Task ExecuteUserInput(string input)
-        {
-            switch (State)
-            {
-                case GameState.INITIALIZING:
-                    await HandleInitializing(input);
-                    break;
-                case GameState.SOLVING:
-                    HandleSolving(input);
-                    break;
-                case GameState.RUNNING:
-                case GameState.DONE:
-                    // do nothing
-                    break;
-            }
-        }
-
-        public bool HasNextGame => _currentGameIndex < _games.Count() - 1;
-
-        public void NextGame()
-        {
-            _currentGameIndex += 1;
-            State = GameState.INITIALIZING;
-        }
-
-        private GameState State
-        {
-            get => _state;
-            set
-            {
-                _state = value;
-                NotifyGameStateUpdated(_state);
-            }
-        }
-
-        private IGame CurrentGame => _games.ElementAt(_currentGameIndex);
-
-        private void InitializeSession()
-        {
-            _games = new List<IGame>();
-            foreach (var gameType in _gameSequence)
-                _games.Add((IGame)Activator.CreateInstance(gameType));
-
-            _currentGameIndex = 0;
-            State = GameState.INITIALIZING;
-            _lastScore = 0;
-            _runCompleteDateTime = default(DateTime);
-            _isAnswerTimeout = false;
-            Score = 0;
         }
 
         private void DisposeGames()
         {
-            foreach (var game in _games)
+            foreach (ICountdownRound round in _countdownRounds)
             {
-                game?.Dispose();
+                round?.Dispose();
             }
-        }
-
-        private void HandleSolving(string input)
-        {
-            _lastScore = Score;
-            _isAnswerTimeout = (DateTime.Now - _runCompleteDateTime).TotalSeconds > MAX_ANSWER_WAIT_TIME;
-            Score += _isAnswerTimeout ? 0 : CurrentGame.GetScore(input);
-            State = GameState.DONE;
-        }
-
-        private async Task HandleInitializing(string input)
-        {
-            bool isInitialized = CurrentGame.Initialize(input, out string output);
-            if (isInitialized)
-            {
-                Console.Error.WriteLine("Finished initialization...");
-                State = GameState.RUNNING;
-                await Task.Run(() =>
-                {
-                    CurrentGame.Run(
-                      () =>
-                      {
-                          State = GameState.SOLVING;
-                          _runCompleteDateTime = DateTime.Now;
-                      });
-                });
-
-                return;
-            }
-            State = GameState.INITIALIZING;
-        }
-
-        private void NotifyGameStateUpdated(GameState state)
-        {
-            _eventAggregator.GetEvent<GameStateUpdatedEvent>().Publish(state);
-        }
-
-        private string GetRunSolveMessage(string tail)
-        {
-            var startMessage = CurrentGame.StartRunMessage;
-            var head = startMessage.Any()
-                ? startMessage.PadLeft(Math.Max(startMessage.Length, tail.Length)) + "\n\n"
-                : "";
-            return $"{head}{tail}";
         }
     }
 }

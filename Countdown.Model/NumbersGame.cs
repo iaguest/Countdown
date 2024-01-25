@@ -60,6 +60,8 @@ namespace Countdown.Model
             return InitializeNumbersGame(gamePointer, input, inputSize, output, outputSize);
         }
 
+        protected override string GameTypeString => "Numbers";
+
         protected override string InitializationMessage => "Enter number of large numbers (0->4)";
 
         protected override string StartMessage(IntPtr gamePointer)

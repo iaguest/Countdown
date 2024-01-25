@@ -1,6 +1,6 @@
 ﻿namespace Countdown.Model
 {
-    public enum GameState
+    public enum RoundState
     {
         INITIALIZING,
         RUNNING,

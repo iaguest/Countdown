@@ -1,17 +1,24 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Mvvm;
 
 namespace Countdown.UI.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : BindableBase
     {
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
+        private string _gameType;
+        private string _userMessage;
+        private string _gameBoard;
+        private string _userInput;
+        private int _score;
+        private int _highScore;
+        private bool _isRunning;
         private bool _canNextButtonExecute;
         private bool _canRestartButtonExecute;
 
@@ -31,6 +38,8 @@ namespace Countdown.UI.ViewModel
             CanNextGameCommandExecute = false;
             CanRestartCommandExecute = false;
             UserInput = string.Empty;
+
+            RefreshDisplay();
         }
 
         public DelegateCommand<KeyEventArgs> KeyDownEventCommand { get; private set; }
@@ -39,51 +48,54 @@ namespace Countdown.UI.ViewModel
 
         public DelegateCommand OnRestartCommand { get; }
 
-        public string GameType => _gameSession.GameType.Replace("Game", " Round");
+        public ICountdownRound CurrentRound => _gameSession.CurrentRound();
 
-        public string GameBoard => _gameSession.GameBoard.ToUpper();
+        public string GameType
+        {
+            get { return _gameType; }
+            set { SetProperty(ref _gameType, value); }
+        }
 
-        public string UserMessage => _gameSession.UserMessage;
+        public string GameBoard
+        {
+            get { return _gameBoard; }
+            set { SetProperty(ref _gameBoard, value); }
+        }
 
-        public string UserInput { get; set; }
+        public string UserMessage
+        {
+            get { return _userMessage; }
+            set { SetProperty(ref _userMessage, value); }
+        }
 
-        public string Score => $"Total Score: {_gameSession.Score}";
+        public string UserInput
+        {
+            get { return _userInput; }
+            set { SetProperty(ref _userInput, value); }
+        }
 
-        public string HighScore => $"High Score: {_dataService.HighScore}";
+        public int Score
+        {
+            get { return _score; }
+            set { SetProperty(ref _score, value); }
+        }
 
-        public bool IsRunning { get; private set; }
+        public int HighScore
+        {
+            get { return _highScore; }
+            set { SetProperty(ref _highScore, value); }
+        }
+
+        public bool IsRunning
+        {
+            get { return _isRunning; }
+            set { SetProperty(ref _isRunning, value); }
+        }
 
         public async Task LoadAsync()
         {
             await Task.Run(() => { _dataService.Load(); });
-            UpdateAllProperties();
-        }
-
-        private void ExecuteUserInput(KeyEventArgs args)
-        {
-            if (args.Key == Key.Return || args.Key == Key.Enter)
-            {
-                _gameSession.ExecuteUserInput(UserInput.ToLower());
-                UserInput = "";
-                UpdateAllProperties();
-            }
-        }
-
-        private async void OnGameStateUpdated(GameState state)
-        {
-            IsRunning = state == GameState.RUNNING;
-            if (state == GameState.DONE)
-            {
-                var hasNextGame = _gameSession.HasNextGame;
-                CanNextGameCommandExecute = hasNextGame;
-                CanRestartCommandExecute = !hasNextGame;
-                if (!hasNextGame && _gameSession.Score > _dataService.HighScore)
-                {
-                    _dataService.HighScore = _gameSession.Score;
-                    await Task.Run(() => { _dataService.Save(); });
-                }
-            }
-            UpdateAllProperties();
+            RefreshDisplay();
         }
 
         private bool CanNextGameCommandExecute
@@ -108,15 +120,54 @@ namespace Countdown.UI.ViewModel
 
         private void OnNextGameCommandExecute()
         {
-            _gameSession.NextGame();
+            _gameSession.NextRound();
             CanNextGameCommandExecute = false;
+            RefreshDisplay();
         }
 
         private void OnRestartCommandExecute()
         {
-            _gameSession.Reset();
+            _gameSession.ResetSession();
             CanRestartCommandExecute = false;
-            UpdateAllProperties();
+            RefreshDisplay();
+        }
+
+        private void ExecuteUserInput(KeyEventArgs args)
+        {
+            if (args.Key != Key.Return && args.Key != Key.Enter)
+            {
+                return;
+            }
+
+            CurrentRound.ExecuteUserInput(UserInput.ToLower());
+            UserInput = string.Empty;
+        }
+
+        private async void OnGameStateUpdated()
+        {
+            if (CurrentRound.State == RoundState.DONE)
+            {
+                var hasNextGame = _gameSession.HasNextRound();
+                CanNextGameCommandExecute = hasNextGame;
+                CanRestartCommandExecute = !hasNextGame;
+                if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
+                {
+                    _dataService.HighScore = _gameSession.TotalScore;
+                    await Task.Run(() => { _dataService.Save(); });
+                }
+            }
+
+            RefreshDisplay();
+        }
+
+        private void RefreshDisplay()
+        {
+            GameType = CurrentRound.Type;
+            GameBoard = CurrentRound.GameBoard.ToUpper();
+            UserMessage = CurrentRound.Message;
+            Score = _gameSession.TotalScore;
+            HighScore = _dataService.HighScore;
+            IsRunning = CurrentRound.State == RoundState.RUNNING;
         }
     }
 }

@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Countdown.Model
 {
     public interface ICountdownSession : IDisposable
     {
-        string GameType { get; }
-        string GameBoard { get; }
-        string UserMessage { get; }
-        int Score { get; }
+        int TotalScore { get; }
 
-        Task ExecuteUserInput(string input);
-
-        bool HasNextGame { get; }
-        void NextGame();
-        void Reset();
+        ICountdownRound CurrentRound();
+        bool HasNextRound();
+        void NextRound();
+        void ResetSession();
     }
 }

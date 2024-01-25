@@ -60,6 +60,8 @@ namespace Countdown.Model
             return InitializeConundrumGame(gamePointer, input, inputSize, output, outputSize);
         }
 
+        protected override string GameTypeString => "Conundrum";
+
         protected override string InitializationMessage => "Press Enter to reveal today's Countdown conundrum";
 
         protected override string StartMessage(IntPtr gamePointer)
