@@ -3,20 +3,26 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { gray5 } from './Styles';
 import { Page } from './Page';
-import { PageTitle } from './PageTitle';
+import { Title } from './Title';
+import { Scores } from './Scores';
+import Clock from './Clock';
 
 export const GamePage = () => {
+  const [highScore, setHighScore] = React.useState(0);
+  const [currentScore, setCurrentScore] = React.useState(0);
+  const [isRunning, setIsRunning] = React.useState(false);
+
+  const onStartRunning = () => {
+    setIsRunning(!isRunning);
+  };
+
   return (
     <div>
+      <Scores highScore={highScore} currentScore={currentScore} />
       <Page>
-        <PageTitle>Letters Round</PageTitle>
-        <p
-          css={css`
-            text-align: center;
-          `}
-        >
-          TODO
-        </p>
+        <Title>Letters Round</Title>
+        <button onClick={onStartRunning}>Start Clock</button>
+        <Clock isRunning={isRunning} />
       </Page>
     </div>
   );

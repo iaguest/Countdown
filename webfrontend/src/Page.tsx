@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { PageTitle } from './PageTitle';
+import { Title } from './Title';
 
 interface Props {
   title?: string;
@@ -16,7 +16,7 @@ export const Page = ({ title, children }: Props) => (
       max-width: 600px;
     `}
   >
-    {title && <PageTitle>{title}</PageTitle>}
+    {title && <Title>{title}</Title>}
     {children}
   </div>
 );
