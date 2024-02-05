@@ -27,9 +27,9 @@ const Clock = ({ isRunning }: Props) => {
   return (
     <div css={clockContainer}>
       <div css={clockFace}>
-        <div
-          css={[clockHand, { transform: `rotate(${rotation - 90}deg)` }]}
-        ></div>
+        <div css={[clockHand, { transform: `rotate(${rotation - 90}deg)` }]} />
+        <div css={crossLine} />
+        <div css={[crossLine, crossLineHorizontal]} />
       </div>
     </div>
   );
@@ -54,11 +54,24 @@ const clockHand = css`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform-origin: 0% 0%;
+  transform-origin: 0px 2px;
   background-color: #333;
-  height: 2px;
+  height: 4px;
   width: 95px;
-  transform: rotate(0deg);
+`;
+
+const crossLine = css`
+  position: absolute;
+  top: 50%;
+  /* left: 50%; */
+  background-color: #333;
+  height: 1px;
+  width: 100%;
+`;
+
+const crossLineHorizontal = css`
+  height: 1px;
+  transform: translate(0%, -50%) rotate(90deg);
 `;
 
 export default Clock;
