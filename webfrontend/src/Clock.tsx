@@ -43,7 +43,7 @@ const clockContainer = css`
 `;
 
 const clockFace = css`
-  position: relative;
+  position: absolute;
   width: 200px;
   height: 200px;
   border: 2px solid #333;
@@ -52,11 +52,10 @@ const clockFace = css`
 
 const clockHand = css`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-origin: 0px 2px;
+  top: 0%;
+  left: 0%;
   background-color: #333;
-  height: 4px;
+  height: 1px;
   width: 95px;
 `;
 

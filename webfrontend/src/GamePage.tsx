@@ -6,6 +6,7 @@ import { Page } from './Page';
 import { Title } from './Title';
 import { Scores } from './Scores';
 import Clock from './Clock';
+import CountdownClock from './CountdownClock';
 
 export const GamePage = () => {
   const [highScore, setHighScore] = React.useState(0);
@@ -22,7 +23,8 @@ export const GamePage = () => {
       <Page>
         <Title>Letters Round</Title>
         <button onClick={onStartRunning}>Start Clock</button>
-        <Clock isRunning={isRunning} />
+        {/* <Clock isRunning={isRunning} /> */}
+        <CountdownClock />
       </Page>
     </div>
   );
