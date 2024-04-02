@@ -24,9 +24,23 @@ export const GamePage = () => {
     <div>
       <Scores highScore={highScore} currentScore={currentScore} />
       <Page>
-        <Title>Letters Round</Title>
-        <button onClick={onStartRunning}>Start Clock</button>
-        <Clock isRunning={isRunning} onComplete={handleOnComplete} />
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            & > *:not(:first-child) {
+              margin-top: 10px; /* Adds top margin to all elements except the first one */
+            }
+          `}
+        >
+          <Title>Letters Round</Title>
+          <button onClick={onStartRunning}>Start Clock</button>
+          <Clock isRunning={isRunning} onComplete={handleOnComplete} />
+        </div>
       </Page>
     </div>
   );
