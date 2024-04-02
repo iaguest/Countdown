@@ -17,14 +17,17 @@ export const GamePage = () => {
     setIsRunning(!isRunning);
   };
 
+  const handleOnComplete = () => {
+    setIsRunning(false);
+  };
+
   return (
     <div>
       <Scores highScore={highScore} currentScore={currentScore} />
       <Page>
         <Title>Letters Round</Title>
         <button onClick={onStartRunning}>Start Clock</button>
-        {/* <Clock isRunning={isRunning} /> */}
-        <CountdownClock />
+        <Clock isRunning={isRunning} onComplete={handleOnComplete} />
       </Page>
     </div>
   );
