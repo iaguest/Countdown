@@ -49,6 +49,7 @@ const clockStyle = css`
   height: 200px;
   border: 5px solid black;
   border-radius: 50%;
+  background-color: lightgray;
   display: flex;
   justify-content: center;
   align-items: center;
