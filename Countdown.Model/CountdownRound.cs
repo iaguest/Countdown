@@ -108,7 +108,7 @@ namespace Countdown.Model
                 State = RoundState.RUNNING;
                 await Task.Run(() =>
                 {
-                    _game.Run(() =>
+                    _game.Run(onDone: () =>
                     {
                         State = RoundState.SOLVING;
                         _runCompleteDateTime = DateTime.Now;
