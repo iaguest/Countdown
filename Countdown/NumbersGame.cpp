@@ -20,6 +20,7 @@ namespace {
 constexpr int numbersBoardSize = 6;
 constexpr int minTarget = 100;
 constexpr int maxTarget = 999;
+constexpr int maxScore = 10;
 std::array largeNumbers{ 25, 50, 75, 100 };
 std::array smallNumbers{ 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 , 5 , 5 , 6 , 6 , 7 , 7 , 8 , 8 , 9 , 9 , 10 , 10 };
 
@@ -77,7 +78,7 @@ void NumbersGame::onStartRun()
     solverThread = std::thread(
         [this]()
         {
-            while (isRunning) {
+            while (isRunning && bestScore < maxScore) {
                 expGen->next();
                 auto currentItem = expGen->currentItem();
                 int score = getScore(currentItem);
@@ -119,7 +120,7 @@ int NumbersGame::getScore(const std::string& answer) const
         NumbersGameUtils::tryEvaluateExpression(answer, value))
     {
         double abs_diff = abs(target - value);
-        return abs_diff < 10 ? 10 - abs_diff : 0;
+        return abs_diff < maxScore ? maxScore - abs_diff : 0;
     }
     return 0;
 }
@@ -150,7 +151,8 @@ bool NumbersGame::validNumbersInAnswer(const std::string& answer) const
     std::sort(begin(gameBoardCopy), end(gameBoardCopy));
     
     std::vector<int> diffs;
-    std::set_difference(begin(answer_nums), end(answer_nums), begin(gameBoardCopy), end(gameBoardCopy),                         std::back_inserter(diffs));
+    std::set_difference(
+        begin(answer_nums), end(answer_nums), begin(gameBoardCopy), end(gameBoardCopy), std::back_inserter(diffs));
     
     return diffs.empty();
 }
