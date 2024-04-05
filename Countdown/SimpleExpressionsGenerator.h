@@ -66,7 +66,6 @@ private:
     void reset() {
         numGen.first();
         opGen.first();
-        expressions.clear();
     }
 
     OperatorSequenceGenerator makeOperatorSequenceGenerator(const std::size_t numOps) const
@@ -77,7 +76,6 @@ private:
 private:
     NumberSequenceGenerator numGen;
     OperatorSequenceGenerator opGen;
-    std::vector<std::vector<std::string>> expressions;
 };
 
 #endif /* SimpleExpressionsGenerator_h */
