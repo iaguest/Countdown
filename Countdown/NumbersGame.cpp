@@ -78,7 +78,7 @@ void NumbersGame::onStartRun()
     solverThread = std::thread(
         [this]()
         {
-            while (isRunning && bestScore < maxScore) {
+            while (isRunning) {// && bestScore < maxScore) {
                 expGen->next();
                 auto currentItem = expGen->currentItem();
                 int score = getScore(currentItem);

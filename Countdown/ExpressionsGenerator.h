@@ -36,12 +36,12 @@ public:
     
     void next() override {
         if (!simpleGen.isDone()) {
-            simpleExpressions.push_back(simpleGen.currentItem());
+            simpleExpressions.push_back(tokenizeExpression(simpleGen.currentItem()));
             simpleGen.next();
             if (simpleGen.isDone()) {
-                std::vector<std::string> filteredExpressions;
+                std::vector<std::vector<std::string>> filteredExpressions;
                 std::copy_if(begin(simpleExpressions), end(simpleExpressions), std::back_inserter(filteredExpressions),
-                             [&](const auto& elem) { return !NumbersGameUtils::isIntegerNumber(elem); });
+                             [&](const auto& elem) { return elem.size() > 3; });
                 
                 complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(filteredExpressions);
             }
@@ -58,6 +58,14 @@ public:
         return complexGenPtr == nullptr ? simpleGen.currentItem() : complexGenPtr->currentItem();
     }
 
+    std::vector<std::string> tokenizeExpression(const std::string& expression) const {
+        std::vector<std::string> tokenized{ "" };
+        for (auto& item : NumbersGameUtils::tokenizeExpression(expression))
+            tokenized.push_back(item);
+        tokenized.push_back("");
+        return tokenized;
+    }
+
 private:
     void reset() {
         simpleGen.first();
@@ -67,7 +75,7 @@ private:
     
 private:
     SimpleExpressionsGenerator simpleGen;
-    std::vector<std::string> simpleExpressions;
+    std::vector<std::vector<std::string>> simpleExpressions;
     std::unique_ptr<ComplexExpressionsGenerator> complexGenPtr;
 };
 

@@ -21,10 +21,10 @@ class ComplexExpressionsGenerator : public IGenerator<std::string>
 {
 public:
     
-    ComplexExpressionsGenerator(const std::vector<std::string>& simpleExpressionStrings)
+    ComplexExpressionsGenerator(const std::vector<std::vector<std::string>>& simpleExpressions)
       : IGenerator::IGenerator(),
-        simpleExpressionStrings(simpleExpressionStrings),
-        maxIterations(maxAllowableIterations(simpleExpressionStrings))
+        simpleExpressions(simpleExpressions),
+        maxIterations(maxAllowableIterations(simpleExpressions))
     {
         reset();
     }
@@ -67,8 +67,8 @@ public:
 private:
     void reset() {
         expressions.clear();
-        for (const auto& simpleExpression: simpleExpressionStrings)
-            expressions.push_back(tokenizeExpression(simpleExpression));
+        for (const auto& simpleExpression: simpleExpressions)
+            expressions.push_back(simpleExpression);
         newExpressions.clear();
         iterations = 0;
         maxExpressionIndex = expressions.size() - 1;
@@ -76,19 +76,11 @@ private:
         parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front());
     }
    
-    std::vector<std::string> tokenizeExpression(const std::string& expression) const {
-        std::vector<std::string> tokenized{""};
-        for (auto& item: NumbersGameUtils::tokenizeExpression(expression))
-             tokenized.push_back(item);
-        tokenized.push_back("");
-        return tokenized;
-    }
-    
-    std::size_t maxAllowableIterations(const std::vector<std::string>& expressionStrings) const
+    std::size_t maxAllowableIterations(const std::vector<std::vector<std::string>>& expressions) const
     {
         std::size_t maxOperatorCount = 0;
-        for (const auto& s: expressionStrings) {
-            const auto& tokenized = tokenizeExpression(s);
+        for (const auto& s: expressions) {
+            const auto& tokenized = s;
             const std::size_t tokensSize = tokenized.size();
             maxOperatorCount = (tokensSize > 3)
                 ? std::fmax(maxOperatorCount, ((tokensSize - 3) / 2))
@@ -98,7 +90,7 @@ private:
     }
     
 private:
-    const std::vector<std::string>& simpleExpressionStrings;
+    const std::vector<std::vector<std::string>>& simpleExpressions;
     std::vector<std::vector<std::string>> expressions;
     std::vector<std::vector<std::string>> newExpressions;
     const std::size_t maxIterations;
