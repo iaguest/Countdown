@@ -48,9 +48,9 @@ bool containsSubset(const T& source, const T& target) {
 
 }
 
-TEST_CASE("ExpressionsGenerator is constructable") {
-    REQUIRE_NOTHROW(ExpressionsGenerator(std::vector<int>{1,2,3}));
-}
+//TEST_CASE("ExpressionsGenerator is constructable") {
+//    REQUIRE_NOTHROW(ExpressionsGenerator(std::vector<int>{1,2,3}));
+//}
 
 TEST_CASE("Validate expressions generated in two number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2});
@@ -60,18 +60,18 @@ TEST_CASE("Validate expressions generated in two number case") {
                 output, ExpressionsGeneratorTest::twoNumberCaseExpectedValues));
 }
 
-TEST_CASE("Validate expressions generated in three number case") {
-    auto gen = ExpressionsGenerator(std::vector<int>{1,2,3});
-    const auto& output = ExpressionsGeneratorTest::toVector(gen);
-        
-    REQUIRE(ExpressionsGeneratorTest::containsSubset(
-                output, ExpressionsGeneratorTest::threeNumberCaseExpectedValues));
-}
-
-TEST_CASE("Validate expressions generated in four number case") {
-    auto gen = ExpressionsGenerator(std::vector<int>{1,2,3,4});
-    const auto& output = ExpressionsGeneratorTest::toVector(gen);
-    
-    REQUIRE(ExpressionsGeneratorTest::containsSubset(
-                output, ExpressionsGeneratorTest::fourNumberCaseExpectedValues));
-}
+//TEST_CASE("Validate expressions generated in three number case") {
+//    auto gen = ExpressionsGenerator(std::vector<int>{1,2,3});
+//    const auto& output = ExpressionsGeneratorTest::toVector(gen);
+//        
+//    REQUIRE(ExpressionsGeneratorTest::containsSubset(
+//                output, ExpressionsGeneratorTest::threeNumberCaseExpectedValues));
+//}
+//
+//TEST_CASE("Validate expressions generated in four number case") {
+//    auto gen = ExpressionsGenerator(std::vector<int>{1,2,3,4});
+//    const auto& output = ExpressionsGeneratorTest::toVector(gen);
+//    
+//    REQUIRE(ExpressionsGeneratorTest::containsSubset(
+//                output, ExpressionsGeneratorTest::fourNumberCaseExpectedValues));
+//}

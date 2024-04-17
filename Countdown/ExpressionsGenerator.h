@@ -35,23 +35,36 @@ public:
     }
     
     void next() override {
-        if (!simpleGen.isDone()) {
-            simpleExpressions.push_back(tokenizeExpression(simpleGen.currentItem()));
-            simpleGen.next();
-            if (simpleGen.isDone()) {
-                std::vector<std::vector<std::string>> filteredExpressions;
-                std::copy_if(begin(simpleExpressions), end(simpleExpressions), std::back_inserter(filteredExpressions),
-                             [&](const auto& elem) { return elem.size() > 3; });
-                
-                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(filteredExpressions);
+
+        if (complexGenPtr == nullptr)
+        {
+            auto foo = tokenizeExpression(simpleGen.currentItem());
+            if (foo.size() > 3)
+            {
+                std::vector<std::vector<std::string>> first;
+                first.push_back(foo);
+                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(first);
             }
+            else
+            {
+                simpleGen.next();
+            }
+
             return;
         }
+
+        if (complexGenPtr->isDone())
+        {
+            complexGenPtr = nullptr;
+            simpleGen.next();
+            return;
+        }
+
         complexGenPtr->next();
     };
     
     bool isDone() const override {
-        return complexGenPtr != nullptr && complexGenPtr->isDone();
+        return simpleGen.isDone();
     }
     
     std::string currentItem() const override {

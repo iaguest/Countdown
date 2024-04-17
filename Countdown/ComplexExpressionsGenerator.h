@@ -21,7 +21,7 @@ class ComplexExpressionsGenerator : public IGenerator<std::string>
 {
 public:
     
-    ComplexExpressionsGenerator(const std::vector<std::vector<std::string>>& simpleExpressions)
+    ComplexExpressionsGenerator(const std::vector<std::vector<std::string>> simpleExpressions)
       : IGenerator::IGenerator(),
         simpleExpressions(simpleExpressions),
         maxIterations(maxAllowableIterations(simpleExpressions))
@@ -86,11 +86,12 @@ private:
                 ? std::fmax(maxOperatorCount, ((tokensSize - 3) / 2))
                 : maxOperatorCount;
         }
+
         return maxOperatorCount - 1;
     }
     
 private:
-    const std::vector<std::vector<std::string>>& simpleExpressions;
+    const std::vector<std::vector<std::string>> simpleExpressions;
     std::vector<std::vector<std::string>> expressions;
     std::vector<std::vector<std::string>> newExpressions;
     const std::size_t maxIterations;
