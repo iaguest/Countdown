@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -21,14 +22,24 @@ class ComplexExpressionsGenerator : public IGenerator<std::string>
 {
 public:
     
-    ComplexExpressionsGenerator(const std::vector<std::vector<std::string>>& simpleExpressions)
+    ComplexExpressionsGenerator(const std::vector<std::string>& simpleExpression)
       : IGenerator::IGenerator(),
-        simpleExpressions(simpleExpressions),
-        maxIterations(maxAllowableIterations(simpleExpressions))
+        simpleExpression(simpleExpression),
+        maxIterations(maxAllowableIterations(simpleExpression))
     {
+        if (!canHandleExpression(simpleExpression))
+        {
+            throw new std::invalid_argument("Invalid expression");
+        }
+
         reset();
     }
-    
+ 
+    static bool canHandleExpression(const std::vector<std::string>& expression)
+    {
+        return expression.size() > MIN_EXPRESSION_SIZE;
+    }
+
     void first() override {
         reset();
     }
@@ -67,8 +78,7 @@ public:
 private:
     void reset() {
         expressions.clear();
-        for (const auto& simpleExpression: simpleExpressions)
-            expressions.push_back(simpleExpression);
+        expressions.push_back(simpleExpression);
         newExpressions.clear();
         iterations = 0;
         maxExpressionIndex = expressions.size() - 1;
@@ -76,22 +86,14 @@ private:
         parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front());
     }
    
-    std::size_t maxAllowableIterations(const std::vector<std::vector<std::string>>& expressions) const
+    std::size_t maxAllowableIterations(const std::vector<std::string>& expression) const
     {
-        std::size_t maxOperatorCount = 0;
-        for (const auto& s: expressions) {
-            const auto& tokenized = s;
-            const std::size_t tokensSize = tokenized.size();
-            maxOperatorCount = (tokensSize > 3)
-                ? std::fmax(maxOperatorCount, ((tokensSize - 3) / 2))
-                : maxOperatorCount;
-        }
-
-        return maxOperatorCount - 1;
+        return ((expression.size() - 3) / 2) - 1;
     }
     
 private:
-    const std::vector<std::vector<std::string>>& simpleExpressions;
+    static constexpr int MIN_EXPRESSION_SIZE = 3;
+    const std::vector<std::string>& simpleExpression;
     std::vector<std::vector<std::string>> expressions;
     std::vector<std::vector<std::string>> newExpressions;
     const std::size_t maxIterations;

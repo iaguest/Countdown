@@ -38,12 +38,10 @@ public:
 
         if (complexGenPtr == nullptr)
         {
-            auto foo = tokenizeExpression(simpleGen.currentItem());
-            if (foo.size() > 3)
+            auto tokenized = tokenizeExpression(simpleGen.currentItem());
+            if (ComplexExpressionsGenerator::canHandleExpression(tokenized))
             {
-                std::vector<std::vector<std::string>> first;
-                first.push_back(foo);
-                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(first);
+                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(tokenized);
             }
             else
             {
@@ -82,13 +80,11 @@ public:
 private:
     void reset() {
         simpleGen.first();
-        simpleExpressions.clear();
         complexGenPtr.reset(nullptr);
     }
     
 private:
     SimpleExpressionsGenerator simpleGen;
-    std::vector<std::vector<std::string>> simpleExpressions;
     std::unique_ptr<ComplexExpressionsGenerator> complexGenPtr;
 };
 
