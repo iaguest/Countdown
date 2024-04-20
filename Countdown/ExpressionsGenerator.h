@@ -51,14 +51,13 @@ public:
             return;
         }
 
+        complexGenPtr->next();
+
         if (complexGenPtr->isDone())
         {
             complexGenPtr = nullptr;
             simpleGen.next();
-            return;
         }
-
-        complexGenPtr->next();
     };
     
     bool isDone() const override {
@@ -80,7 +79,7 @@ public:
 private:
     void reset() {
         simpleGen.first();
-        complexGenPtr.reset(nullptr);
+        complexGenPtr = nullptr;
     }
     
 private:

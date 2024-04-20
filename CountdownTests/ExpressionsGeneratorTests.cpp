@@ -11,6 +11,7 @@
 #include "../Countdown/ExpressionsGenerator.h"
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -80,8 +81,21 @@ TEST_CASE("Validate expressions generated in three number case") {
 
 TEST_CASE("Validate expressions generated in four number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2,3,4});
-    const auto& output = ExpressionsGeneratorTest::toVector(gen);
+    auto output = ExpressionsGeneratorTest::toVector(gen);
     
+    //std::sort(output.begin(), output.end(), compareByLength);
+    std::ofstream outFile("D:/Dev/4numbers.txt"); // Create an ofstream object and open 'example.txt'
+
+    if (outFile.is_open()) { // Check if the file is successfully opened
+        for (auto item : output) {
+            outFile << item << std::endl; // Write to the file
+        }
+        outFile.close(); // Close the file
+    }
+    else {
+        std::cerr << "Unable to open file" << std::endl; // Error message if the file cannot be opened
+    }
+
     REQUIRE(ExpressionsGeneratorTest::containsSubset(
                 output, ExpressionsGeneratorTest::fourNumberCaseExpectedValues));
 }
