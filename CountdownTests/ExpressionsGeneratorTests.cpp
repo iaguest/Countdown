@@ -11,6 +11,7 @@
 #include "../Countdown/ExpressionsGenerator.h"
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -60,10 +61,19 @@ TEST_CASE("Validate expressions generated in two number case") {
                 output, ExpressionsGeneratorTest::twoNumberCaseExpectedValues));
 }
 
+bool compareByLength(const std::string& a, const std::string& b) {
+    return a.size() < b.size();
+}
+
 TEST_CASE("Validate expressions generated in three number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2,3});
-    const auto& output = ExpressionsGeneratorTest::toVector(gen);
-        
+    auto output = ExpressionsGeneratorTest::toVector(gen);
+    std::sort(output.begin(), output.end(), compareByLength);
+    for (auto foo : output)
+    {
+        std::cout << foo << std::endl;
+    }
+
     REQUIRE(ExpressionsGeneratorTest::containsSubset(
                 output, ExpressionsGeneratorTest::threeNumberCaseExpectedValues));
 }
