@@ -151,6 +151,7 @@
     <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComplexExpressionsGeneratorTests.cpp" />
     <ClCompile Include="ConundrumGameTests.cpp" />
     <ClCompile Include="ExpressionsGeneratorTests.cpp" />
     <ClCompile Include="LettersGameTests.cpp" />

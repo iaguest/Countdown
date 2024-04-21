@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "../Countdown/IGenerator.h"
+
 namespace TestUtils {
 
 template <typename T>
@@ -23,6 +25,21 @@ std::vector<T> stringToVec(const std::string& str)
     while (ss >> token)
         tokens.push_back(token);
     return tokens;
+}
+
+template <typename T>
+std::vector<std::string> toResultStringVector(IGenerator<T>& gen) {
+    std::vector<std::string> output;
+    for (gen.first(); !gen.isDone(); gen.next())
+    {
+        std::vector<std::string> current = gen.currentItem();
+        std::ostringstream os;
+        for (const auto& item : current)
+            os << item;
+        output.push_back(os.str());
+    }
+
+    return output;
 }
 
 template <class T>
