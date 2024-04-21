@@ -40,6 +40,7 @@ TEST_CASE("Validate parenthesized expressions generated in three number case") {
     auto gen = ParenthesizedExpressionsGenerator(ParenthesizedExpressionsGeneratorTest::threeNumExpression);
     const auto& output = ParenthesizedExpressionsGeneratorTest::toResultStringVector(gen);
 
+    REQUIRE(expected.size() == output.size());
     REQUIRE(TestUtils::containsSubset(output, expected));
 }
 
@@ -49,5 +50,6 @@ TEST_CASE("Validate parenthesized expressions generated in four number case") {
     auto gen = ParenthesizedExpressionsGenerator(ParenthesizedExpressionsGeneratorTest::fourNumExpression);
     const auto& output = ParenthesizedExpressionsGeneratorTest::toResultStringVector(gen);
 
+    REQUIRE(expected.size() == output.size());
     REQUIRE(TestUtils::containsSubset(output, expected));
 }
