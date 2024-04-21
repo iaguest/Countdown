@@ -28,6 +28,14 @@ std::vector<T> stringToVec(const std::string& str)
 }
 
 template <typename T>
+std::vector<std::string> toResultVector(IGenerator<T>& gen) {
+    std::vector<std::string> output;
+    for (gen.first(); !gen.isDone(); gen.next())
+        output.push_back(gen.currentItem());
+    return output;
+}
+
+template <typename T>
 std::vector<std::string> toResultStringVector(IGenerator<T>& gen) {
     std::vector<std::string> output;
     for (gen.first(); !gen.isDone(); gen.next())
