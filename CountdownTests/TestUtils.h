@@ -25,6 +25,16 @@ std::vector<T> stringToVec(const std::string& str)
     return tokens;
 }
 
+template <class T>
+bool containsSubset(const T& source, const T& target) {
+    T source_copy(begin(source), end(source));
+    T target_copy(begin(target), end(target));
+    std::sort(begin(source_copy), end(source_copy));
+    std::sort(begin(target_copy), end(target_copy));
+    return std::includes(begin(source_copy), end(source_copy),
+        begin(target_copy), end(target_copy));
+}
+
 }
 
 #endif /* TestUtils_hpp */

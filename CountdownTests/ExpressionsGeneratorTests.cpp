@@ -8,6 +8,7 @@
 
 #include "catch.hpp"
 
+#include "TestUtils.h"
 #include "../Countdown/ExpressionsGenerator.h"
 
 #include <algorithm>
@@ -36,16 +37,6 @@ std::vector<std::string> toVector(ExpressionsGenerator& gen) {
     return output;
 }
 
-template <class T>
-bool containsSubset(const T& source, const T& target) {
-    T source_copy(begin(source), end(source));
-    T target_copy(begin(target), end(target));
-    std::sort(begin(source_copy), end(source_copy));
-    std::sort(begin(target_copy), end(target_copy));
-    return std::includes(begin(source_copy), end(source_copy),
-                         begin(target_copy), end(target_copy));
-}
-
 }
 
 TEST_CASE("ExpressionsGenerator is constructable") {
@@ -56,22 +47,22 @@ TEST_CASE("Validate expressions generated in two number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2});
     const auto& output = ExpressionsGeneratorTest::toVector(gen);
     
-    REQUIRE(ExpressionsGeneratorTest::containsSubset(
-                output, ExpressionsGeneratorTest::twoNumberCaseExpectedValues));
+    REQUIRE(TestUtils::containsSubset(
+        output, ExpressionsGeneratorTest::twoNumberCaseExpectedValues));
 }
 
 TEST_CASE("Validate expressions generated in three number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2,3});
     const auto& output = ExpressionsGeneratorTest::toVector(gen);
         
-    REQUIRE(ExpressionsGeneratorTest::containsSubset(
-                output, ExpressionsGeneratorTest::threeNumberCaseExpectedValues));
+    REQUIRE(TestUtils::containsSubset(
+        output, ExpressionsGeneratorTest::threeNumberCaseExpectedValues));
 }
 
 TEST_CASE("Validate expressions generated in four number case") {
     auto gen = ExpressionsGenerator(std::vector<int>{1,2,3,4});
     const auto& output = ExpressionsGeneratorTest::toVector(gen);
     
-    REQUIRE(ExpressionsGeneratorTest::containsSubset(
-                output, ExpressionsGeneratorTest::fourNumberCaseExpectedValues));
+    REQUIRE(TestUtils::containsSubset(
+        output, ExpressionsGeneratorTest::fourNumberCaseExpectedValues));
 }
