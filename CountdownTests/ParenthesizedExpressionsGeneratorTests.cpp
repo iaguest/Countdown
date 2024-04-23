@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace ParenthesizedExpressionsGeneratorTest
+namespace ParenExpGenTest
 {
 
 static const std::vector<std::string> threeNumExpression { "", "1", "+", "2", "+", "3", "" };
@@ -17,13 +17,13 @@ static const std::vector<std::string> fourNumExpression{ "", "1", "+", "2", "+",
 }
 
 TEST_CASE("ParenthesizedExpressionsGenerator is constructable") {
-    REQUIRE_NOTHROW(ParenthesizedExpressionsGenerator(ParenthesizedExpressionsGeneratorTest::threeNumExpression));
+    REQUIRE_NOTHROW(ParenthesizedExpressionsGenerator(ParenExpGenTest::threeNumExpression));
 }
 
 TEST_CASE("Validate parenthesized expressions generated in three number case") {
     const std::vector<std::string> expected = std::vector<std::string>{ "(1+2)+3", "(1+2+3)", "1+(2+3)" };
 
-    auto gen = ParenthesizedExpressionsGenerator(ParenthesizedExpressionsGeneratorTest::threeNumExpression);
+    auto gen = ParenthesizedExpressionsGenerator(ParenExpGenTest::threeNumExpression);
     const auto& output = TestUtils::toResultStringVector(gen);
 
     REQUIRE(expected.size() == output.size());
@@ -31,9 +31,10 @@ TEST_CASE("Validate parenthesized expressions generated in three number case") {
 }
 
 TEST_CASE("Validate parenthesized expressions generated in four number case") {
-    const std::vector<std::string> expected = std::vector<std::string>{ "(1+2)+3+4", "(1+2+3)+4", "(1+2+3+4)", "1+(2+3)+4", "1+(2+3+4)", "1+2+(3+4)" };
+    const std::vector<std::string> expected = std::vector<std::string>{
+        "(1+2)+3+4", "(1+2+3)+4", "(1+2+3+4)", "1+(2+3)+4", "1+(2+3+4)", "1+2+(3+4)" };
 
-    auto gen = ParenthesizedExpressionsGenerator(ParenthesizedExpressionsGeneratorTest::fourNumExpression);
+    auto gen = ParenthesizedExpressionsGenerator(ParenExpGenTest::fourNumExpression);
     const auto& output = TestUtils::toResultStringVector(gen);
 
     REQUIRE(expected.size() == output.size());

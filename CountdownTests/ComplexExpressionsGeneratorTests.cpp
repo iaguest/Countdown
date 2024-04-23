@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace ComplexExpressionsGeneratorTest
+namespace ComplexExpGenTest
 {
     static const std::vector<std::string> simpleExpressions{ "1+2", "1+2+3" };
     static const std::vector<std::string> threeNumExpression{ "1*2*3" };
@@ -24,45 +24,45 @@ namespace ComplexExpressionsGeneratorTest
 }
 
 TEST_CASE("ComplexExpressionsGenerator is constructable") {
-    REQUIRE_NOTHROW(ComplexExpressionsGenerator(ComplexExpressionsGeneratorTest::simpleExpressions));
+    REQUIRE_NOTHROW(ComplexExpressionsGenerator(ComplexExpGenTest::simpleExpressions));
 }
 
 TEST_CASE("Validate complex expressions generated for single three number expression") {
 
-    auto gen = ComplexExpressionsGenerator(ComplexExpressionsGeneratorTest::threeNumExpression);
+    auto gen = ComplexExpressionsGenerator(ComplexExpGenTest::threeNumExpression);
 
     const auto& output = TestUtils::toResultVector(gen);
 
-    REQUIRE(ComplexExpressionsGeneratorTest::threeNumExpressionResults.size() == output.size());
-    REQUIRE(TestUtils::containsSubset(output, ComplexExpressionsGeneratorTest::threeNumExpressionResults));
+    REQUIRE(ComplexExpGenTest::threeNumExpressionResults.size() == output.size());
+    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::threeNumExpressionResults));
 }
 
 TEST_CASE("Validate complex expressions generated for single four number expression") {
 
-    auto gen = ComplexExpressionsGenerator(ComplexExpressionsGeneratorTest::fourNumExpression);
+    auto gen = ComplexExpressionsGenerator(ComplexExpGenTest::fourNumExpression);
 
     auto output = TestUtils::toResultVector(gen);
 
-    REQUIRE(ComplexExpressionsGeneratorTest::fourNumExpressionResults.size() == output.size());
-    REQUIRE(TestUtils::containsSubset(output, ComplexExpressionsGeneratorTest::fourNumExpressionResults));
+    REQUIRE(ComplexExpGenTest::fourNumExpressionResults.size() == output.size());
+    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::fourNumExpressionResults));
 }
 
 TEST_CASE("Validate complex expressions generated for multiple input expressions") {
     std::vector<std::string> expressions {
-        ComplexExpressionsGeneratorTest::threeNumExpression.front(),
-        ComplexExpressionsGeneratorTest::fourNumExpression.front() };
+        ComplexExpGenTest::threeNumExpression.front(),
+        ComplexExpGenTest::fourNumExpression.front() };
     auto gen = ComplexExpressionsGenerator(expressions);
 
     const auto& output = TestUtils::toResultVector(gen);
 
-    REQUIRE((ComplexExpressionsGeneratorTest::threeNumExpressionResults.size() +
-        ComplexExpressionsGeneratorTest::fourNumExpressionResults.size()) == output.size());
-    REQUIRE(TestUtils::containsSubset(output, ComplexExpressionsGeneratorTest::threeNumExpressionResults));
-    REQUIRE(TestUtils::containsSubset(output, ComplexExpressionsGeneratorTest::fourNumExpressionResults));
+    REQUIRE((ComplexExpGenTest::threeNumExpressionResults.size() +
+        ComplexExpGenTest::fourNumExpressionResults.size()) == output.size());
+    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::threeNumExpressionResults));
+    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::fourNumExpressionResults));
 }
 
 TEST_CASE("Validate complex expressions contain no duplicates") {
-    auto gen = ComplexExpressionsGenerator(ComplexExpressionsGeneratorTest::fourNumExpression);
+    auto gen = ComplexExpressionsGenerator(ComplexExpGenTest::fourNumExpression);
 
     const auto& output = TestUtils::toResultVector(gen);
 
