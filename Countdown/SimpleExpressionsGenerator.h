@@ -34,7 +34,10 @@ public:
         opGen.next();
         if (opGen.isDone() && !numGen.isDone()) {
             numGen.next();
-            opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
+            if (!numGen.isDone())
+            {
+                opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
+            }
             return;
         }
     }

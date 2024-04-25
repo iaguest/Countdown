@@ -47,5 +47,8 @@
     <ClCompile Include="ComplexExpressionsGeneratorTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleExpressionsGeneratorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

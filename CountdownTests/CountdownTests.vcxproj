@@ -159,6 +159,7 @@
     <ClCompile Include="NumbersGameTests.cpp" />
     <ClCompile Include="NumbersGameUtilsTests.cpp" />
     <ClCompile Include="ParenthesizedExpressionsGeneratorTests.cpp" />
+    <ClCompile Include="SimpleExpressionsGeneratorTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
