@@ -69,3 +69,19 @@ TEST_CASE("Validate complex expressions contain no duplicates") {
     const std::set<std::string> noDuplicates(output.begin(), output.end());
     REQUIRE(TestUtils::containsSubset(std::vector(noDuplicates.begin(), noDuplicates.end()), output));
 }
+
+TEST_CASE("Complex expressions generator handles five number expression")
+{
+    static const std::vector<std::string> expression{ "1+2+3+4+5" };
+    auto gen = ComplexExpressionsGenerator(expression);
+
+    REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
+}
+
+TEST_CASE("Complex expressions generator handles six number expression")
+{
+    static const std::vector<std::string> expression{ "1+2+3+4+5+6" };
+    auto gen = ComplexExpressionsGenerator(expression);
+
+    REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
+}
