@@ -12,7 +12,7 @@ namespace SimpleExpGenTest
     static const std::vector<std::string> twoNumberCaseExpectedValues{
         "1", "2", "1+2", "1-2", "1*2", "1/2", "2+1", "2-1", "2*1", "2/1"
     };
-    // only allow one division per expression
+    // we only allow one division per expression
     static const std::vector<std::string> threeNumberCaseExpectedValues{
         "1","2","3","1*2","1+2","1-2","1/2","1*3","1+3","1-3","1/3","2*1","2+1","2-1",
         "2/1","2*3","2+3","2-3","2/3","3*1","3+1","3-1","3/1","3*2","3+2","3-2","3/2",
