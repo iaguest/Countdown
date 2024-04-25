@@ -57,4 +57,5 @@ TEST_CASE("SimpleExpressionsGenerator handles vector with three numbers")
     const auto& output = TestUtils::toResultVector(gen);
 
     REQUIRE(output.size() == SimpleExpGenTest::threeNumberCaseExpectedValues.size());
+    REQUIRE(TestUtils::containsSubset(output, SimpleExpGenTest::threeNumberCaseExpectedValues));
 }

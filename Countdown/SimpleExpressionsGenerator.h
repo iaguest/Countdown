@@ -32,14 +32,14 @@ public:
     
     void next() override {
         opGen.next();
-        if (opGen.isDone() && !numGen.isDone()) {
-            numGen.next();
-            if (!numGen.isDone())
-            {
-                opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
-            }
+        if (!opGen.isDone())
             return;
-        }
+
+        numGen.next();
+        if (numGen.isDone())
+            return;
+
+        opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
     }
     
     bool isDone() const override {
