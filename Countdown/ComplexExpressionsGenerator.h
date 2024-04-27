@@ -54,13 +54,23 @@ public:
         expressionIndex += 1;
         if (expressionIndex > maxExpressionIndex) {
             expressionIndex = 0;
-            iterations += 1;
+        iterations += 1;
             expressions = newExpressions;
             newExpressions.clear();
             maxExpressionIndex = expressions.size() - 1;
         }
-        
+
         parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.at(expressionIndex));
+
+        // Does this expression start and end with "", ""?
+
+        //auto newExpression = std::vector<std::string>(simpleExpression);
+        //for (int i = 0; i < iterations; ++i)
+        //{
+        //    newExpression[0] += '(';
+        //    newExpression[simpleExpression.size() - 1] += ')';
+        //}
+        //parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(newExpression);
     }
     
     bool isDone() const override {

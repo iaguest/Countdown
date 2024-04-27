@@ -63,7 +63,7 @@ private:
     }
     
 private:
-    const std::vector<std::string>& expression;
+    const std::vector<std::string> expression;
     const std::size_t expressionSize;
     std::size_t leftIter;
     std::size_t rightIter;
