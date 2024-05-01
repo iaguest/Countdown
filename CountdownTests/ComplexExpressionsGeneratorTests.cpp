@@ -57,20 +57,6 @@ TEST_CASE("Validate complex expressions generated for single four number express
     REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::fourNumExpressionResults));
 }
 
-//TEST_CASE("Validate complex expressions generated for multiple input expressions") {
-//    std::vector<std::string> expressions {
-//        ComplexExpGenTest::threeNumExpression.front(),
-//        ComplexExpGenTest::fourNumExpression.front() };
-//    auto gen = ComplexExpressionsGenerator(expressions);
-//
-//    const auto& output = TestUtils::toResultVector(gen);
-//
-//    REQUIRE((ComplexExpGenTest::threeNumExpressionResults.size() +
-//        ComplexExpGenTest::fourNumExpressionResults.size()) == output.size());
-//    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::threeNumExpressionResults));
-//    REQUIRE(TestUtils::containsSubset(output, ComplexExpGenTest::fourNumExpressionResults));
-//}
-
 TEST_CASE("Complex expressions generator handles five number expression")
 {
     static const std::vector<std::string> expression{ "", "1", "+", "2", "+", "3", "+", "4", "+", "5", ""};
@@ -79,10 +65,10 @@ TEST_CASE("Complex expressions generator handles five number expression")
     REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
 }
 
-//TEST_CASE("Complex expressions generator handles six number expression")
-//{
-//    static const std::vector<std::string> expression{ "", "1", "+", "2", "+", "3", "+", "4", "+", "5", "+", "6", ""};
-//    auto gen = ComplexExpressionsGenerator(expression);
-//
-//    REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
-//}
+TEST_CASE("Complex expressions generator handles six number expression")
+{
+    static const std::vector<std::string> expression{ "", "1", "+", "2", "+", "3", "+", "4", "+", "5", "+", "6", ""};
+    auto gen = ComplexExpressionsGenerator(expression);
+
+    REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
+}
