@@ -109,12 +109,12 @@ std::vector<std::string> NumbersGameUtils::getPostFixExpression(const std::vecto
         opStack.pop();
     };
     
-    while (!inFixQueue.empty()) {        
+    while (!inFixQueue.empty()) {
         const auto token = inFixQueue.front();
         inFixQueue.pop();
         
         if (isIntegerNumber(token))
-            outputQueue.push(token);      
+            outputQueue.push(token);
         if (token.size() != 1)
             continue;
         
@@ -138,7 +138,7 @@ std::vector<std::string> NumbersGameUtils::getPostFixExpression(const std::vecto
     }
     
     if (!opStack.empty()) {
-        while (!opStack.empty())    
+        while (!opStack.empty())
             moveTopOperatorOnStackToOutputQueue();
     }    
     

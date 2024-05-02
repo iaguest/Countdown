@@ -10,7 +10,6 @@
 
 namespace ComplexExpGenTest
 {
-    //static const std::vector<std::string> simpleExpressions{ "1+2", "1+2+3" };
     static const std::vector<std::string> threeNumExpression{"", "1", "*", "2", "*", "3", ""};
     static const std::vector<std::string> threeNumExpressionResults = std::vector<std::string>{
         "(1*2*3)", "(1*2)*3", "1*(2*3)",
