@@ -45,32 +45,13 @@ public:
     }
     
     void next() override {
-        //newExpressions.push_back(parenGenPtr->currentItem());
-        
         parenGenPtr->next();
         if (!parenGenPtr->isDone())
             return;
         
-        //expressionIndex += 1;
-        //if (expressionIndex > maxExpressionIndex) {
-        //    expressionIndex = 0;
         iteration += 1;
-        //    expressions = newExpressions;
-        //    newExpressions.clear();
-        //    maxExpressionIndex = expressions.size() - 1;
-        //}
 
         parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front(), iteration);
-
-        // Does this expression start and end with "", ""?
-
-        //auto newExpression = std::vector<std::string>(simpleExpression);
-        //for (int i = 0; i < iterations; ++i)
-        //{
-        //    newExpression[0] += '(';
-        //    newExpression[simpleExpression.size() - 1] += ')';
-        //}
-        //parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(newExpression);
     }
     
     bool isDone() const override {
@@ -79,10 +60,6 @@ public:
     
     std::string currentItem() const override {
         return parenGenPtr->currentItem();
-        //std::ostringstream os;
-        //for (const auto& item: current)
-        //    os << item;
-        //return os.str();
     }
     
 private:
@@ -95,10 +72,7 @@ private:
              os << item;
 
         expressions.push_back(os.str());
-        //newExpressions.clear();
-        //iterations = 0;
-        //maxExpressionIndex = expressions.size() - 1;
-        //expressionIndex = 0;
+
         parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front(), iteration);
     }
    
@@ -111,12 +85,8 @@ private:
     static constexpr int MIN_EXPRESSION_SIZE = 3;
     const std::vector<std::string> simpleExpression;
     std::vector<std::string> expressions;
-    //std::vector<std::vector<std::string>> newExpressions;
     const std::size_t maxIterations;
     int iteration;
-    //std::size_t iterations;
-    //std::size_t maxExpressionIndex;
-    //std::size_t expressionIndex;
     std::unique_ptr<ParenthesizedExpressionsGenerator> parenGenPtr;
 };
 

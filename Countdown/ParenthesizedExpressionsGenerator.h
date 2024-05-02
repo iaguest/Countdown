@@ -58,11 +58,6 @@ public:
 private:
     
     static std::string insertParentheses(const std::string& input, int openIndex, int closeIndex) {
-        if (openIndex > closeIndex || openIndex < 0 || closeIndex > input.length()) {
-            // Handle error: indices are out of order or out of bounds
-            throw std::out_of_range("Error: Invalid indices for parentheses insertion.");
-        }
-
         std::string result = input;
         result.insert(closeIndex + 1, ")");
         result.insert(openIndex, "(");
@@ -80,8 +75,7 @@ private:
     // Recursive function to generate all expressions with 'n' pairs of parentheses
     static void generateExpressions(const std::string& currentExpr, int n, std::set<std::string>& results) {
         if (n == 0) {
-            if (!containsSingleNumberInParentheses(currentExpr))
-            {
+            if (!containsSingleNumberInParentheses(currentExpr)) {
                 results.insert(currentExpr);
             }
             return;
