@@ -23,8 +23,8 @@ namespace Countdown.UI.Startup
 
             var defaultGameSequence = new List<Type>
             {
-                //typeof(LettersGame),
-                //typeof(LettersGame),
+                typeof(LettersGame),
+                typeof(LettersGame),
                 typeof(NumbersGame),
                 typeof(LettersGame),
                 typeof(LettersGame),
