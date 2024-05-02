@@ -10,11 +10,11 @@
 
 namespace ComplexExpGenTest
 {
-    static const std::vector<std::string> threeNumExpression{"", "1", "*", "2", "*", "3", ""};
+    static const std::string threeNumExpression{"1*2*3"};
     static const std::vector<std::string> threeNumExpressionResults = std::vector<std::string>{
         "(1*2*3)", "(1*2)*3", "1*(2*3)",
     };
-    static const std::vector<std::string> fourNumExpression{ "","1","+", "2", "+", "3", "+", "4", ""};
+    static const std::string fourNumExpression{ "1+2+3+4"};
     static const std::vector<std::string> fourNumExpressionResults = std::vector<std::string>{
         "((1+2))+3+4", "((1+2+3))+4", "((1+2+3+4))", "1+((2+3+4))", "1+2+((3+4))", "1+((2+3))+4",
         "((1+2)+3)+4", "((1+2)+3+4)",  "((1+2+3)+4)", "(1+(2+3))+4", "(1+(2+3)+4)", "(1+(2+3+4))",
@@ -23,8 +23,7 @@ namespace ComplexExpGenTest
 }
 
 TEST_CASE("ComplexExpressionsGenerator is constructable") {
-    const std::vector<std::string> simpleExpression{ "", "1", "+", "2", ""};
-    REQUIRE_NOTHROW(ComplexExpressionsGenerator(simpleExpression));
+    REQUIRE_NOTHROW(ComplexExpressionsGenerator("1+2"));
 }
 
 TEST_CASE("Validate complex expressions generated for single three number expression") {
@@ -58,16 +57,14 @@ TEST_CASE("Validate complex expressions generated for single four number express
 
 TEST_CASE("Complex expressions generator handles five number expression")
 {
-    static const std::vector<std::string> expression{ "", "1", "+", "2", "+", "3", "+", "4", "+", "5", ""};
-    auto gen = ComplexExpressionsGenerator(expression);
+    auto gen = ComplexExpressionsGenerator("1+2+3+4+5");
 
     REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
 }
 
 TEST_CASE("Complex expressions generator handles six number expression")
 {
-    static const std::vector<std::string> expression{ "", "1", "+", "2", "+", "3", "+", "4", "+", "5", "+", "6", ""};
-    auto gen = ComplexExpressionsGenerator(expression);
+    auto gen = ComplexExpressionsGenerator("1+2+3+4+5+6");
 
     REQUIRE_NOTHROW(TestUtils::toResultVector(gen));
 }

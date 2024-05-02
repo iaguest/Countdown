@@ -22,24 +22,14 @@ class ComplexExpressionsGenerator : public IGenerator<std::string>
 {
 public:
     
-    ComplexExpressionsGenerator(const std::vector<std::string>& simpleExpression)
+    ComplexExpressionsGenerator(const std::string& simpleExpression)
       : IGenerator::IGenerator(),
         simpleExpression(simpleExpression),
-        maxIterations(maxAllowableIterations(simpleExpression))
+        maxParenPairCount(calculateMaxParenPairCount(simpleExpression))
     {
-        if (!canHandleExpression(simpleExpression))
-        {
-            throw new std::invalid_argument("Invalid expression");
-        }
-
         reset();
     }
  
-    static bool canHandleExpression(const std::vector<std::string>& expression)
-    {
-        return expression.size() > MIN_EXPRESSION_SIZE;
-    }
-
     void first() override {
         reset();
     }
@@ -49,13 +39,11 @@ public:
         if (!parenGenPtr->isDone())
             return;
         
-        iteration += 1;
-
-        parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front(), iteration);
+        parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(simpleExpression, ++currentParenPairCount);
     }
     
     bool isDone() const override {
-        return iteration > maxIterations;
+        return currentParenPairCount > maxParenPairCount;
     }
     
     std::string currentItem() const override {
@@ -64,29 +52,20 @@ public:
     
 private:
     void reset() {
-        iteration = 1;
-        expressions.clear();
-        auto current = simpleExpression;
-        std::ostringstream os;
-         for (const auto& item: current)
-             os << item;
-
-        expressions.push_back(os.str());
-
-        parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(expressions.front(), iteration);
+        currentParenPairCount = 1;
+        parenGenPtr = std::make_unique<ParenthesizedExpressionsGenerator>(simpleExpression, currentParenPairCount);
     }
    
-    std::size_t maxAllowableIterations(const std::vector<std::string>& expression) const
+    std::size_t calculateMaxParenPairCount(const std::string& simpleExpression) const
     {
-        return ((expression.size() - 3) / 2) - 1;
+        const auto tokenised = NumbersGameUtils::tokenizeExpression(simpleExpression);
+        return tokenised.size() >= 3 ? ((tokenised.size() - 1) / 2) - 1 : 0;
     }
-    
+
 private:
-    static constexpr int MIN_EXPRESSION_SIZE = 3;
-    const std::vector<std::string> simpleExpression;
-    std::vector<std::string> expressions;
-    const std::size_t maxIterations;
-    int iteration;
+    const std::string simpleExpression;
+    const std::size_t maxParenPairCount;
+    int currentParenPairCount;
     std::unique_ptr<ParenthesizedExpressionsGenerator> parenGenPtr;
 };
 
