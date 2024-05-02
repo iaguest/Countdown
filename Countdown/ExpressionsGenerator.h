@@ -19,6 +19,11 @@
 #include "ComplexExpressionsGenerator.h"
 #include "NumbersGameUtils.h"
 
+/// <summary>
+/// Generates all "possible" parenthesized and non parenthesized
+/// expressions based on the number sequence. This includes 
+/// sub expressions that do not use all of the available numbers.
+/// </summary>
 class ExpressionsGenerator : public IGenerator<std::string>
 {
 public:

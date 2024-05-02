@@ -15,6 +15,11 @@
 
 #include "PermutationsGenerator.h"
 
+/// <summary>
+/// Generates all "possible" non parenthesized expressions based
+/// on a number sequence. This includes sub expressions that do not
+/// use all of the available numbers.
+/// </summary>
 class SimpleExpressionsGenerator : public IGenerator<std::string>
 {
 public:

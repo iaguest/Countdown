@@ -18,6 +18,9 @@
 #include "ParenthesizedExpressionsGenerator.h"
 #include "NumbersGameUtils.h"
 
+/// <summary>
+/// Generate a set of possible parenthesized expressions from the simple expression
+/// </summary>
 class ComplexExpressionsGenerator : public IGenerator<std::string>
 {
 public:
