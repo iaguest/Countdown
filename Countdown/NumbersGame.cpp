@@ -44,7 +44,10 @@ int getSingleIntegerInputOrDefault(std::istream& is, int intDefault = 0)
 
 
 NumbersGame::NumbersGame(std::mt19937 gen)
-  : AbstractGame(gen)
+  : AbstractGame(gen),
+    target(0),
+    isRunning(false),
+    bestScore(0)
 {
 }
 
