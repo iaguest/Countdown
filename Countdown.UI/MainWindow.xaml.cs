@@ -20,7 +20,23 @@ namespace Countdown
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            await _viewModel.LoadAsync();
+            mediaPlayer.Play();
+            mediaPlayer.Pause();
+
+            await _viewModel.LoadAsync(() =>
+            {
+                mediaPlayer.Play();
+            });
+        }
+
+        private void myMediaElement_MediaOpened(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void mediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -121,28 +121,12 @@
                 </Line.Style>
             </Line>
         </Canvas>
-        <MediaElement x:Name="myMediaElement" Visibility="Hidden" >
-            <MediaElement.Resources>
-                <Storyboard x:Key="SoundStoryboard">
-                    <MediaTimeline Source="Resources/clock.mp3" />
-                </Storyboard>
-            </MediaElement.Resources>
-            <MediaElement.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <StaticResource ResourceKey="SoundStoryboard"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </MediaElement.Style>
-        </MediaElement>
+        <MediaElement x:Name="mediaPlayer"
+              Source="Resources/clock.mp3"
+              LoadedBehavior="Manual"
+              UnloadedBehavior="Stop"
+              MediaOpened="myMediaElement_MediaOpened"
+              MediaEnded="mediaPlayer_MediaEnded" />
         <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding GameBoard}" HorizontalAlignment="Center"
                FontSize="30" FontFamily="Arial" FontWeight="Thin"/>
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding UserMessage}" HorizontalAlignment="Center" FontSize="15"/>

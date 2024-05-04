@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
@@ -21,6 +22,7 @@ namespace Countdown.UI.ViewModel
         private bool _isRunning;
         private bool _canNextButtonExecute;
         private bool _canRestartButtonExecute;
+        private Action _onStartRunning;
 
         public MainViewModel(IEventAggregator eventAggregator,
                              ICountdownDataService dataService,
@@ -89,11 +91,20 @@ namespace Countdown.UI.ViewModel
         public bool IsRunning
         {
             get { return _isRunning; }
-            set { SetProperty(ref _isRunning, value); }
+            set
+            {
+                if (value)
+                {
+                    _onStartRunning();
+                }
+
+                SetProperty(ref _isRunning, value);
+            }
         }
 
-        public async Task LoadAsync()
+        public async Task LoadAsync(Action onStartRunning)
         {
+            _onStartRunning = onStartRunning;
             await Task.Run(() => { _dataService.Load(); });
             RefreshDisplay();
         }
