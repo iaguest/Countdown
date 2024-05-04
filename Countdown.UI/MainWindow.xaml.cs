@@ -29,14 +29,9 @@ namespace Countdown
             });
         }
 
-        private void myMediaElement_MediaOpened(object sender, RoutedEventArgs e)
+        private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void mediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
-        {
-
+            mediaPlayer?.Stop();
         }
     }
 }
