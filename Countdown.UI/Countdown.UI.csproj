@@ -124,8 +124,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\CountdownDataService.cs" />
-    <Compile Include="Data\ICountdownDataService.cs" />
+    <Compile Include="Service\CountdownAudioPlayer.cs" />
+    <Compile Include="Service\CountdownDataService.cs" />
+    <Compile Include="Service\IAudioPlayer.cs" />
+    <Compile Include="Service\ICountdownDataService.cs" />
     <Compile Include="Startup\Bootstrapper.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Countdown.Model;
-using Countdown.UI.Data;
+using Countdown.UI.Service;
 using Countdown.UI.ViewModel;
 using Prism.Events;
 using System;

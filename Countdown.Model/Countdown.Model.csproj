@@ -78,11 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractGame.cs" />
-    <Compile Include="CountdownAudioPlayer.cs" />
     <Compile Include="ConundrumGame.cs" />
     <Compile Include="CountdownRound.cs" />
     <Compile Include="CountdownSession.cs" />
-    <Compile Include="IAudioPlayer.cs" />
     <Compile Include="ICountdownRound.cs" />
     <Compile Include="ICountdownSession.cs" />
     <Compile Include="RoundState.cs" />

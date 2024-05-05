@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
-using Countdown.UI.Data;
+using Countdown.UI.Service;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -10,6 +10,8 @@ namespace Countdown.UI.ViewModel
 {
     public class MainViewModel : BindableBase
     {
+        private const int AudioStopMillisecondsDelay = 2000;
+
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
         private readonly IAudioPlayer _audioPlayer;
@@ -152,29 +154,14 @@ namespace Countdown.UI.ViewModel
         {
             bool wasRunning = IsRunning;
 
-             if (CurrentRound.State == RoundState.DONE)
+            if (CurrentRound.State == RoundState.DONE)
             {
-                var hasNextGame = _gameSession.HasNextRound();
-                CanNextGameCommandExecute = hasNextGame;
-                CanRestartCommandExecute = !hasNextGame;
-                if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
-                {
-                    _dataService.HighScore = _gameSession.TotalScore;
-                    await Task.Run(() => { _dataService.Save(); });
-                }
+                await HandleRoundComplete();
             }
 
             RefreshDisplay();
 
-            if (!wasRunning && CurrentRound.State == RoundState.RUNNING)
-            {
-                _audioPlayer.OnStart();
-            }
-            else if (wasRunning && CurrentRound.State != RoundState.RUNNING)
-            {
-                await Task.Delay(2000);
-                _audioPlayer.OnStop();
-            }
+            await UpdateAudio(wasRunning);
         }
 
         private void RefreshDisplay()
@@ -185,6 +172,31 @@ namespace Countdown.UI.ViewModel
             Score = _gameSession.TotalScore;
             HighScore = _dataService.HighScore;
             IsRunning = CurrentRound.State == RoundState.RUNNING;
+        }
+
+        private async Task HandleRoundComplete()
+        {
+            var hasNextGame = _gameSession.HasNextRound();
+            CanNextGameCommandExecute = hasNextGame;
+            CanRestartCommandExecute = !hasNextGame;
+            if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
+            {
+                _dataService.HighScore = _gameSession.TotalScore;
+                await Task.Run(() => { _dataService.Save(); });
+            }
+        }
+
+        private async Task UpdateAudio(bool wasRunning)
+        {
+            if (!wasRunning && CurrentRound.State == RoundState.RUNNING)
+            {
+                _audioPlayer.OnStart();
+            }
+            else if (wasRunning && CurrentRound.State != RoundState.RUNNING)
+            {
+                await Task.Delay(AudioStopMillisecondsDelay);
+                _audioPlayer.OnStop();
+            }
         }
     }
 }

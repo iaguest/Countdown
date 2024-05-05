@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace Countdown.Model
+namespace Countdown.UI.Service
 {
     public class CountdownAudioPlayer : IAudioPlayer
     {

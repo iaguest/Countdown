@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Countdown.Model
+namespace Countdown.UI.Service
 {
     public interface IAudioPlayer
     {
