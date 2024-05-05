@@ -1,5 +1,7 @@
 ﻿using Countdown.UI.ViewModel;
+using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Countdown
 {
@@ -20,8 +22,7 @@ namespace Countdown
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Play();
-            mediaPlayer.Pause();
+            PrepareAudio();
 
             await _viewModel.LoadAsync(() =>
             {
@@ -31,7 +32,14 @@ namespace Countdown
 
         private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-            mediaPlayer?.Stop();
+            mediaPlayer.Position = TimeSpan.Zero;
+            PrepareAudio();
+        }
+
+        private void PrepareAudio()
+        {
+            mediaPlayer.Play();
+            mediaPlayer.Pause();
         }
     }
 }
