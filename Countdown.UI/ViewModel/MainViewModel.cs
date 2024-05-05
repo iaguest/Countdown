@@ -10,7 +10,8 @@ namespace Countdown.UI.ViewModel
 {
     public class MainViewModel : BindableBase
     {
-        private const int AudioStopMillisecondsDelay = 2000;
+        // Delay for audio stop handler to avoid clipping
+        private const int AudioStopHandlerDelayMilliseconds = 2000;
 
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
@@ -194,7 +195,7 @@ namespace Countdown.UI.ViewModel
             }
             else if (wasRunning && CurrentRound.State != RoundState.RUNNING)
             {
-                await Task.Delay(AudioStopMillisecondsDelay);
+                await Task.Delay(AudioStopHandlerDelayMilliseconds);
                 _audioPlayer.OnStop();
             }
         }
