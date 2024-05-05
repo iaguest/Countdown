@@ -1,6 +1,6 @@
 ﻿namespace Countdown.UI.Service
 {
-    public interface IAudioPlayer
+    public interface ICountdownAudioPlayer
     {
         /// <summary>
         /// Perform any initialization

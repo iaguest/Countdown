@@ -14,7 +14,7 @@ namespace Countdown.UI.ViewModel
 
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
-        private readonly IAudioPlayer _audioPlayer;
+        private readonly ICountdownAudioPlayer _audioPlayer;
         private string _gameType;
         private string _userMessage;
         private string _gameBoard;
@@ -28,7 +28,7 @@ namespace Countdown.UI.ViewModel
         public MainViewModel(IEventAggregator eventAggregator,
                              ICountdownDataService dataService,
                              ICountdownSession gameSession,
-                             IAudioPlayer audioPlayer)
+                             ICountdownAudioPlayer audioPlayer)
         {
             eventAggregator.GetEvent<GameStateUpdatedEvent>()
                 .Subscribe(OnGameStateUpdated, ThreadOption.UIThread);

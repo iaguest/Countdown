@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace Countdown.UI.Service
 {
-    public class CountdownAudioPlayer : IAudioPlayer
+    public class CountdownAudioPlayer : ICountdownAudioPlayer
     {
         private const string UriString = "Resources/clock.mp3";
 
