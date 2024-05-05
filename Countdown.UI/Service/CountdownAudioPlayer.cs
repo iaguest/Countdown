@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace Countdown.UI.Service
 {
     public class CountdownAudioPlayer : IAudioPlayer
     {
+        private const string UriString = "Resources/clock.mp3";
+
         private readonly MediaPlayer _player;
 
         public CountdownAudioPlayer()
         {
             _player = new MediaPlayer();
-            _player.Open(new Uri("Resources/clock.mp3", UriKind.Relative));
+            _player.Open(new Uri(UriString, UriKind.Relative));
         }
 
         public void Initialise()
