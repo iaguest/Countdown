@@ -121,10 +121,10 @@
                 </Line.Style>
             </Line>
         </Canvas>
-        <MediaElement x:Name="mediaPlayer"
+        <!--<MediaElement x:Name="mediaPlayer"
               Source="Resources/clock.mp3"
               LoadedBehavior="Manual"
-              MediaEnded="MediaPlayer_MediaEnded" />
+              MediaEnded="MediaPlayer_MediaEnded" />-->
         <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding GameBoard}" HorizontalAlignment="Center"
                FontSize="30" FontFamily="Arial" FontWeight="Thin"/>
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding UserMessage}" HorizontalAlignment="Center" FontSize="15"/>

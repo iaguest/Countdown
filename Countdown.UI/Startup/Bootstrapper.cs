@@ -34,6 +34,8 @@ namespace Countdown.UI.Startup
 
             builder.Register(o => new CountdownSession(eventAggregator, defaultGameSequence)).As<ICountdownSession>();
 
+            builder.RegisterType<CountdownAudioPlayer>().As<IAudioPlayer>();
+
             builder.RegisterType<MainViewModel>().AsSelf();
 
             return builder.Build();

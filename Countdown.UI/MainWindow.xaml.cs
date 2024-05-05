@@ -22,24 +22,7 @@ namespace Countdown
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            PrepareAudio();
-
-            await _viewModel.LoadAsync(() =>
-            {
-                mediaPlayer.Play();
-            });
-        }
-
-        private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            mediaPlayer.Position = TimeSpan.Zero;
-            PrepareAudio();
-        }
-
-        private void PrepareAudio()
-        {
-            mediaPlayer.Play();
-            mediaPlayer.Pause();
+            await _viewModel.LoadAsync();
         }
     }
 }

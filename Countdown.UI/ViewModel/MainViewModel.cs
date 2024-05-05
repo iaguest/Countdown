@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
 using Countdown.UI.Data;
@@ -13,6 +12,7 @@ namespace Countdown.UI.ViewModel
     {
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
+        private readonly IAudioPlayer _audioPlayer;
         private string _gameType;
         private string _userMessage;
         private string _gameBoard;
@@ -22,16 +22,18 @@ namespace Countdown.UI.ViewModel
         private bool _isRunning;
         private bool _canNextButtonExecute;
         private bool _canRestartButtonExecute;
-        private Action _onStartRunning;
 
         public MainViewModel(IEventAggregator eventAggregator,
                              ICountdownDataService dataService,
-                             ICountdownSession gameSession)
+                             ICountdownSession gameSession,
+                             IAudioPlayer audioPlayer)
         {
-            eventAggregator.GetEvent<GameStateUpdatedEvent>().Subscribe(OnGameStateUpdated);
+            eventAggregator.GetEvent<GameStateUpdatedEvent>()
+                .Subscribe(OnGameStateUpdated, ThreadOption.UIThread);
 
             _dataService = dataService;
             _gameSession = gameSession;
+            _audioPlayer = audioPlayer;
             KeyDownEventCommand = new DelegateCommand<KeyEventArgs>(ExecuteUserInput);
             OnNextGameCommand = new DelegateCommand(OnNextGameCommandExecute,
                                                     () => CanNextGameCommandExecute);
@@ -91,21 +93,13 @@ namespace Countdown.UI.ViewModel
         public bool IsRunning
         {
             get { return _isRunning; }
-            set
-            {
-                if (value)
-                {
-                    _onStartRunning();
-                }
-
-                SetProperty(ref _isRunning, value);
-            }
+            set { SetProperty(ref _isRunning, value); }
         }
 
-        public async Task LoadAsync(Action onStartRunning)
+        public async Task LoadAsync()
         {
-            _onStartRunning = onStartRunning;
             await Task.Run(() => { _dataService.Load(); });
+            _audioPlayer.Initialise();
             RefreshDisplay();
         }
 
@@ -156,7 +150,9 @@ namespace Countdown.UI.ViewModel
 
         private async void OnGameStateUpdated()
         {
-            if (CurrentRound.State == RoundState.DONE)
+            bool wasRunning = IsRunning;
+
+             if (CurrentRound.State == RoundState.DONE)
             {
                 var hasNextGame = _gameSession.HasNextRound();
                 CanNextGameCommandExecute = hasNextGame;
@@ -169,6 +165,16 @@ namespace Countdown.UI.ViewModel
             }
 
             RefreshDisplay();
+
+            if (!wasRunning && CurrentRound.State == RoundState.RUNNING)
+            {
+                _audioPlayer.OnStart();
+            }
+            else if (wasRunning && CurrentRound.State != RoundState.RUNNING)
+            {
+                await Task.Delay(2000);
+                _audioPlayer.OnStop();
+            }
         }
 
         private void RefreshDisplay()
