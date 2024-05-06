@@ -15,6 +15,11 @@
 
 #include "PermutationsGenerator.h"
 
+/// <summary>
+/// Generates all "possible" non parenthesized expressions based
+/// on a number sequence. This includes sub expressions that do not
+/// use all of the available numbers.
+/// </summary>
 class SimpleExpressionsGenerator : public IGenerator<std::string>
 {
 public:
@@ -32,11 +37,14 @@ public:
     
     void next() override {
         opGen.next();
-        if (opGen.isDone() && !numGen.isDone()) {
-            numGen.next();
-            opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
+        if (!opGen.isDone())
             return;
-        }
+
+        numGen.next();
+        if (numGen.isDone())
+            return;
+
+        opGen = makeOperatorSequenceGenerator(numGen.currentItem().size() - 1);
     }
     
     bool isDone() const override {
@@ -66,7 +74,6 @@ private:
     void reset() {
         numGen.first();
         opGen.first();
-        expressions.clear();
     }
 
     OperatorSequenceGenerator makeOperatorSequenceGenerator(const std::size_t numOps) const
@@ -77,7 +84,6 @@ private:
 private:
     NumberSequenceGenerator numGen;
     OperatorSequenceGenerator opGen;
-    std::vector<std::vector<std::string>> expressions;
 };
 
 #endif /* SimpleExpressionsGenerator_h */

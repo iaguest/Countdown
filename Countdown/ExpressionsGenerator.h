@@ -19,6 +19,11 @@
 #include "ComplexExpressionsGenerator.h"
 #include "NumbersGameUtils.h"
 
+/// <summary>
+/// Generates all "possible" parenthesized and non parenthesized
+/// expressions based on the number sequence. This includes 
+/// sub expressions that do not use all of the available numbers.
+/// </summary>
 class ExpressionsGenerator : public IGenerator<std::string>
 {
 public:
@@ -35,23 +40,28 @@ public:
     }
     
     void next() override {
-        if (!simpleGen.isDone()) {
-            simpleExpressions.push_back(simpleGen.currentItem());
-            simpleGen.next();
-            if (simpleGen.isDone()) {
-                std::vector<std::string> filteredExpressions;
-                std::copy_if(begin(simpleExpressions), end(simpleExpressions), std::back_inserter(filteredExpressions),
-                             [&](const auto& elem) { return !NumbersGameUtils::isIntegerNumber(elem); });
-                
-                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(filteredExpressions);
+
+        if (complexGenPtr == nullptr) {
+            const auto simpleExpression = simpleGen.currentItem();
+            if (!NumbersGameUtils::isIntegerNumber(simpleExpression)) {
+                complexGenPtr = std::make_unique<ComplexExpressionsGenerator>(simpleExpression);
             }
+            else {
+                simpleGen.next();
+            }
+
             return;
         }
+
         complexGenPtr->next();
+        if (complexGenPtr->isDone()) {
+            complexGenPtr = nullptr;
+            simpleGen.next();
+        }
     };
     
     bool isDone() const override {
-        return complexGenPtr != nullptr && complexGenPtr->isDone();
+        return simpleGen.isDone();
     }
     
     std::string currentItem() const override {
@@ -61,13 +71,11 @@ public:
 private:
     void reset() {
         simpleGen.first();
-        simpleExpressions.clear();
-        complexGenPtr.reset(nullptr);
+        complexGenPtr = nullptr;
     }
     
 private:
     SimpleExpressionsGenerator simpleGen;
-    std::vector<std::string> simpleExpressions;
     std::unique_ptr<ComplexExpressionsGenerator> complexGenPtr;
 };
 

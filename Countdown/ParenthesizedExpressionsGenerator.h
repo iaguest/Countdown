@@ -9,6 +9,9 @@
 #ifndef ParenthesizedExpressionsGenerator_h
 #define ParenthesizedExpressionsGenerator_h
 
+#include <regex>
+#include <set>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -16,14 +19,19 @@
 
 // Return the parenthesized permutations of an input expression achieved through adding a single pair of 
 // opening and closing brackets.
-class ParenthesizedExpressionsGenerator : public IGenerator<std::vector<std::string>>
+class ParenthesizedExpressionsGenerator : public IGenerator<std::string>
 {
 public:
-    ParenthesizedExpressionsGenerator(const std::vector<std::string>& tokenizedExpression)
+    ParenthesizedExpressionsGenerator(const std::string& simpleExpression,
+                                      const int numParenPairs)
       : IGenerator::IGenerator(),
-        expression(tokenizedExpression),
-        expressionSize(tokenizedExpression.size())
+        simpleExpression(simpleExpression),
+        nextExpressionIndex(0)
     {
+        std::set<std::string> expressions;
+        generateExpressions(simpleExpression, numParenPairs, expressions);
+        parenthesizedExpressions = std::vector<std::string>(expressions.begin(), expressions.end());
+
         reset();
     }
     
@@ -34,39 +42,68 @@ public:
     
     void next() override
     {
-        rightIter += 2;
-        if (rightIter >= expressionSize) {
-            leftIter += 2;
-            rightIter = leftIter + 4;
-        }
+        nextExpressionIndex += 1;
     }
     
     bool isDone() const override
     {
-        return (leftIter >= (expressionSize - 2) || rightIter >= expressionSize);
+        return nextExpressionIndex >= parenthesizedExpressions.size();
     }
     
-    std::vector<std::string> currentItem() const override
+    std::string currentItem() const override
     {
-        auto current = expression;
-        current[leftIter] += "(";
-        current[rightIter] = ")" + current[rightIter];
-        return current;
-    }    
+        return parenthesizedExpressions.at(nextExpressionIndex);
+    }
     
 private:
     
+    static std::string insertParentheses(const std::string& input, int openIndex, int closeIndex) {
+        std::string result = input;
+        result.insert(closeIndex + 1, ")");
+        result.insert(openIndex, "(");
+        return result;
+    }
+
+    static bool containsSingleNumberInParentheses(const std::string& input) {
+        // Regex pattern to match a number enclosed in parentheses
+        std::regex pattern(R"(\(\d+\))");
+
+        // Check if the input string contains a number in parentheses
+        return std::regex_search(input, pattern);
+    }
+
+    // Recursive function to generate all expressions with 'n' pairs of parentheses
+    static void generateExpressions(const std::string& currentExpr, int n, std::set<std::string>& results) {
+        if (n == 0) {
+            if (!containsSingleNumberInParentheses(currentExpr)) {
+                results.insert(currentExpr);
+            }
+            return;
+        }
+
+        // Try placing a new pair of parentheses in every possible position
+        int len = currentExpr.length();
+        for (int i = 0; i < len; ++i) {
+            if (isdigit(currentExpr[i])) {
+                for (int j = i + 1; j < len; ++j) {
+                    if (isdigit(currentExpr[j])) {
+                        std::string newExpr = insertParentheses(currentExpr, i, j);
+                        generateExpressions(newExpr, n - 1, results);
+                    }
+                }
+            }
+        }
+    }
+
     void reset()
     {
-        leftIter = 0;
-        rightIter = leftIter + 4;
+        nextExpressionIndex = 0;
     }
     
 private:
-    const std::vector<std::string>& expression;
-    const std::size_t expressionSize;
-    std::size_t leftIter;
-    std::size_t rightIter;
+    const std::string simpleExpression;
+    std::vector<std::string> parenthesizedExpressions;
+    int nextExpressionIndex;
 };
 
 #endif /* ParenthesizedExpressionsGenerator_h */

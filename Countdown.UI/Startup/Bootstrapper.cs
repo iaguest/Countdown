@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Countdown.Model;
-using Countdown.UI.Data;
+using Countdown.UI.Service;
 using Countdown.UI.ViewModel;
 using Prism.Events;
 using System;
@@ -33,6 +33,8 @@ namespace Countdown.UI.Startup
             };
 
             builder.Register(o => new CountdownSession(eventAggregator, defaultGameSequence)).As<ICountdownSession>();
+
+            builder.RegisterType<CountdownAudioPlayer>().As<ICountdownAudioPlayer>();
 
             builder.RegisterType<MainViewModel>().AsSelf();
 

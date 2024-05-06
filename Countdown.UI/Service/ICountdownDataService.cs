@@ -1,4 +1,4 @@
-﻿namespace Countdown.UI.Data
+﻿namespace Countdown.UI.Service
 {
     public interface ICountdownDataService
     {

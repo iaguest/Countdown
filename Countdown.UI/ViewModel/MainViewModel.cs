@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Countdown.Model;
-using Countdown.UI.Data;
+using Countdown.UI.Service;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -10,8 +10,12 @@ namespace Countdown.UI.ViewModel
 {
     public class MainViewModel : BindableBase
     {
+        // Delay for audio stop handler to avoid clipping
+        private const int AudioStopHandlerDelayMilliseconds = 2000;
+
         private ICountdownDataService _dataService;
         private ICountdownSession _gameSession;
+        private readonly ICountdownAudioPlayer _audioPlayer;
         private string _gameType;
         private string _userMessage;
         private string _gameBoard;
@@ -24,12 +28,15 @@ namespace Countdown.UI.ViewModel
 
         public MainViewModel(IEventAggregator eventAggregator,
                              ICountdownDataService dataService,
-                             ICountdownSession gameSession)
+                             ICountdownSession gameSession,
+                             ICountdownAudioPlayer audioPlayer)
         {
-            eventAggregator.GetEvent<GameStateUpdatedEvent>().Subscribe(OnGameStateUpdated);
+            eventAggregator.GetEvent<GameStateUpdatedEvent>()
+                .Subscribe(OnGameStateUpdated, ThreadOption.UIThread);
 
             _dataService = dataService;
             _gameSession = gameSession;
+            _audioPlayer = audioPlayer;
             KeyDownEventCommand = new DelegateCommand<KeyEventArgs>(ExecuteUserInput);
             OnNextGameCommand = new DelegateCommand(OnNextGameCommandExecute,
                                                     () => CanNextGameCommandExecute);
@@ -95,6 +102,7 @@ namespace Countdown.UI.ViewModel
         public async Task LoadAsync()
         {
             await Task.Run(() => { _dataService.Load(); });
+            _audioPlayer.Initialise();
             RefreshDisplay();
         }
 
@@ -145,19 +153,16 @@ namespace Countdown.UI.ViewModel
 
         private async void OnGameStateUpdated()
         {
+            bool wasRunning = IsRunning;
+
             if (CurrentRound.State == RoundState.DONE)
             {
-                var hasNextGame = _gameSession.HasNextRound();
-                CanNextGameCommandExecute = hasNextGame;
-                CanRestartCommandExecute = !hasNextGame;
-                if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
-                {
-                    _dataService.HighScore = _gameSession.TotalScore;
-                    await Task.Run(() => { _dataService.Save(); });
-                }
+                await HandleRoundComplete();
             }
 
             RefreshDisplay();
+
+            await UpdateAudio(wasRunning);
         }
 
         private void RefreshDisplay()
@@ -168,6 +173,31 @@ namespace Countdown.UI.ViewModel
             Score = _gameSession.TotalScore;
             HighScore = _dataService.HighScore;
             IsRunning = CurrentRound.State == RoundState.RUNNING;
+        }
+
+        private async Task HandleRoundComplete()
+        {
+            var hasNextGame = _gameSession.HasNextRound();
+            CanNextGameCommandExecute = hasNextGame;
+            CanRestartCommandExecute = !hasNextGame;
+            if (!hasNextGame && _gameSession.TotalScore > _dataService.HighScore)
+            {
+                _dataService.HighScore = _gameSession.TotalScore;
+                await Task.Run(() => { _dataService.Save(); });
+            }
+        }
+
+        private async Task UpdateAudio(bool wasRunning)
+        {
+            if (!wasRunning && CurrentRound.State == RoundState.RUNNING)
+            {
+                _audioPlayer.OnStart();
+            }
+            else if (wasRunning && CurrentRound.State != RoundState.RUNNING)
+            {
+                await Task.Delay(AudioStopHandlerDelayMilliseconds);
+                _audioPlayer.OnStop();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Countdown.UI.ViewModel;
+using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Countdown
 {

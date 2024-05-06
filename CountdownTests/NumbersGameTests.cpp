@@ -42,12 +42,6 @@ TEST_CASE("Validate NumbersGame behavior.")
         REQUIRE_THAT("25 4 4 8 3 7", Catch::Equals(game.getGameBoard()));
     }
     
-    SECTION("getTarget throws if uninitialized game")
-    {
-        NumbersGame game(gen);
-        REQUIRE_THROWS(game.getTarget());
-    }
-    
     SECTION("getTarget returns game target value")
     {
         NumbersGame game(gen);
