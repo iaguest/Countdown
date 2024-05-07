@@ -21,18 +21,7 @@ namespace Countdown.UI.Startup
 
             builder.RegisterType<CountdownDataService>().As<ICountdownDataService>();
 
-            var defaultGameSequence = new List<Type>
-            {
-                typeof(LettersGame),
-                typeof(LettersGame),
-                typeof(NumbersGame),
-                typeof(LettersGame),
-                typeof(LettersGame),
-                typeof(NumbersGame),
-                typeof(ConundrumGame),
-            };
-
-            builder.Register(o => new CountdownSession(eventAggregator, defaultGameSequence)).As<ICountdownSession>();
+            builder.Register(o => CountdownSession.MakeDefaultCountdownSession(eventAggregator)).As<ICountdownSession>();
 
             builder.RegisterType<CountdownAudioPlayer>().As<ICountdownAudioPlayer>();
 

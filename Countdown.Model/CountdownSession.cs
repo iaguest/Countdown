@@ -25,6 +25,22 @@ namespace Countdown.Model
 
         public int TotalScore => _countdownRounds.Sum(o => o.Score ?? 0);
 
+        public static CountdownSession MakeDefaultCountdownSession(IEventAggregator eventAggregator)
+        {
+            return new CountdownSession(
+                eventAggregator,
+                new List<Type>
+                {
+                    typeof(LettersGame),
+                    typeof(LettersGame),
+                    typeof(NumbersGame),
+                    typeof(LettersGame),
+                    typeof(LettersGame),
+                    typeof(NumbersGame),
+                    typeof(ConundrumGame),
+                });
+        }
+
         public void Dispose()
         {
             DisposeGames();
