@@ -77,5 +77,25 @@ namespace Countdown.Web.Controllers
 
             return startNextResponse;
         }
+
+        [HttpPost("sessions/{sessionId}/currentRound/execute")]
+        public async Task<IActionResult> ExecuteUserInput(UserInputPostRequest userInputPostRequest)
+        {
+            try
+            {
+                var item = await _sessionManager.ExecuteUserInput(userInputPostRequest);
+                if (item == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(item);
+            }
+            catch (Exception)
+            {
+                // Log the exception details here
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
     }
 }

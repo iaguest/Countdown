@@ -6,7 +6,7 @@ namespace Countdown.Web.Models
     {
         public int Id { get; set; }
         public int TotalScore { get; set; }
-        public RoundGetResponse CurrentRound { get; set; }
+        public RoundGetResponse? CurrentRound { get; set; }
 
         public static SessionGetResponse FromCountdownSession(int id,
                                                               ICountdownSession session)

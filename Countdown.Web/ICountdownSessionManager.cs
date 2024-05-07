@@ -16,5 +16,7 @@ namespace Countdown.Web
         HasNextRoundGetResponse? HasNextRound(int sessionId);
 
         RoundGetResponse? StartNextRound(int sessionId);
+
+        Task<UserInputGetResponse?> ExecuteUserInput(UserInputPostRequest userInputPostRequest);
     }
 }
