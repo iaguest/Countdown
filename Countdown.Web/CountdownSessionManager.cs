@@ -60,5 +60,16 @@ namespace Countdown.Web
 
             return null;
         }
+
+        public RoundGetResponse? StartNextRound(int sessionId)
+        {
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
+            {
+                session.NextRound();
+                return RoundGetResponse.FromCountdownRound(session.CurrentRound());
+            }
+
+            return null;
+        }
     };
 }

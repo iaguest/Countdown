@@ -14,5 +14,7 @@ namespace Countdown.Web
         RoundGetResponse? GetCurrentRound(int sessionId);
 
         HasNextRoundGetResponse? HasNextRound(int sessionId);
+
+        RoundGetResponse? StartNextRound(int sessionId);
     }
 }

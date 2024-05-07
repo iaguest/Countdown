@@ -23,47 +23,59 @@ namespace Countdown.Web.Controllers
         [HttpGet("sessions/{sessionId}")]
         public ActionResult<SessionGetResponse> GetSession(int sessionId)
         {
-            var session = _sessionManager.GetSession(sessionId);
-            if (session == null)
+            var sessionResponse = _sessionManager.GetSession(sessionId);
+            if (sessionResponse == null)
             {
                 return NotFound();
             }
 
-            return session;
+            return sessionResponse;
         }
 
         [HttpPost("sessions")]
         public ActionResult<SessionGetResponse> CreateSession()
         {
-            var newSession = _sessionManager.CreateSession();
+            var createSessionResponse = _sessionManager.CreateSession();
             return CreatedAtAction(
                 nameof(GetSession),
-                new { sessionId = newSession.Id },
-                newSession);
+                new { sessionId = createSessionResponse.Id },
+                createSessionResponse);
         }
 
         [HttpGet("sessions/{sessionId}/currentRound")]
         public ActionResult<RoundGetResponse> GetCurrentRound(int sessionId)
         {
-            var round = _sessionManager.GetCurrentRound(sessionId);
-            if (round == null)
+            var currentRoundResponse = _sessionManager.GetCurrentRound(sessionId);
+            if (currentRoundResponse == null)
             {
                 return NotFound();
             }
 
-            return round;
+            return currentRoundResponse;
         }
 
         [HttpGet("sessions/{sessionId}/hasNextRound")]
         public ActionResult<HasNextRoundGetResponse> HasNextRound(int sessionId)
         {
-            var hasNext = _sessionManager.HasNextRound(sessionId);
-            if (hasNext == null)
+            var hasNextResponse = _sessionManager.HasNextRound(sessionId);
+            if (hasNextResponse == null)
             {
                 return NotFound();
             }
 
-            return new HasNextRoundGetResponse { HasNextRound = hasNext.HasNextRound };
+            return new HasNextRoundGetResponse { HasNextRound = hasNextResponse.HasNextRound };
+        }
+
+        [HttpPost("sessions/{sessionId}/nextRound")]
+        public ActionResult<RoundGetResponse> StartNextRound(int sessionId)
+        {
+            var startNextResponse = _sessionManager.StartNextRound(sessionId);
+            if (startNextResponse == null)
+            {
+                return NotFound();
+            }
+
+            return startNextResponse;
         }
     }
 }
