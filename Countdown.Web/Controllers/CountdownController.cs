@@ -36,11 +36,10 @@ namespace Countdown.Web.Controllers
         public ActionResult<SessionGetResponse> CreateSession()
         {
             var newSession = _sessionManager.CreateSession();
-            //return CreatedAtAction(
-            //    nameof(GetSession),
-            //    new {id = newSession.Id},
-            //    newSession);
-            return Ok(newSession);
+            return CreatedAtAction(
+                nameof(GetSession),
+                new { sessionId = newSession.Id },
+                newSession);
         }
     }
 }
