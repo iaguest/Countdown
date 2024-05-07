@@ -14,13 +14,13 @@ namespace Countdown.Web.Controllers
             _sessionManager = sessionManager;
         }
 
-        [HttpGet]
+        [HttpGet("sessions")]
         public IEnumerable<SessionGetResponse> GetSessions()
         {
             return _sessionManager.GetSessions();
         }
 
-        [HttpGet("{sessionId}")]
+        [HttpGet("sessions/{sessionId}")]
         public ActionResult<SessionGetResponse> GetSession(int sessionId)
         {
             var session = _sessionManager.GetSession(sessionId);
@@ -32,7 +32,7 @@ namespace Countdown.Web.Controllers
             return session;
         }
 
-        [HttpPost]
+        [HttpPost("sessions")]
         public ActionResult<SessionGetResponse> CreateSession()
         {
             var newSession = _sessionManager.CreateSession();
