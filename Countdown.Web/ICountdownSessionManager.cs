@@ -10,5 +10,9 @@ namespace Countdown.Web
         SessionGetResponse? GetSession(int id);
 
         SessionGetResponse CreateSession();
+
+        RoundGetResponse? GetCurrentRound(int sessionId);
+
+        HasNextRoundGetResponse? HasNextRound(int sessionId);
     }
 }

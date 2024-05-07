@@ -21,11 +21,11 @@ namespace Countdown.Web
             return _sessionsPerId.Select(o => SessionGetResponse.FromCountdownSession(o.Key, o.Value));
         }
 
-        public SessionGetResponse? GetSession(int id)
+        public SessionGetResponse? GetSession(int sessionId)
         {
-            if (_sessionsPerId.TryGetValue(id, out ICountdownSession? session))
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
-                return SessionGetResponse.FromCountdownSession(id, session);
+                return SessionGetResponse.FromCountdownSession(sessionId, session);
             }
 
             return null;
@@ -39,6 +39,26 @@ namespace Countdown.Web
             _sessionsPerId.Add(sessionId, newSession);
 
             return SessionGetResponse.FromCountdownSession(sessionId, newSession);
+        }
+
+        public RoundGetResponse? GetCurrentRound(int sessionId)
+        {
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
+            {
+                return RoundGetResponse.FromCountdownRound(session.CurrentRound());
+            }
+
+            return null;
+        }
+
+        public HasNextRoundGetResponse? HasNextRound(int sessionId)
+        {
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
+            {
+                return new HasNextRoundGetResponse { HasNextRound = session.HasNextRound() };
+            }
+
+            return null;
         }
     };
 }

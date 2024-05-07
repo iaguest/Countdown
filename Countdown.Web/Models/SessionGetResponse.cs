@@ -15,14 +15,7 @@ namespace Countdown.Web.Models
             {
                 Id = id,
                 TotalScore = session.TotalScore,
-                CurrentRound = new RoundGetResponse
-                {
-                    Type = session.CurrentRound().Type,
-                    RoundState = session.CurrentRound().State,
-                    Message = session.CurrentRound().Message,
-                    GameBoard = session.CurrentRound().GameBoard,
-                    Score = session.CurrentRound().Score,
-                }
+                CurrentRound = RoundGetResponse.FromCountdownRound(session.CurrentRound())
             };
         }
     }

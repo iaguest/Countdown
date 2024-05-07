@@ -41,5 +41,29 @@ namespace Countdown.Web.Controllers
                 new { sessionId = newSession.Id },
                 newSession);
         }
+
+        [HttpGet("sessions/{sessionId}/currentRound")]
+        public ActionResult<RoundGetResponse> GetCurrentRound(int sessionId)
+        {
+            var round = _sessionManager.GetCurrentRound(sessionId);
+            if (round == null)
+            {
+                return NotFound();
+            }
+
+            return round;
+        }
+
+        [HttpGet("sessions/{sessionId}/hasNextRound")]
+        public ActionResult<HasNextRoundGetResponse> HasNextRound(int sessionId)
+        {
+            var hasNext = _sessionManager.HasNextRound(sessionId);
+            if (hasNext == null)
+            {
+                return NotFound();
+            }
+
+            return new HasNextRoundGetResponse { HasNextRound = hasNext.HasNextRound };
+        }
     }
 }
