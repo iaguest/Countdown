@@ -91,10 +91,10 @@ namespace Countdown.Web.Controllers
 
                 return Ok(item);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Log the exception details here
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, $"An error occurred while processing your request. {ex}");
             }
         }
     }

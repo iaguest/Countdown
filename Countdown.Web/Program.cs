@@ -8,6 +8,9 @@ namespace Countdown.Web
     {
         public static void Main(string[] args)
         {
+            // Set the working directory to the same location as the application's executable (for now)
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
