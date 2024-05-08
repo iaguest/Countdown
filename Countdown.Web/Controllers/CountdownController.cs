@@ -94,41 +94,25 @@ namespace Countdown.Web.Controllers
         public ActionResult<UserInputGetResponse> ExecuteUserInput(int sessionId,
                                                                    UserInputPostRequest userInputPostRequest)
         {
-            try
+            var item = _sessionManager.ExecuteUserInput(sessionId, userInputPostRequest);
+            if (item == null)
             {
-                var item = _sessionManager.ExecuteUserInput(sessionId, userInputPostRequest);
-                if (item == null)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                return Ok(item);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception details here
-                return StatusCode(500, $"An error occurred while processing your request. {ex}");
-            }
+            return Ok(item);
         }
 
         [HttpPost("sessions/{sessionId}/reset")]
         public ActionResult<SessionGetResponse> ResetSession(int sessionId)
         {
-            try
+            var item = _sessionManager.ResetSession(sessionId);
+            if (item == null)
             {
-                var item = _sessionManager.ResetSession(sessionId);
-                if (item == null)
-                {
-                    return NotFound(sessionId);
-                }
+                return NotFound(sessionId);
+            }
 
-                return Ok(item);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception details here
-                return StatusCode(500, $"An error occurred while processing your request. {ex}");
-            }
+            return Ok(item);
         }
     }
 }
