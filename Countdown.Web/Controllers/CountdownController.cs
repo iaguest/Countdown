@@ -32,6 +32,18 @@ namespace Countdown.Web.Controllers
             return sessionResponse;
         }
 
+        [HttpGet("sessions/{sessionId}/score")]
+        public ActionResult<SessionScoreGetResponse> GetSessionScore(int sessionId)
+        {
+            var sessionScoreResponse = _sessionManager.GetSessionScore(sessionId);
+            if (sessionScoreResponse == null)
+            {
+                return NotFound();
+            }
+
+            return sessionScoreResponse;
+        }
+
         [HttpPost("sessions")]
         public ActionResult<SessionGetResponse> CreateSession()
         {
@@ -79,11 +91,12 @@ namespace Countdown.Web.Controllers
         }
 
         [HttpPost("sessions/{sessionId}/currentRound/execute")]
-        public ActionResult<UserInputGetResponse> ExecuteUserInput(UserInputPostRequest userInputPostRequest)
+        public ActionResult<UserInputGetResponse> ExecuteUserInput(int sessionId,
+                                                                   UserInputPostRequest userInputPostRequest)
         {
             try
             {
-                var item = _sessionManager.ExecuteUserInput(userInputPostRequest);
+                var item = _sessionManager.ExecuteUserInput(sessionId, userInputPostRequest);
                 if (item == null)
                 {
                     return NotFound();

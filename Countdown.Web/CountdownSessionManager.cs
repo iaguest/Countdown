@@ -31,6 +31,16 @@ namespace Countdown.Web
             return null;
         }
 
+        public SessionScoreGetResponse? GetSessionScore(int sessionId)
+        {
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
+            {
+                return new SessionScoreGetResponse { TotalScore = session.TotalScore };
+            }
+
+            return null;
+        }
+
         public SessionGetResponse CreateSession()
         {
             CountdownSession newSession = CountdownSession.MakeDefaultCountdownSession(_eventAggregator);
@@ -72,9 +82,9 @@ namespace Countdown.Web
             return null;
         }
 
-        public UserInputGetResponse? ExecuteUserInput(UserInputPostRequest userInputPostRequest)
+        public UserInputGetResponse? ExecuteUserInput(int sessionId, UserInputPostRequest userInputPostRequest)
         {
-            if (_sessionsPerId.TryGetValue(userInputPostRequest.Id, out ICountdownSession? session))
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
                 session.CurrentRound().ExecuteUserInput(userInputPostRequest.Content);
                 return new UserInputGetResponse

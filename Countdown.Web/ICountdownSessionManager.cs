@@ -9,6 +9,8 @@ namespace Countdown.Web
 
         SessionGetResponse? GetSession(int id);
 
+        SessionScoreGetResponse? GetSessionScore(int id);
+
         SessionGetResponse CreateSession();
 
         RoundGetResponse? GetCurrentRound(int sessionId);
@@ -17,7 +19,7 @@ namespace Countdown.Web
 
         RoundGetResponse? StartNextRound(int sessionId);
 
-        UserInputGetResponse? ExecuteUserInput(UserInputPostRequest userInputPostRequest);
+        UserInputGetResponse? ExecuteUserInput(int sessionId, UserInputPostRequest userInputPostRequest);
 
         SessionGetResponse? ResetSession(int sessionId);
     }
