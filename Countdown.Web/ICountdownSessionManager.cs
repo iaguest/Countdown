@@ -17,6 +17,6 @@ namespace Countdown.Web
 
         RoundGetResponse? StartNextRound(int sessionId);
 
-        Task<UserInputGetResponse?> ExecuteUserInput(UserInputPostRequest userInputPostRequest);
+        UserInputGetResponse? ExecuteUserInput(UserInputPostRequest userInputPostRequest);
     }
 }

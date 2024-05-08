@@ -79,11 +79,11 @@ namespace Countdown.Web.Controllers
         }
 
         [HttpPost("sessions/{sessionId}/currentRound/execute")]
-        public async Task<IActionResult> ExecuteUserInput(UserInputPostRequest userInputPostRequest)
+        public ActionResult<UserInputGetResponse> ExecuteUserInput(UserInputPostRequest userInputPostRequest)
         {
             try
             {
-                var item = await _sessionManager.ExecuteUserInput(userInputPostRequest);
+                var item = _sessionManager.ExecuteUserInput(userInputPostRequest);
                 if (item == null)
                 {
                     return NotFound();

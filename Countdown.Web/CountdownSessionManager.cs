@@ -72,11 +72,11 @@ namespace Countdown.Web
             return null;
         }
 
-        public async Task<UserInputGetResponse?> ExecuteUserInput(UserInputPostRequest userInputPostRequest)
+        public UserInputGetResponse? ExecuteUserInput(UserInputPostRequest userInputPostRequest)
         {
             if (_sessionsPerId.TryGetValue(userInputPostRequest.Id, out ICountdownSession? session))
             {
-                await session.CurrentRound().ExecuteUserInput(userInputPostRequest.Content);
+                session.CurrentRound().ExecuteUserInput(userInputPostRequest.Content);
                 return new UserInputGetResponse
                 {
                     CurrentRound = RoundGetResponse.FromCountdownRound(session.CurrentRound())
