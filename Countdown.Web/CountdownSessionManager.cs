@@ -85,5 +85,16 @@ namespace Countdown.Web
 
             return null;
         }
+
+        public SessionGetResponse? ResetSession(int sessionId)
+        {
+            if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
+            {
+                session.ResetSession();
+                return SessionGetResponse.FromCountdownSession(sessionId, session);
+            }
+
+            return null;
+        }
     };
 }

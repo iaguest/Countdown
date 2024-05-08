@@ -18,5 +18,7 @@ namespace Countdown.Web
         RoundGetResponse? StartNextRound(int sessionId);
 
         UserInputGetResponse? ExecuteUserInput(UserInputPostRequest userInputPostRequest);
+
+        SessionGetResponse? ResetSession(int sessionId);
     }
 }

@@ -97,5 +97,25 @@ namespace Countdown.Web.Controllers
                 return StatusCode(500, $"An error occurred while processing your request. {ex}");
             }
         }
+
+        [HttpPost("sessions/{sessionId}/reset")]
+        public ActionResult<SessionGetResponse> ResetSession(int sessionId)
+        {
+            try
+            {
+                var item = _sessionManager.ResetSession(sessionId);
+                if (item == null)
+                {
+                    return NotFound(sessionId);
+                }
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details here
+                return StatusCode(500, $"An error occurred while processing your request. {ex}");
+            }
+        }
     }
 }
