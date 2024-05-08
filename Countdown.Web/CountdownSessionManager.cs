@@ -18,14 +18,14 @@ namespace Countdown.Web
 
         public IEnumerable<SessionGetResponse> GetSessions()
         {
-            return _sessionsPerId.Select(o => SessionGetResponse.FromCountdownSession(o.Key, o.Value));
+            return _sessionsPerId.Select(o => new SessionGetResponse(o.Key, o.Value));
         }
 
         public SessionGetResponse? GetSession(int sessionId)
         {
             if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
-                return SessionGetResponse.FromCountdownSession(sessionId, session);
+                return new SessionGetResponse(sessionId, session);
             }
 
             return null;
@@ -48,14 +48,14 @@ namespace Countdown.Web
 
             _sessionsPerId.Add(sessionId, newSession);
 
-            return SessionGetResponse.FromCountdownSession(sessionId, newSession);
+            return new SessionGetResponse(sessionId, newSession);
         }
 
         public RoundGetResponse? GetCurrentRound(int sessionId)
         {
             if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
-                return RoundGetResponse.FromCountdownRound(session.CurrentRound());
+                return new RoundGetResponse(session.CurrentRound());
             }
 
             return null;
@@ -76,7 +76,7 @@ namespace Countdown.Web
             if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
                 session.NextRound();
-                return RoundGetResponse.FromCountdownRound(session.CurrentRound());
+                return new RoundGetResponse(session.CurrentRound());
             }
 
             return null;
@@ -89,7 +89,7 @@ namespace Countdown.Web
                 session.CurrentRound().ExecuteUserInput(userInputPostRequest.Content);
                 return new UserInputGetResponse
                 {
-                    CurrentRound = RoundGetResponse.FromCountdownRound(session.CurrentRound())
+                    CurrentRound = new RoundGetResponse(session.CurrentRound())
                 };
             }
 
@@ -101,7 +101,7 @@ namespace Countdown.Web
             if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
                 session.ResetSession();
-                return SessionGetResponse.FromCountdownSession(sessionId, session);
+                return new SessionGetResponse(sessionId, session);
             }
 
             return null;

@@ -4,22 +4,23 @@ namespace Countdown.Web.Models
 {
     public class RoundGetResponse
     {
-        public string Type { get; set; }
-        public RoundState RoundState { get; set; }
-        public string Message { get; set; }
-        public string GameBoard { get; set; }
-        public int? Score { get; set; }
-
-        public static RoundGetResponse FromCountdownRound(ICountdownRound round)
+        public RoundGetResponse(ICountdownRound round)
         {
-            return new RoundGetResponse
-            {
-                Type = round.Type,
-                RoundState = round.State,
-                Message = round.Message,
-                GameBoard = round.GameBoard,
-                Score = round.Score,
-            };
+            Type = round.Type;
+            RoundState = round.State;
+            Message = round.Message;
+            GameBoard = round.GameBoard;
+            Score = round.Score;
         }
+
+        public string Type { get; }
+
+        public RoundState RoundState { get; }
+
+        public string Message { get; }
+
+        public string GameBoard { get; }
+
+        public int? Score { get; }
     }
 }

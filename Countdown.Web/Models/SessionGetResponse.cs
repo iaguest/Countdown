@@ -4,19 +4,15 @@ namespace Countdown.Web.Models
 {
     public class SessionGetResponse
     {
-        public int Id { get; set; }
-        public int TotalScore { get; set; }
-        public RoundGetResponse? CurrentRound { get; set; }
-
-        public static SessionGetResponse FromCountdownSession(int id,
-                                                              ICountdownSession session)
+        public SessionGetResponse(int id, ICountdownSession session)
         {
-            return new SessionGetResponse
-            {
-                Id = id,
-                TotalScore = session.TotalScore,
-                CurrentRound = RoundGetResponse.FromCountdownRound(session.CurrentRound())
-            };
+            Id = id;
+            TotalScore = session.TotalScore;
+            CurrentRound = new RoundGetResponse(session.CurrentRound());
         }
+
+        public int Id { get; }
+        public int TotalScore { get; }
+        public RoundGetResponse CurrentRound { get; }
     }
 }
