@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { gray5 } from './Styles';
 import { Page } from './Page';
 import { Title } from './Title';
 import { Scores } from './Scores';

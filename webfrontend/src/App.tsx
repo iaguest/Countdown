@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import React from 'react';
 //import './App.css';
 import { fontFamily, fontSize, gray1 } from './Styles';
-import { GamePage } from './GamePage';
+import { GamePage } from './components/GamePage';
 
 function App() {
   return (

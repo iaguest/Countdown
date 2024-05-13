@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { gray5 } from './Styles';
+import { gray5 } from '../Styles';
 
 interface Props {
   highScore: number;
