@@ -1,4 +1,4 @@
-import { Round } from './round';
+import { Round } from './Round';
 
 export interface Session {
   id: number;

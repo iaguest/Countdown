@@ -5,11 +5,19 @@ import { Page } from './Page';
 import { Title } from './Title';
 import { Scores } from './Scores';
 import Clock from './Clock';
+import { createSession } from '../api/countdown-api';
 
 export const GamePage = () => {
   const [highScore, setHighScore] = React.useState(0);
   const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
+
+  React.useEffect(() => {
+    const doCreateSession = async () => {
+      const session = await createSession();
+    };
+    doCreateSession();
+  }, []);
 
   const onStartRunning = () => {
     setIsRunning(!isRunning);
