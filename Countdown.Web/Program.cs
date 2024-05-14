@@ -6,6 +6,10 @@ namespace Countdown.Web
 {
     public class Program
     {
+        // TODO: Pull these out into config
+        private const string CorsPolicy = "CorsPolicy";
+        private const string FrontEndUrl = "http://localhost:3000";
+
         public static void Main(string[] args)
         {
             // Set the working directory to the same location as the application's executable (for now)
@@ -15,9 +19,9 @@ namespace Countdown.Web
 
             // Add services to the container.
             builder.Services.AddCors(options =>
-                options.AddPolicy("CorsPolicy", builder =>
+                options.AddPolicy(CorsPolicy, builder =>
                   builder
-                    .WithOrigins("http://localhost:3000")
+                    .WithOrigins(FrontEndUrl)
                     .AllowAnyMethod()
                     .AllowAnyHeader()));
             builder.Services.AddControllers().AddJsonOptions(opts =>
@@ -42,7 +46,7 @@ namespace Countdown.Web
 
             app.UseHttpsRedirection();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors(CorsPolicy);
 
             app.UseAuthorization();
 
