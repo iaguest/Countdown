@@ -14,7 +14,12 @@ namespace Countdown.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddCors(options =>
+                options.AddPolicy("CorsPolicy", builder =>
+                  builder
+                    .WithOrigins("http://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
             builder.Services.AddControllers().AddJsonOptions(opts =>
             {
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -37,8 +42,9 @@ namespace Countdown.Web
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("CorsPolicy");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
