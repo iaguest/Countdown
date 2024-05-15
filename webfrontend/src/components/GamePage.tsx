@@ -5,19 +5,16 @@ import { Page } from './Page';
 import { Title } from './Title';
 import { Scores } from './Scores';
 import Clock from './Clock';
-import { createSession } from '../api/countdown-api';
+import { Session } from '../types/Session';
 
-export const GamePage = () => {
+interface Props {
+  session: Session;
+}
+
+export const GamePage = ({ session }: Props) => {
   const [highScore, setHighScore] = React.useState(0);
   const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
-
-  React.useEffect(() => {
-    const doCreateSession = async () => {
-      const session = await createSession();
-    };
-    doCreateSession();
-  }, []);
 
   const onStartRunning = () => {
     setIsRunning(!isRunning);
@@ -44,7 +41,7 @@ export const GamePage = () => {
             }
           `}
         >
-          <Title>Letters Round</Title>
+          <Title>{session.currentRound.type} Round</Title>
           {/* <button
             css={css`
               visibility: collapse;
@@ -54,7 +51,7 @@ export const GamePage = () => {
             Start Clock
           </button> */}
           <Clock isRunning={isRunning} onComplete={handleOnComplete} />
-          <p>Vowel(v)/Consonant(c)?</p>
+          <p>{session.currentRound.message}</p>
           <input
             css={css`
               padding: 5px;

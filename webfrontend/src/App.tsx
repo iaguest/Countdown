@@ -1,11 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React from 'react';
-//import './App.css';
+import React, { useState } from 'react';
 import { fontFamily, fontSize, gray1 } from './Styles';
 import { GamePage } from './components/GamePage';
+import { createSession } from './api/countdown-api';
+import { Session } from './types/Session';
 
 function App() {
+  const [session, setSession] = useState<Session | null>(null);
+  React.useEffect(() => {
+    const doCreateSession = async () => {
+      const createdSession = await createSession();
+      setSession(createdSession);
+    };
+    doCreateSession();
+  }, []);
+
   return (
     <div
       // this is a tagged template literal
@@ -16,7 +26,7 @@ function App() {
       `}
     >
       <div className="App">
-        <GamePage />
+        {session == null ? null : <GamePage session={session} />}
       </div>
     </div>
   );
