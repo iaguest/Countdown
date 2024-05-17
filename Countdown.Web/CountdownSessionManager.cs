@@ -82,15 +82,12 @@ namespace Countdown.Web
             return null;
         }
 
-        public UserInputGetResponse? ExecuteUserInput(int sessionId, UserInputPostRequest userInputPostRequest)
+        public RoundGetResponse? ExecuteUserInput(int sessionId, UserInputPostRequest userInputPostRequest)
         {
             if (_sessionsPerId.TryGetValue(sessionId, out ICountdownSession? session))
             {
                 session.CurrentRound().ExecuteUserInput(userInputPostRequest.Content);
-                return new UserInputGetResponse
-                {
-                    CurrentRound = new RoundGetResponse(session.CurrentRound())
-                };
+                return new RoundGetResponse(session.CurrentRound());
             }
 
             return null;

@@ -6,6 +6,9 @@ import { Title } from './Title';
 import { Scores } from './Scores';
 import Clock from './Clock';
 import { Session } from '../types/Session';
+import TextInputComponent from './TextInputComponent';
+import { executeUserInput } from '../api/countdown-api';
+import { Round } from '../types/Round';
 
 interface Props {
   session: Session;
@@ -15,6 +18,7 @@ export const GamePage = ({ session }: Props) => {
   const [highScore, setHighScore] = React.useState(0);
   const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
+  const [gameBoard, setGameBoard] = React.useState('');
 
   const onStartRunning = () => {
     setIsRunning(!isRunning);
@@ -22,6 +26,11 @@ export const GamePage = ({ session }: Props) => {
 
   const handleOnComplete = () => {
     setIsRunning(false);
+  };
+
+  const handleFinalValue = async (value: string) => {
+    const roundUpdate = await executeUserInput(session.id, { content: value });
+    setGameBoard(roundUpdate.gameBoard);
   };
 
   return (
@@ -51,15 +60,17 @@ export const GamePage = ({ session }: Props) => {
             Start Clock
           </button> */}
           <Clock isRunning={isRunning} onComplete={handleOnComplete} />
+          <p>{gameBoard}</p>
           <p>{session.currentRound.message}</p>
-          <input
+          {/* <input
             css={css`
               padding: 5px;
             `}
             type="text"
             placeholder="Enter responses here..."
             name="name"
-          ></input>
+          ></input> */}
+          <TextInputComponent onFinalValue={handleFinalValue} />
           <div
             css={css`
               display: flex;

@@ -91,8 +91,8 @@ namespace Countdown.Web.Controllers
         }
 
         [HttpPost("sessions/{sessionId}/currentRound/execute")]
-        public ActionResult<UserInputGetResponse> ExecuteUserInput(int sessionId,
-                                                                   UserInputPostRequest userInputPostRequest)
+        public ActionResult<RoundGetResponse> ExecuteUserInput(int sessionId,
+                                                               UserInputPostRequest userInputPostRequest)
         {
             var item = _sessionManager.ExecuteUserInput(sessionId, userInputPostRequest);
             if (item == null)
