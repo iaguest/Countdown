@@ -6,14 +6,19 @@ import { GamePage } from './components/GamePage';
 import { createSession } from './api/countdown-api';
 import { Session } from './types/Session';
 
+let sessionWasCreated = false;
+
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   React.useEffect(() => {
-    const doCreateSession = async () => {
-      const createdSession = await createSession();
-      setSession(createdSession);
-    };
-    doCreateSession();
+    if (!sessionWasCreated) {
+      sessionWasCreated = true;
+      const doCreateSession = async () => {
+        const createdSession = await createSession();
+        setSession(createdSession);
+      };
+      doCreateSession();
+    }
   }, []);
 
   return (
