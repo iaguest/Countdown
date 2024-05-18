@@ -57,7 +57,7 @@ export async function executeUserInput(
     console.log('In executeUserInput...');
 
     const response = await Axios.post(
-      `sessions/${id}/currentRound/execute`,
+      `${apiEndpoint}/sessions/${id}/currentRound/execute`,
       JSON.stringify(request),
       makeRequestConfig(),
     );

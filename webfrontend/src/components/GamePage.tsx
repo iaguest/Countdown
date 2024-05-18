@@ -31,6 +31,7 @@ export const GamePage = ({ session }: Props) => {
   const handleFinalValue = async (value: string) => {
     const roundUpdate = await executeUserInput(session.id, { content: value });
     setGameBoard(roundUpdate.gameBoard);
+    console.log('in handle final value');
   };
 
   return (
