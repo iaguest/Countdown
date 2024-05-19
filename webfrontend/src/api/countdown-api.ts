@@ -3,6 +3,7 @@ import { Session } from '../types/Session';
 import { Round } from '../types/Round';
 import { UserInputRequest } from '../types/UserInputRequest';
 import { apiEndpoint } from '../config';
+import { HasNextRoundResponse } from '../types/HasNextRoundResponse';
 
 export async function createSession(): Promise<Session> {
   try {
@@ -22,7 +23,7 @@ export async function createSession(): Promise<Session> {
     );
     return session;
   } catch (error) {
-    console.error('Failed to create session', error);
+    console.error('Failed to create session');
     throw error;
   }
 }
@@ -44,7 +45,7 @@ export async function getSession(id: number): Promise<Session> {
     );
     return session;
   } catch (error) {
-    console.error(`Failed to get session for id:${id}`, error);
+    console.error(`Failed to get session with id:${id}`);
     throw error;
   }
 }
@@ -69,6 +70,49 @@ export async function getCurrentRound(id: number): Promise<Round> {
   }
 }
 
+export async function hasNextRound(id: number): Promise<boolean> {
+  try {
+    console.log(`In hasNextRound for session id:${id}...`);
+
+    const response = await Axios.get(
+      `${apiEndpoint}/sessions/${id}/hasNextRound`,
+      makeRequestConfig(),
+    );
+
+    const hasNextRound: HasNextRoundResponse = response.data;
+    console.log(
+      `... hasNextRoundResponse is ${JSON.stringify(
+        hasNextRound,
+      )}, returning has next round data...`,
+    );
+    return hasNextRound.hasNextRound;
+  } catch (error) {
+    console.error(`Failed to get has next round response for session id:${id}`);
+    throw error;
+  }
+}
+
+export async function startNextRound(id: number): Promise<Round> {
+  try {
+    console.log(`In startNextRound for session id:${id}...`);
+
+    const response = await Axios.post(
+      `${apiEndpoint}/sessions/${id}/nextRound`,
+      '',
+      makeRequestConfig(),
+    );
+
+    const round = response.data;
+    console.log(
+      `... round item is ${JSON.stringify(round)}, returning round data...`,
+    );
+    return round;
+  } catch (error) {
+    console.error(`Failed to start next round for session id:${id}`);
+    throw error;
+  }
+}
+
 export async function executeUserInput(
   id: number,
   request: UserInputRequest,
@@ -88,7 +132,7 @@ export async function executeUserInput(
     );
     return round;
   } catch (error) {
-    console.error('Failed to execute user input, error');
+    console.error(`Failed to execute user input for session id:${id}`);
     throw error;
   }
 }

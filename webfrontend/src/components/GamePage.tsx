@@ -7,7 +7,11 @@ import { Scores } from './Scores';
 import Clock from './Clock';
 import { Session } from '../types/Session';
 import TextInputComponent from './TextInputComponent';
-import { executeUserInput, getCurrentRound } from '../api/countdown-api';
+import {
+  executeUserInput,
+  getCurrentRound,
+  startNextRound,
+} from '../api/countdown-api';
 import { Round } from '../types/Round';
 import { sleep } from '../utils';
 
@@ -17,6 +21,7 @@ interface Props {
 
 export const GamePage = ({ session }: Props) => {
   const [highScore, setHighScore] = React.useState(0);
+  const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
   const [round, setRound] = React.useState<Round>(session.currentRound);
 
@@ -57,7 +62,7 @@ export const GamePage = ({ session }: Props) => {
   const handleUserInput = async (value: string) => {
     console.log(`In handleUserInput: ${value}`);
 
-    if (!value) {
+    if (isRunning) {
       return; // ignore
     }
 
@@ -67,8 +72,23 @@ export const GamePage = ({ session }: Props) => {
       });
       if (!isRunning && roundUpdate.roundState === 'RUNNING') {
         onStartRunning();
+      } else if (roundUpdate.roundState === 'DONE') {
+        setCurrentScore(
+          roundUpdate.score ? currentScore + roundUpdate.score : currentScore,
+        );
       }
       updateRound(roundUpdate);
+    } catch (error) {
+      // ignore - hopefully benign!
+    }
+  };
+
+  const nextRound = async () => {
+    console.log(`In startNextRound`);
+
+    try {
+      const updatedRound = await startNextRound(session.id);
+      updateRound(updatedRound);
     } catch (error) {
       handleError(error);
     }
@@ -76,7 +96,7 @@ export const GamePage = ({ session }: Props) => {
 
   return (
     <div>
-      <Scores highScore={highScore} currentScore={round.score ?? 0} />
+      <Scores highScore={highScore} currentScore={currentScore} />
       <Page>
         <div
           css={css`
@@ -106,6 +126,7 @@ export const GamePage = ({ session }: Props) => {
             <button
               style={{ padding: '5px' }}
               disabled={round.roundState !== 'DONE'}
+              onClick={() => nextRound()}
             >
               Next Round
             </button>
