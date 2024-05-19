@@ -20,6 +20,10 @@ export const GamePage = ({ session }: Props) => {
   const [isRunning, setIsRunning] = React.useState(false);
   const [gameBoard, setGameBoard] = React.useState('');
 
+  const updateGameBoard = (value: string) => {
+    setGameBoard(value.toUpperCase());
+  };
+
   const onStartRunning = () => {
     setIsRunning(!isRunning);
   };
@@ -29,9 +33,9 @@ export const GamePage = ({ session }: Props) => {
   };
 
   const handleFinalValue = async (value: string) => {
-    const roundUpdate = await executeUserInput(session.id, { content: value });
-    setGameBoard(roundUpdate.gameBoard);
     console.log('in handle final value');
+    const roundUpdate = await executeUserInput(session.id, { content: value });
+    updateGameBoard(roundUpdate.gameBoard);
   };
 
   return (

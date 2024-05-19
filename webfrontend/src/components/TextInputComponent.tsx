@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface TextInputComponentProps {
-  onFinalValue: (value: string, clearInput: () => void) => void; // Pass a method to clear the input
+  onFinalValue: (value: string) => void;
 }
 
 const TextInputComponent: React.FC<TextInputComponentProps> = ({
@@ -12,14 +12,10 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       console.log('Enter pressed, processing input');
-      onFinalValue(inputValue, () => setInputValue('')); // Pass the current value and method to clear it
+      onFinalValue(inputValue);
+      setInputValue('');
       event.preventDefault();
     }
-  };
-
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    console.log('Final entered value:', event.target.value);
-    onFinalValue(event.target.value, () => setInputValue('')); // Pass the current value and method to clear it
   };
 
   return (
@@ -31,7 +27,6 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
       onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
     />
   );
 };
