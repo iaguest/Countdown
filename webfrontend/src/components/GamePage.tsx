@@ -18,10 +18,10 @@ export const GamePage = ({ session }: Props) => {
   const [highScore, setHighScore] = React.useState(0);
   const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
-  const [gameBoard, setGameBoard] = React.useState('');
+  const [round, setRound] = React.useState<Round>(session.currentRound);
 
-  const updateGameBoard = (value: string) => {
-    setGameBoard(value.toUpperCase());
+  const updateRound = (updatedRound: Round) => {
+    setRound(updatedRound);
   };
 
   const onStartRunning = () => {
@@ -35,7 +35,7 @@ export const GamePage = ({ session }: Props) => {
   const handleFinalValue = async (value: string) => {
     console.log('in handle final value');
     const roundUpdate = await executeUserInput(session.id, { content: value });
-    updateGameBoard(roundUpdate.gameBoard);
+    updateRound(roundUpdate);
   };
 
   return (
@@ -55,7 +55,7 @@ export const GamePage = ({ session }: Props) => {
             }
           `}
         >
-          <Title>{session.currentRound.type} Round</Title>
+          <Title>{round.type} Round</Title>
           {/* <button
             css={css`
               visibility: collapse;
@@ -65,8 +65,8 @@ export const GamePage = ({ session }: Props) => {
             Start Clock
           </button> */}
           <Clock isRunning={isRunning} onComplete={handleOnComplete} />
-          <p>{gameBoard}</p>
-          <p>{session.currentRound.message}</p>
+          <p>{round.gameBoard.toUpperCase()}</p>
+          <p>{round.message}</p>
           {/* <input
             css={css`
               padding: 5px;
