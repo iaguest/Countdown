@@ -28,14 +28,32 @@ export const GamePage = ({ session }: Props) => {
     setIsRunning(!isRunning);
   };
 
-  const handleOnComplete = () => {
+  const onEndRunning = () => {
     setIsRunning(false);
   };
 
-  const handleFinalValue = async (value: string) => {
-    console.log('in handle final value');
-    const roundUpdate = await executeUserInput(session.id, { content: value });
-    updateRound(roundUpdate);
+  const handleUserInput = async (value: string) => {
+    console.log(`in handle user input: ${value}`);
+
+    if (!value) {
+      // ignore
+      return;
+    }
+
+    try {
+      const roundUpdate = await executeUserInput(session.id, {
+        content: value,
+      });
+      updateRound(roundUpdate);
+      if (!isRunning && roundUpdate.roundState === 'RUNNING') {
+        onStartRunning();
+      } else {
+        onEndRunning();
+      }
+    } catch (error) {
+      // TODO: graceful error handling
+      throw error;
+    }
   };
 
   return (
@@ -64,7 +82,7 @@ export const GamePage = ({ session }: Props) => {
           >
             Start Clock
           </button> */}
-          <Clock isRunning={isRunning} onComplete={handleOnComplete} />
+          <Clock isRunning={isRunning} onComplete={onEndRunning} />
           <p>{round.gameBoard.toUpperCase()}</p>
           <p>{round.message}</p>
           {/* <input
@@ -75,7 +93,7 @@ export const GamePage = ({ session }: Props) => {
             placeholder="Enter responses here..."
             name="name"
           ></input> */}
-          <TextInputComponent onFinalValue={handleFinalValue} />
+          <TextInputComponent onFinalValue={handleUserInput} />
           <div
             css={css`
               display: flex;
