@@ -29,7 +29,7 @@ export async function createSession(): Promise<Session> {
 
 export async function getSession(id: number): Promise<Session> {
   try {
-    console.log('In getSession...');
+    console.log(`In getSession for id:${id}...`);
 
     const response = await Axios.get(
       `${apiEndpoint}/sessions/${id}`,
@@ -44,7 +44,27 @@ export async function getSession(id: number): Promise<Session> {
     );
     return session;
   } catch (error) {
-    console.error('Failed to get session', error);
+    console.error(`Failed to get session for id:${id}`, error);
+    throw error;
+  }
+}
+
+export async function getCurrentRound(id: number): Promise<Round> {
+  try {
+    console.log(`In getCurrentRound for session id:${id}...`);
+
+    const response = await Axios.get(
+      `${apiEndpoint}/sessions/${id}/currentRound`,
+      makeRequestConfig(),
+    );
+
+    const round = response.data;
+    console.log(
+      `... round item is ${JSON.stringify(round)}, returning round data...`,
+    );
+    return round;
+  } catch (error) {
+    console.error(`Failed to get current round for session id:${id}`);
     throw error;
   }
 }
@@ -54,7 +74,7 @@ export async function executeUserInput(
   request: UserInputRequest,
 ): Promise<Round> {
   try {
-    console.log('In executeUserInput...');
+    console.log(`In executeUserInput for session id:${id}...`);
 
     const response = await Axios.post(
       `${apiEndpoint}/sessions/${id}/currentRound/execute`,

@@ -7,7 +7,7 @@ import { Scores } from './Scores';
 import Clock from './Clock';
 import { Session } from '../types/Session';
 import TextInputComponent from './TextInputComponent';
-import { executeUserInput } from '../api/countdown-api';
+import { executeUserInput, getCurrentRound } from '../api/countdown-api';
 import { Round } from '../types/Round';
 
 interface Props {
@@ -16,49 +16,69 @@ interface Props {
 
 export const GamePage = ({ session }: Props) => {
   const [highScore, setHighScore] = React.useState(0);
-  const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
   const [round, setRound] = React.useState<Round>(session.currentRound);
+
+  const handleError = (error: unknown) => {
+    // TODO: Better error handling!
+    console.log('An error has occurred');
+    throw error;
+  };
+
+  function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   const updateRound = (updatedRound: Round) => {
     setRound(updatedRound);
   };
 
   const onStartRunning = () => {
+    console.log('In onStartRunning...');
     setIsRunning(!isRunning);
   };
 
-  const onEndRunning = () => {
+  const onEndRunning = async () => {
+    console.log('In onEndRunning...');
     setIsRunning(false);
+    try {
+      for (let attempts = 0; attempts < 10; attempts++) {
+        const roundUpdate = await getCurrentRound(session.id);
+        if (roundUpdate.roundState === 'SOLVING') {
+          updateRound(roundUpdate);
+          return;
+        }
+        await sleep(100);
+      }
+      throw new Error(`Session id:${session.id} is in an unexpected state...`);
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const handleUserInput = async (value: string) => {
-    console.log(`in handle user input: ${value}`);
+    console.log(`In handleUserInput: ${value}`);
 
     if (!value) {
-      // ignore
-      return;
+      return; // ignore
     }
 
     try {
       const roundUpdate = await executeUserInput(session.id, {
         content: value,
       });
-      updateRound(roundUpdate);
       if (!isRunning && roundUpdate.roundState === 'RUNNING') {
         onStartRunning();
-      } else {
-        onEndRunning();
       }
+      updateRound(roundUpdate);
     } catch (error) {
-      // TODO: graceful error handling
-      throw error;
+      handleError(error);
     }
   };
 
   return (
     <div>
-      <Scores highScore={highScore} currentScore={currentScore} />
+      <Scores highScore={highScore} currentScore={round.score ?? 0} />
       <Page>
         <div
           css={css`
@@ -74,31 +94,15 @@ export const GamePage = ({ session }: Props) => {
           `}
         >
           <Title>{round.type} Round</Title>
-          {/* <button
-            css={css`
-              visibility: collapse;
-            `}
-            onClick={onStartRunning}
-          >
-            Start Clock
-          </button> */}
           <Clock isRunning={isRunning} onComplete={onEndRunning} />
           <p>{round.gameBoard.toUpperCase()}</p>
           <p>{round.message}</p>
-          {/* <input
-            css={css`
-              padding: 5px;
-            `}
-            type="text"
-            placeholder="Enter responses here..."
-            name="name"
-          ></input> */}
           <TextInputComponent onFinalValue={handleUserInput} />
           <div
             css={css`
               display: flex;
-              justify-content: center; /* Center the buttons horizontally */
-              gap: 20px; /* Adds some space between the two buttons */
+              justify-content: center;
+              gap: 20px;
             `}
           >
             <button style={{ padding: '5px' }} disabled={true}>
