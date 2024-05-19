@@ -9,6 +9,7 @@ import { Session } from '../types/Session';
 import TextInputComponent from './TextInputComponent';
 import { executeUserInput, getCurrentRound } from '../api/countdown-api';
 import { Round } from '../types/Round';
+import { sleep } from '../utils';
 
 interface Props {
   session: Session;
@@ -25,10 +26,6 @@ export const GamePage = ({ session }: Props) => {
     throw error;
   };
 
-  function sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const updateRound = (updatedRound: Round) => {
     setRound(updatedRound);
   };
@@ -40,11 +37,12 @@ export const GamePage = ({ session }: Props) => {
 
   const onEndRunning = async () => {
     console.log('In onEndRunning...');
-    setIsRunning(false);
     try {
-      for (let attempts = 0; attempts < 10; attempts++) {
+      // Ensure the backend is in the expected state
+      for (let apiCalls = 0; apiCalls < 10; apiCalls++) {
         const roundUpdate = await getCurrentRound(session.id);
         if (roundUpdate.roundState === 'SOLVING') {
+          setIsRunning(false);
           updateRound(roundUpdate);
           return;
         }
@@ -105,7 +103,10 @@ export const GamePage = ({ session }: Props) => {
               gap: 20px;
             `}
           >
-            <button style={{ padding: '5px' }} disabled={true}>
+            <button
+              style={{ padding: '5px' }}
+              disabled={round.roundState !== 'DONE'}
+            >
               Next Round
             </button>
             <button style={{ padding: '5px' }} disabled={true}>
