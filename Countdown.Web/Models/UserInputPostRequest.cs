@@ -4,7 +4,7 @@ namespace Countdown.Web.Models
 {
     public class UserInputPostRequest
     {
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string? Content { get; set; }
     }
 }
