@@ -63,6 +63,7 @@ export const GamePage = ({ session }: Props) => {
     console.log(`In handleUserInput: ${value}`);
 
     if (isRunning) {
+      console.log('Ignore user input whilst running...');
       return; // ignore
     }
 
@@ -79,7 +80,7 @@ export const GamePage = ({ session }: Props) => {
       }
       updateRound(roundUpdate);
     } catch (error) {
-      // ignore - hopefully benign!
+      console.error('User input could not be handled, ignoring...');
     }
   };
 
