@@ -137,6 +137,29 @@ export async function executeUserInput(
   }
 }
 
+export async function resetSession(id: number): Promise<Session> {
+  try {
+    console.log(`In resetSession for session id:${id}...`);
+
+    const response = await Axios.post(
+      `${apiEndpoint}/sessions/${id}/reset`,
+      '',
+      makeRequestConfig(),
+    );
+
+    const session = response.data;
+    console.log(
+      `... session item is ${JSON.stringify(
+        session,
+      )}, returning session data...`,
+    );
+    return session;
+  } catch (error) {
+    console.error(`Failed to reset session id:${id}`);
+    throw error;
+  }
+}
+
 function makeRequestConfig(): AxiosRequestConfig<string> {
   return {
     headers: {

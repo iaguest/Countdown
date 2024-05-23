@@ -11,6 +11,8 @@ import {
   executeUserInput,
   getCurrentRound,
   startNextRound,
+  resetSession,
+  hasNextRound,
 } from '../api/countdown-api';
 import { Round } from '../types/Round';
 import { sleep } from '../utils';
@@ -24,6 +26,7 @@ export const GamePage = ({ session }: Props) => {
   const [currentScore, setCurrentScore] = React.useState(0);
   const [isRunning, setIsRunning] = React.useState(false);
   const [round, setRound] = React.useState<Round>(session.currentRound);
+  const [canReset, setCanReset] = React.useState(false);
 
   const handleError = (error: unknown) => {
     console.log('An error has occurred:', error);
@@ -58,7 +61,7 @@ export const GamePage = ({ session }: Props) => {
     }
   };
 
-  const handleUserInput = async (value: string) => {
+  const onHandleUserInput = async (value: string) => {
     console.log(`In handleUserInput: ${value}`);
 
     if (isRunning) {
@@ -76,6 +79,8 @@ export const GamePage = ({ session }: Props) => {
         setCurrentScore(
           roundUpdate.score ? currentScore + roundUpdate.score : currentScore,
         );
+        const isAnotherRound = await hasNextRound(session.id);
+        setCanReset(!isAnotherRound);
       }
       updateRound(roundUpdate);
     } catch (error) {
@@ -83,12 +88,25 @@ export const GamePage = ({ session }: Props) => {
     }
   };
 
-  const nextRound = async () => {
+  const onNextRound = async () => {
     console.log(`In startNextRound`);
 
     try {
       const updatedRound = await startNextRound(session.id);
       updateRound(updatedRound);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const onResetSession = async () => {
+    console.log('In reset session');
+
+    try {
+      const updatedSession = await resetSession(session.id);
+      setCurrentScore(updatedSession.totalScore);
+      setRound(updatedSession.currentRound);
+      setCanReset(false);
     } catch (error) {
       handleError(error);
     }
@@ -115,7 +133,7 @@ export const GamePage = ({ session }: Props) => {
           <Clock isRunning={isRunning} onComplete={onEndRunning} />
           <p>{round.gameBoard.toUpperCase()}</p>
           <p>{round.message}</p>
-          <TextInputComponent onFinalValue={handleUserInput} />
+          <TextInputComponent onFinalValue={onHandleUserInput} />
           <div
             css={css`
               display: flex;
@@ -125,12 +143,16 @@ export const GamePage = ({ session }: Props) => {
           >
             <button
               style={{ padding: '5px' }}
-              disabled={round.roundState !== 'DONE'}
-              onClick={() => nextRound()}
+              disabled={round.roundState !== 'DONE' || canReset}
+              onClick={() => onNextRound()}
             >
               Next Round
             </button>
-            <button style={{ padding: '5px' }} disabled={true}>
+            <button
+              style={{ padding: '5px' }}
+              disabled={!canReset}
+              onClick={() => onResetSession()}
+            >
               Restart Game
             </button>
           </div>
