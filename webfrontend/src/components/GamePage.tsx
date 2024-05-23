@@ -26,8 +26,7 @@ export const GamePage = ({ session }: Props) => {
   const [round, setRound] = React.useState<Round>(session.currentRound);
 
   const handleError = (error: unknown) => {
-    // TODO: Better error handling!
-    console.log('An error has occurred');
+    console.log('An error has occurred:', error);
     throw error;
   };
 
