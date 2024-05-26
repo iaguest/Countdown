@@ -85,7 +85,7 @@ export const GamePage = () => {
   };
 
   const onHandleUserInput = async (value: string) => {
-    console.log(`In onHandleUserInput: ${value}`);
+    console.log(`In onHandleUserInput: ${value}...`);
 
     if (session.currentRound.roundState === RoundState.RUNNING) {
       console.log('Ignore user input whilst running...');
@@ -112,7 +112,7 @@ export const GamePage = () => {
   };
 
   const onNextRound = async () => {
-    console.log('In onNextRound');
+    console.log('In onNextRound...');
 
     try {
       const updatedRound = await startNextRound(session.id);
@@ -123,7 +123,7 @@ export const GamePage = () => {
   };
 
   const onResetSession = async () => {
-    console.log('In onResetSession');
+    console.log('In onResetSession...');
 
     try {
       const resettedSession = await resetSession(session.id);
