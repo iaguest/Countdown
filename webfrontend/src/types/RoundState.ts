@@ -1,0 +1,6 @@
+export enum RoundState {
+  INITIALIZING = 'INITIALIZING',
+  RUNNING = 'RUNNING',
+  SOLVING = 'SOLVING',
+  DONE = 'DONE',
+}
