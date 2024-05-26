@@ -8,6 +8,7 @@ import Clock from './Clock';
 import { Session } from '../types/Session';
 import TextInputComponent from './TextInputComponent';
 import {
+  createSession,
   executeUserInput,
   getCurrentRound,
   startNextRound,
@@ -17,24 +18,37 @@ import {
 import { Round } from '../types/Round';
 import { sleep } from '../utils';
 
-interface Props {
-  session: Session;
-}
+let sessionWasCreated = false;
 
-export const GamePage = ({ session }: Props) => {
+export const GamePage = () => {
   const [highScore, setHighScore] = React.useState(0);
-  const [currentScore, setCurrentScore] = React.useState(0);
+  const [session, setSession] = React.useState<Session | null>(null);
   const [isRunning, setIsRunning] = React.useState(false);
-  const [round, setRound] = React.useState<Round>(session.currentRound);
   const [canReset, setCanReset] = React.useState(false);
+  React.useEffect(() => {
+    if (!sessionWasCreated) {
+      sessionWasCreated = true;
+      const doCreateSession = async () => {
+        const createdSession = await createSession();
+        setSession(createdSession);
+      };
+      doCreateSession();
+    }
+  }, []);
 
   const handleError = (error: unknown) => {
     console.log('An error has occurred:', error);
     throw error;
   };
 
-  const updateRound = (updatedRound: Round) => {
-    setRound(updatedRound);
+  const updateRound = (session: Session, roundUpdate: Round) => {
+    setSession({
+      ...session,
+      currentRound: {
+        ...session.currentRound,
+        ...roundUpdate,
+      },
+    });
   };
 
   const onStartRunning = () => {
@@ -42,7 +56,7 @@ export const GamePage = ({ session }: Props) => {
     setIsRunning(!isRunning);
   };
 
-  const onEndRunning = async () => {
+  const onEndRunning = async (session: Session) => {
     console.log('In onEndRunning...');
     try {
       // Ensure the backend is in the expected state
@@ -50,7 +64,7 @@ export const GamePage = ({ session }: Props) => {
         const roundUpdate = await getCurrentRound(session.id);
         if (roundUpdate.roundState === 'SOLVING') {
           setIsRunning(false);
-          updateRound(roundUpdate);
+          updateRound(session, roundUpdate);
           return;
         }
         await sleep(100);
@@ -61,7 +75,7 @@ export const GamePage = ({ session }: Props) => {
     }
   };
 
-  const onHandleUserInput = async (value: string) => {
+  const onHandleUserInput = async (session: Session, value: string) => {
     console.log(`In handleUserInput: ${value}`);
 
     if (isRunning) {
@@ -76,36 +90,42 @@ export const GamePage = ({ session }: Props) => {
       if (!isRunning && roundUpdate.roundState === 'RUNNING') {
         onStartRunning();
       } else if (roundUpdate.roundState === 'DONE') {
-        setCurrentScore(
-          roundUpdate.score ? currentScore + roundUpdate.score : currentScore,
-        );
+        const updatedScore = session.totalScore + (roundUpdate.score || 0);
+        setSession({
+          ...session,
+          totalScore: updatedScore,
+          currentRound: {
+            ...session.currentRound,
+            ...roundUpdate,
+          },
+        });
         const isAnotherRound = await hasNextRound(session.id);
         setCanReset(!isAnotherRound);
+        return;
       }
-      updateRound(roundUpdate);
+      updateRound(session, roundUpdate);
     } catch (error) {
       console.error('User input could not be handled, ignoring...');
     }
   };
 
-  const onNextRound = async () => {
+  const onNextRound = async (session: Session) => {
     console.log(`In startNextRound`);
 
     try {
       const updatedRound = await startNextRound(session.id);
-      updateRound(updatedRound);
+      updateRound(session, updatedRound);
     } catch (error) {
       handleError(error);
     }
   };
 
-  const onResetSession = async () => {
+  const onResetSession = async (id: number) => {
     console.log('In reset session');
 
     try {
-      const updatedSession = await resetSession(session.id);
-      setCurrentScore(updatedSession.totalScore);
-      setRound(updatedSession.currentRound);
+      const resettedSession = await resetSession(id);
+      setSession(resettedSession);
       setCanReset(false);
     } catch (error) {
       handleError(error);
@@ -114,50 +134,61 @@ export const GamePage = ({ session }: Props) => {
 
   return (
     <div>
-      <Scores highScore={highScore} currentScore={currentScore} />
-      <Page>
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+      {session === null ? null : (
+        <div>
+          <Scores highScore={highScore} currentScore={session.totalScore} />
+          <Page>
+            <div
+              css={css`
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
 
-            & > *:not(:first-child) {
-              margin-top: 20px; /* Adds top margin to all elements except the first one */
-            }
-          `}
-        >
-          <Title>{round.type} Round</Title>
-          <Clock isRunning={isRunning} onComplete={onEndRunning} />
-          <p>{round.gameBoard.toUpperCase()}</p>
-          <p>{round.message}</p>
-          <TextInputComponent onFinalValue={onHandleUserInput} />
-          <div
-            css={css`
-              display: flex;
-              justify-content: center;
-              gap: 20px;
-            `}
-          >
-            <button
-              style={{ padding: '5px' }}
-              disabled={round.roundState !== 'DONE' || canReset}
-              onClick={() => onNextRound()}
+                & > *:not(:first-child) {
+                  margin-top: 20px; /* Adds top margin to all elements except the first one */
+                }
+              `}
             >
-              Next Round
-            </button>
-            <button
-              style={{ padding: '5px' }}
-              disabled={!canReset}
-              onClick={() => onResetSession()}
-            >
-              Restart Game
-            </button>
-          </div>
+              <Title>{session.currentRound.type} Round</Title>
+              <Clock
+                isRunning={isRunning}
+                onComplete={() => onEndRunning(session)}
+              />
+              <p>{session.currentRound.gameBoard.toUpperCase()}</p>
+              <p>{session.currentRound.message}</p>
+              <TextInputComponent
+                onFinalValue={(value) => onHandleUserInput(session, value)}
+              />
+              <div
+                css={css`
+                  display: flex;
+                  justify-content: center;
+                  gap: 20px;
+                `}
+              >
+                <button
+                  style={{ padding: '5px' }}
+                  disabled={
+                    session.currentRound.roundState !== 'DONE' || canReset
+                  }
+                  onClick={() => onNextRound(session)}
+                >
+                  Next Round
+                </button>
+                <button
+                  style={{ padding: '5px' }}
+                  disabled={!canReset}
+                  onClick={() => onResetSession(session.id)}
+                >
+                  Restart Game
+                </button>
+              </div>
+            </div>
+          </Page>
         </div>
-      </Page>
+      )}
     </div>
   );
 };
