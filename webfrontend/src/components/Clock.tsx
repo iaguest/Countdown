@@ -41,7 +41,7 @@ const Clock = ({ isRunning, onComplete }: Props) => {
   const hourAngles = [30, 60, 120, 150, 210, 240, 300, 330];
   return (
     <div>
-      <audio ref={audioRef} src={'/clock.mp3'} />
+      <audio ref={audioRef} src={'/clock.mp3'} preload="auto" />
       <div css={clockStyle}>
         <div css={centerMarkStyle}></div>
         <div css={[handStyle, { transform: `rotate(${rotation}deg)` }]} />
