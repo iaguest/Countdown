@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Props {
   isRunning: boolean;
@@ -8,9 +8,16 @@ interface Props {
 }
 
 const Clock = ({ isRunning, onComplete }: Props) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [rotation, setRotation] = useState(0);
   useEffect(() => {
     if (isRunning) {
+      if (audioRef.current) {
+        audioRef.current.play().catch((error) => {
+          console.error('Clock component failed to play audio:', error);
+        });
+      }
+
       const startTime = Date.now();
 
       const updateRotation = () => {
@@ -33,12 +40,15 @@ const Clock = ({ isRunning, onComplete }: Props) => {
 
   const hourAngles = [30, 60, 120, 150, 210, 240, 300, 330];
   return (
-    <div css={clockStyle}>
-      <div css={centerMarkStyle}></div>
-      <div css={[handStyle, { transform: `rotate(${rotation}deg)` }]} />
-      {hourAngles.map((angle, index) => (
-        <div key={index} css={hourMarkStyle(angle)}></div>
-      ))}
+    <div>
+      <audio ref={audioRef} src={'/clock.mp3'} />
+      <div css={clockStyle}>
+        <div css={centerMarkStyle}></div>
+        <div css={[handStyle, { transform: `rotate(${rotation}deg)` }]} />
+        {hourAngles.map((angle, index) => (
+          <div key={index} css={hourMarkStyle(angle)}></div>
+        ))}
+      </div>
     </div>
   );
 };
