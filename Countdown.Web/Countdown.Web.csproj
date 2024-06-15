@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(SolutionDir)CountdownDll\$(Platform)\Release\CountdownDll.dll&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\Release\consonants.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\Release\vowels.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\Release\UK_english_truncated.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;" />
+    <Exec Command="xcopy &quot;$(SolutionDir)CountdownDll\$(Platform)\$(Configuration)\CountdownDll.dll&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\$(Configuration)\consonants.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\$(Configuration)\vowels.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(SolutionDir)Countdown\$(Platform)\$(Configuration)\UK_english_truncated.txt&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;" />
   </Target>
 
 </Project>

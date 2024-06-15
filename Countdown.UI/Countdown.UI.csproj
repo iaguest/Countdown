@@ -184,10 +184,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)CountdownDll\$(Platform)\Release\CountdownDll.dll" "$(TargetDir)" /Y
-xcopy "$(SolutionDir)Countdown\$(Platform)\Release\consonants.txt" "$(TargetDir)" /Y
-xcopy "$(SolutionDir)Countdown\$(Platform)\Release\vowels.txt" "$(TargetDir)" /Y
-xcopy "$(SolutionDir)Countdown\$(Platform)\Release\UK_english_truncated.txt" "$(TargetDir)" /Y
+    <PostBuildEvent>xcopy "$(SolutionDir)CountdownDll\$(Platform)\$(Configuration)\CountdownDll.dll" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)Countdown\$(Platform)\$(Configuration)\consonants.txt" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)Countdown\$(Platform)\$(Configuration)\vowels.txt" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)Countdown\$(Platform)\$(Configuration)\UK_english_truncated.txt" "$(TargetDir)" /Y
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.1.3\build\MaterialDesignThemes.targets')" />
