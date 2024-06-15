@@ -82,23 +82,21 @@ private:
         }
         // Try placing a new pair of parentheses in every possible position
         int len = currentExpr.length();
-        int start = -1;
-        int end = -1;
         for (int i = 0; i < len; ++i) {
             if (isdigit(currentExpr[i])) {
-                start = i++;
+                int openIndex = i++;
                 while (i < len && isdigit(currentExpr[i])) {
                     i++;
                 }
 
                 for (int j = i; j < len; ++j) {
                     if (isdigit(currentExpr[j])) {
-                        end = j++;
+                        int closeIndex = j++;
                         while (j < len && isdigit(currentExpr[j])) {
-                            end = j++;
+                            closeIndex = j++;
                         }
 
-                        std::string newExpr = insertParentheses(currentExpr, start, end);
+                        std::string newExpr = insertParentheses(currentExpr, openIndex, closeIndex);
                         generateExpressions(newExpr, n - 1, results);
                     }
                 }
