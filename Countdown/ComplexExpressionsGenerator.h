@@ -62,7 +62,13 @@ private:
     std::size_t calculateMaxParenPairCount(const std::string& simpleExpression) const
     {
         const auto tokenised = NumbersGameUtils::tokenizeExpression(simpleExpression);
-        return tokenised.size() >= 3 ? ((tokenised.size() - 1) / 2) - 1 : 0;
+        const std::size_t size = tokenised.size();
+        if (size >= 3)
+        {
+            return (std::min)(static_cast<std::size_t>(2), ((size - 1) / 2) - 1);
+        }
+
+        return 0;
     }
 
 private:
